@@ -1,2 +1,2 @@
 # Kantinerado
-3/4 Semester Prjekt
+3/4 Semester Project
