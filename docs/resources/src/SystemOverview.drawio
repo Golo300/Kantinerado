@@ -1,12 +1,14 @@
-<mxfile host="Electron" modified="2024-02-08T17:02:43.160Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.1.16 Chrome/120.0.6099.109 Electron/28.1.1 Safari/537.36" etag="d3UqCvjEXLm8aeXa0STt" version="22.1.16" type="device">
+<mxfile host="Electron" modified="2024-02-09T16:48:21.748Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.1.18 Chrome/120.0.6099.216 Electron/28.1.4 Safari/537.36" etag="HesR0rzzt4BSUdwyIZg9" version="22.1.18" type="device">
   <diagram name="Seite-1" id="sgqPQjKhVZXb0571wNXU">
-    <mxGraphModel dx="954" dy="576" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1195" dy="725" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="pxNu8yLYfZmzI5YL1-k2-2" value="" style="whiteSpace=wrap;html=1;aspect=fixed;" parent="1" vertex="1">
-          <mxGeometry x="149" y="120" width="620" height="620" as="geometry" />
-        </mxCell>
+        <UserObject label="" link="https://upload.wikimedia.org/wikipedia/de/thumb/d/dd/MySQL_logo.svg/640px-MySQL_logo.svg.png" id="pxNu8yLYfZmzI5YL1-k2-2">
+          <mxCell style="whiteSpace=wrap;html=1;aspect=fixed;" parent="1" vertex="1">
+            <mxGeometry x="149" y="120" width="620" height="620" as="geometry" />
+          </mxCell>
+        </UserObject>
         <mxCell id="pxNu8yLYfZmzI5YL1-k2-3" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;Docker Network&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="149" y="120" width="150" height="30" as="geometry" />
         </mxCell>
@@ -120,7 +122,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="pxNu8yLYfZmzI5YL1-k2-32" value="Mysql" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.database;whiteSpace=wrap;" parent="1" vertex="1">
+        <mxCell id="pxNu8yLYfZmzI5YL1-k2-32" value="" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.database;whiteSpace=wrap;" parent="1" vertex="1">
           <mxGeometry x="579" y="240" width="160" height="120" as="geometry" />
         </mxCell>
         <mxCell id="pxNu8yLYfZmzI5YL1-k2-35" value="Port 3306" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
@@ -135,8 +137,8 @@
         <mxCell id="pxNu8yLYfZmzI5YL1-k2-47" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://ertan-toker.de/wp-content/uploads/2018/04/spring-boot-project-logo-1-thegem-blog-default.png;" parent="1" vertex="1">
           <mxGeometry x="288.52000000000004" y="440" width="77.78" height="70" as="geometry" />
         </mxCell>
-        <mxCell id="pxNu8yLYfZmzI5YL1-k2-48" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=1;exitDx=0;exitDy=0;" parent="1" source="pxNu8yLYfZmzI5YL1-k2-47" target="pxNu8yLYfZmzI5YL1-k2-47" edge="1">
-          <mxGeometry relative="1" as="geometry" />
+        <mxCell id="t94c_FdWUVDSunw1kjLL-1" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://upload.wikimedia.org/wikipedia/de/thumb/d/dd/MySQL_logo.svg/640px-MySQL_logo.svg.png;" vertex="1" parent="1">
+          <mxGeometry x="619.36" y="287.5" width="79.28" height="55" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

@@ -70,7 +70,7 @@ In der nachfolgenden Grafik ist der Systemkontext des Projekts dargestellt. Dies
 
 ### Technology
 
-Zu beginn muss auf den voher definierten Anforderungen ein Tech-Stack erarbeitet werden, mit wechlem das Projket sinvoll umsetzbar ist. Dabei dürfen nicht nur die Anforderungen inbetracht gezogen werden, sondern auch die bekannten Technologien der enzelnen Entwickler. Das das Projekt als Webanwendung umgesetzt werden soll müssen für die drei zentralen Komponenten Technologien/Frameworks gefunden werden:
+Zu beginn muss auf den voher definierten Anforderungen ein Tech-Stack erarbeitet werden, mit wechlem das Projket sinvoll umsetzbar ist. Dabei dürfen nicht nur die Anforderungen inbetracht gezogen werden, sondern auch die bekannten Technologien der enzelnen Entwickler. Da das Projekt als Webanwendung umgesetzt werden soll müssen für die drei zentralen Komponenten Technologien/Frameworks gefunden werden:
 
 - Frontend
 - Backend
@@ -94,7 +94,7 @@ React: 7.6/10
 Vue.js: 7.45/10  
 Angular: 8.8/10  
 
-**Entscheidung:** Aufgrund der gewichteten Gesamtbewertung und der vorhandenen Erfahrung der Entwickler mit Angular wird sich für Angular entschieden.
+**Entscheidung:** Aufgrund der gewichteten Gesamtbewertung und der vorhandenen Erfahrung der Entwickler mit Angular wird sich für **Angular** entschieden.
 
 #### Backend
 
@@ -115,7 +115,7 @@ Django: 7.75/10
 Ruby on Rails: 7.35/10  
 Java Spring Boot: 8.3/10  
 
-**Entscheidung:** Aufgrund der gewichteten Gesamtbewertung und der vorhandenen Erfahrung der Entwickler wird sich für Java Spring Boot entschieden.
+**Entscheidung:** Aufgrund der gewichteten Gesamtbewertung und der vorhandenen Erfahrung der Entwickler wird sich für **Java Spring Boot** entschieden.
 
 
 #### Datenbank
@@ -138,7 +138,7 @@ PostgreSQL: 7.5/10
 MongoDB: 6.8/10  
 MySQL: 8.4/10  
 
-**Entscheidung:** Aufgrund der gewichteten Gesamtbewertung und der vorhandenen Erfahrung der Entwickler wird sich für MySQL entschieden.
+**Entscheidung:** Aufgrund der gewichteten Gesamtbewertung und der vorhandenen Erfahrung der Entwickler wird sich für **MySQL** entschieden.
  
 ### Architecture Overview
 
