@@ -34,7 +34,7 @@ public class AdminService {
 
         ApplicationUser user = userOptional.get();
 
-        Role canteenRole = roleRepository.findByAuthority(Roles.ADMIN).get();
+        Role canteenRole = roleRepository.findByAuthority(Roles.KANTEEN).get();
 
         // register main admin
         Set<Role> roles = new HashSet<>();
