@@ -1,0 +1,42 @@
+version: '3.8'
+
+
+
+services:
+  angular-app:
+    container_name: angular-app
+    build:
+      context: ./angular-frontend
+      dockerfile: Dockerfile
+    ports:
+      - "4200:80"  
+    depends_on:
+      - spring-boot-app
+
+  spring-boot-app:
+    container_name: spring-boot-app
+    build:
+      context: ./springboot-backend
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"  
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: kantine
+      MYSQL_USER: springuser
+      MYSQL_PASSWORD: ThePassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:
+
+    
