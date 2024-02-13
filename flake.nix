@@ -15,7 +15,7 @@
         pkgs.mkShell { buildInputs = 
           [         
             pkgs.jdk17
-            pkgs.maven
+            pkgs.gradle
             pkgs.nodejs
             pkgs.jetbrains.idea-ultimate
             pkgs.soapui

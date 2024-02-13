@@ -35,3 +35,28 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### nix ###
+/output
+
+### angular ###
+
+angular-frontend/dist
+angular-frontend/tmp
+angular-frontend/out-tsc
+# Only exists if Bazel was run
+angular-frontend/bazel-out
+
+# Dependencies
+angular-frontend/node_modules
+
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+# System Files
+.DS_Store
+Thumbs.db
