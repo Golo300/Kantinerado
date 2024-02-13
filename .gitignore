@@ -44,6 +44,7 @@ out/
 angular-frontend/dist
 angular-frontend/tmp
 angular-frontend/out-tsc
+.angular
 # Only exists if Bazel was run
 angular-frontend/bazel-out
 
