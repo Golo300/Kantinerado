@@ -33,8 +33,8 @@ Um Requirements für ein Projekt zu definiern sollte als erstes eine Stakeholder
 
 7. **Verwaltung:**
     - Ein Admin Account kann Mitarbeiter und Kantinenpersonal Verwaltung. Dabei können Mitarbeiter auch zu Kantinenpersonal befördert/degradiert werden.
-8. *Webanwendung:**
-    - Die gesamte Prjekt soll als Webanwendung umgesetzt werden.
+8. **Webanwendung:**
+    - Das gesamte Projekt soll als Webanwendung umgesetzt werden.
 
 ## Non Funktional Requirements:
 
