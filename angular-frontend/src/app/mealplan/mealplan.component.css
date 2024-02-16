@@ -16,7 +16,12 @@ body {
     align-items: center;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
-  
+
+  #loginLink {
+    color: #fff;
+    text-decoration: none;
+  }
+
   nav ul {
     list-style-type: none;
     margin: 0;
@@ -63,10 +68,6 @@ body {
     margin-bottom: 10px;
   }
   
-  img{
-    width: 100%;
-  }
-  
   th, td {
     border: 1px solid #ddd;
     padding: 8px;
@@ -95,7 +96,7 @@ body {
     color: #fff;
     text-align: center;
     padding: 10px;
-    width: 100%;
+    
     box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
   }
   
