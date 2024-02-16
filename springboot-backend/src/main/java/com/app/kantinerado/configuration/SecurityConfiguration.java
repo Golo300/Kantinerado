@@ -58,6 +58,7 @@ public class SecurityConfiguration {
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> {
                 auth.requestMatchers("/auth/**").permitAll();
+                auth.requestMatchers("/mealplan/**").permitAll();
                 auth.requestMatchers("/admin/**").hasRole(Roles.ADMIN);
                 auth.requestMatchers("/user/**").hasAnyRole(Roles.ADMIN, Roles.USER);
                 auth.anyRequest().authenticated();

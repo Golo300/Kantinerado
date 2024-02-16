@@ -1,29 +1,32 @@
-FROM --platform=$BUILDPLATFORM node:latest as builder
+# Verwenden Sie ein Basisimage mit Node.js, um Angular-Anwendungen zu erstellen
+FROM node:20.0.0 AS build
 
-RUN mkdir /project
-WORKDIR /project
+# Setzen Sie das Arbeitsverzeichnis im Container
+WORKDIR /app
 
-RUN npm install -g @angular/cli@13
-
+# Kopieren Sie die Abhängigkeiten in das Arbeitsverzeichnis
 COPY package.json package-lock.json ./
-RUN npm ci
 
+# Installieren Sie die Abhängigkeiten
+RUN npm install
+
+# Kopieren Sie den Rest der Anwendung
 COPY . .
-CMD ["ng", "serve", "--host", "0.0.0.0"]
 
-FROM builder as dev-envs
+# Erstellen Sie die Angular-Anwendung
+RUN npm run build
 
-RUN <<EOF
-apt-get update
-apt-get install -y --no-install-recommends git
-EOF
+# Verwenden Sie ein schlankes Basisimage für die Bereitstellung
+FROM nginx:alpine
 
-RUN <<EOF
-useradd -s /bin/bash -m vscode
-groupadd docker
-usermod -aG docker vscode
-EOF
-# install Docker tools (cli, buildx, compose)
-COPY --from=gloursdocker/docker / /
+# Kopieren Sie die erstellte Angular-Anwendung in das Nginx-Verzeichnis
+COPY --from=build /app/dist/* /usr/share/nginx/html/
 
-CMD ["ng", "serve", "--host", "0.0.0.0"]
+# Ändern Sie die Standardkonfiguration von Nginx, um Anfragen zu bedienen
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Port, auf dem Nginx läuft (Standard: 80)
+EXPOSE 80
+
+# Befehl, der beim Starten des Containers ausgeführt wird
+CMD ["nginx", "-g", "daemon off;"]

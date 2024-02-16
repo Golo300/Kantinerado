@@ -1,8 +1,15 @@
 package com.app.kantinerado;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import com.app.kantinerado.models.mealplan.Day;
+import com.app.kantinerado.models.mealplan.Dish;
+import com.app.kantinerado.models.mealplan.DishCategory;
+import com.app.kantinerado.models.mealplan.Mealplan;
+import com.app.kantinerado.repository.*;
 import com.app.kantinerado.utils.Roles;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -12,8 +19,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.app.kantinerado.models.ApplicationUser;
 import com.app.kantinerado.models.Role;
-import com.app.kantinerado.repository.RoleRepository;
-import com.app.kantinerado.repository.UserRepository;
 
 @SpringBootApplication
 public class AuthenticatedBackendApplication {
@@ -22,8 +27,11 @@ public class AuthenticatedBackendApplication {
 	}
 
 	@Bean
-	CommandLineRunner run(RoleRepository roleRepository, UserRepository userRepository, PasswordEncoder passwordEncode){
+	CommandLineRunner run(RoleRepository roleRepository, UserRepository userRepository, MealplanRepository mealplanRepository,
+						  DayRepository dayRepository, DishRepository dishRepository,
+						  PasswordEncoder passwordEncode){
 		return args ->{
+
 			if(roleRepository.findByAuthority("ADMIN").isPresent()) return;
 
 			Role adminRole = roleRepository.save(new Role(Roles.ADMIN));
@@ -37,6 +45,46 @@ public class AuthenticatedBackendApplication {
 			ApplicationUser admin = new ApplicationUser(1, "admin", passwordEncode.encode("password"), roles);
 
 			userRepository.save(admin);
+
+			// Smaple Mealplan
+			Mealplan mealplan = new Mealplan();
+			mealplan.setCalendarWeek(10);
+			mealplan.setPlanned(true);
+			mealplan = mealplanRepository.save(mealplan);
+
+			// Erstelle Tage für den Speiseplan
+			Set<Day> days = new HashSet<>();
+			String[] weekdays = {"Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"};
+			for (String weekday : weekdays) {
+				Day day = new Day();
+				day.setDayofWeek(weekday);
+				days.add(day);
+				Set<Dish> dishes = new HashSet<>();
+
+				Dish dish1 = new Dish();
+				dish1.setDishCategory("Menü1");
+				dish1.setTitle("Gericht 1");
+				dish1.setDescription("Beschreibung für Gericht 1");
+				dish1.setPrice(9.99);
+				dishRepository.save(dish1);
+				dishes.add(dish1);
+
+				Dish dish2 = new Dish();
+				dish2.setDishCategory("Dessert");
+				dish2.setTitle("Dessert 1");
+				dish2.setDescription("Beschreibung für Dessert 1");
+				dish2.setPrice(4.99);
+				dishRepository.save(dish2);
+				dishes.add(dish2);
+
+				day.setDishes(dishes);
+				dayRepository.save(day);
+			}
+
+			mealplan.setDays(days);
+			mealplan = mealplanRepository.save(mealplan);
+
 		};
 	}
+
 }
