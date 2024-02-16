@@ -63,7 +63,7 @@ public class AuthenticatedBackendApplication {
 
 				Dish dish1 = new Dish();
 				dish1.setDishCategory("Menü1");
-				dish1.setTitle("Gericht 1");
+				dish1.setTitle("Gericht 1 " + weekday);
 				dish1.setDescription("Beschreibung für Gericht 1");
 				dish1.setPrice(9.99);
 				dishRepository.save(dish1);
@@ -71,7 +71,7 @@ public class AuthenticatedBackendApplication {
 
 				Dish dish2 = new Dish();
 				dish2.setDishCategory("Dessert");
-				dish2.setTitle("Dessert 1");
+				dish2.setTitle("Dessert 1 " + weekday);
 				dish2.setDescription("Beschreibung für Dessert 1");
 				dish2.setPrice(4.99);
 				dishRepository.save(dish2);

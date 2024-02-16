@@ -23,10 +23,10 @@
 </section>    
 
   <section id="week">
-    <h2>KW 7 | 12.02.24 - 17.02.24</h2>
+    <h2>KW {{kw}}</h2>
     <div id="week-selector">
-      <button id="prev-week">Vorherige Woche</button>
-      <button id="next-week">Nächste Woche</button>
+      <button (click)="lastWeek()" id="prev-week">Vorherige Woche</button>
+      <button (click)="nextWeek()" id="next-week">Nächste Woche</button>
     </div>
   </section>
 
@@ -34,54 +34,51 @@
     <table>
       <thead>
         <tr>
-          <th></th>
+          <th> </th>
           <th>Montag</th>
           <th>Dienstag</th>
           <th>Mittwoch</th>
           <th>Donnerstag</th>
           <th>Freitag</th>
           <th>Samstag</th>
+          <!-- weitere Wochentage hier einfügen -->
         </tr>
       </thead>
       <tbody>
         <tr>
-          <th>Menü 1</th>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
+          <td>Menü1</td>
+          <td *ngFor="let day of weekDays">
+            <span *ngFor="let dish of getDishes('Menü1', day)">
+              {{ dish.title }}
+            </span>
+          </td>
         </tr>
         <tr>
-          <th>Menü 2</th>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
+          <td>Menü2</td>
+          <td *ngFor="let day of weekDays">
+            <span *ngFor="let dish of getDishes('Menü2', day)">
+              {{ dish.title }}
+            </span>
+          </td>
         </tr>
         <tr>
-            <th>Nachspeise</th>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <th>Suppe</th>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+          <td>Dessert</td>
+          <td *ngFor="let day of weekDays">
+            <span *ngFor="let dish of getDishes('Dessert', day)">
+              {{ dish.title }}
+            </span>
+          </td>
         </tr>
       </tbody>
     </table>
+    
+    
+    
+    
+    
+    
+    
+    
   </section>
 
   <section id="notes">
