@@ -1,8 +1,6 @@
 package com.app.kantinerado;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import com.app.kantinerado.models.mealplan.Day;
@@ -28,7 +26,7 @@ public class AuthenticatedBackendApplication {
 
 	@Bean
 	CommandLineRunner run(RoleRepository roleRepository, UserRepository userRepository, MealplanRepository mealplanRepository,
-						  DayRepository dayRepository, DishRepository dishRepository,
+						  DayRepository dayRepository, DishRepository dishRepository, DishCategoryRepository dishCategoryRepository,
 						  PasswordEncoder passwordEncode){
 		return args ->{
 
@@ -47,6 +45,10 @@ public class AuthenticatedBackendApplication {
 			userRepository.save(admin);
 
 			// Smaple Mealplan
+			DishCategory menü_1 = dishCategoryRepository.save( new DishCategory("Menü1", false));
+			DishCategory dessert = dishCategoryRepository.save( new DishCategory("Dessert", false));
+
+
 			Mealplan mealplan = new Mealplan();
 			mealplan.setCalendarWeek(10);
 			mealplan.setPlanned(true);
@@ -62,7 +64,7 @@ public class AuthenticatedBackendApplication {
 				Set<Dish> dishes = new HashSet<>();
 
 				Dish dish1 = new Dish();
-				dish1.setDishCategory("Menü1");
+				dish1.setDishCategory(menü_1);
 				dish1.setTitle("Gericht 1 " + weekday);
 				dish1.setDescription("Beschreibung für Gericht 1");
 				dish1.setPrice(9.99);
@@ -70,7 +72,7 @@ public class AuthenticatedBackendApplication {
 				dishes.add(dish1);
 
 				Dish dish2 = new Dish();
-				dish2.setDishCategory("Dessert");
+				dish2.setDishCategory(dessert);
 				dish2.setTitle("Dessert 1 " + weekday);
 				dish2.setDescription("Beschreibung für Dessert 1");
 				dish2.setPrice(4.99);

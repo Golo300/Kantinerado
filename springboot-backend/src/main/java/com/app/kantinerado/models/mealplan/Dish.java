@@ -9,7 +9,9 @@ public class Dish {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    private String dishCategory;
+    @ManyToOne()
+    @JoinColumn(name = "dishCategory_id")
+    private DishCategory dishCategory;
 
     private String title;
 
@@ -21,7 +23,7 @@ public class Dish {
         super();
     }
 
-    public Dish(String dishCategory, String title, String description, double price) {
+    public Dish(DishCategory dishCategory, String title, String description, double price) {
         super();
         this.dishCategory = dishCategory;
         this.title = title;
@@ -38,11 +40,11 @@ public class Dish {
         this.id = id;
     }
 
-    public String getDishCategory() {
+    public DishCategory getDishCategory() {
         return dishCategory;
     }
 
-    public void setDishCategory(String dishCategory) {
+    public void setDishCategory(DishCategory dishCategory) {
         this.dishCategory = dishCategory;
     }
 

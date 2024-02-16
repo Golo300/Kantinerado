@@ -146,4 +146,11 @@ MySQL: 8.4/10
 <p align="center">
   <img src="resources/SystemOverview.png" alt="Architecture-Overview"/>
 </p>
+
+### Entity Overview
+
+
+<p align="center">
+  <img src="resources/Database.png" alt="Architecture-Overview"/>
+</p>
  

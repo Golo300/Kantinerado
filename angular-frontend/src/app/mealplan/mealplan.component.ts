@@ -40,7 +40,7 @@ export class MealplanComponent implements OnInit {
   getDishes(category: string, day: string) {
     const selectedDay = this.mealplan.days.find(d => d.dayofWeek === day);
     if (selectedDay) {
-      return selectedDay.dishes.filter(dish => dish.dishCategory === category);
+      return selectedDay.dishes.filter(dish => dish.dishCategory.name === category);
     }
     return [];
   }

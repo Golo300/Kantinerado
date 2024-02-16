@@ -14,9 +14,13 @@ export interface Mealplan {
   
   export interface Dish {
     id: number;
-    dishCategory: string;
+    dishCategory: DishCategory;
     title: string;
     description: string;
     price: number;
   }
   
+  export interface DishCategory {
+    name: string;
+    canVeggie: boolean;
+  }
