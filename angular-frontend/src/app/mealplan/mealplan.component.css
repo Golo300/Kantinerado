@@ -1,0 +1,132 @@
+/* Allgemeine Stile */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f8f8;
+  }
+  
+  header {
+    background-color: #4CAF50;
+    color: #fff;
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  nav ul li {
+    display: inline;
+    margin-right: 10px;
+  }
+  
+  nav ul li a {
+    color: #fff;
+    text-decoration: none;
+  }
+  
+  main {
+    padding: 16px;
+  }
+  
+  /* Woche Sektion */
+  
+  #week {
+    margin-bottom: 16px;
+  }
+  
+  #week-selector button {
+    margin-right: 5px;
+  }
+  
+  /* Menü Tabelle */
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 16px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  caption {
+    font-weight: bold;
+    font-size: 1.2em;
+    margin-bottom: 10px;
+  }
+  
+  img{
+    width: 100%;
+  }
+  
+  th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+    width: 14.285%;
+  }
+  
+  th {
+    background-color: #4CAF50;
+    color: #fff;
+  }
+  
+  /* Hinweise Sektion */
+  
+  #notes {
+    background-color: #fff;
+    padding: 16px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Footer */
+  
+  footer {
+    background-color: #4CAF50;
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+    width: 100%;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Media Queries für mobile Geräte */
+  
+  @media only screen and (max-width: 600px) {
+    header {
+        padding: 12px;
+    }
+  
+    nav ul li {
+        margin-right: 8px;
+    }
+  
+    main {
+        padding: 12px;
+    }
+  
+    #week-selector button {
+        margin-right: 4px;
+    }
+  
+    th, td {
+        padding: 6px;
+    }
+  
+    #notes {
+        padding: 12px;
+    }
+  
+    footer {
+        padding: 8px;
+    }
+  }
