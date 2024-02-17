@@ -1,32 +1,28 @@
-# Verwenden Sie ein Basisimage mit Node.js, um Angular-Anwendungen zu erstellen
-FROM node:20.0.0 AS build
+# Stage 1: Compile and Build angular codebase
 
-# Setzen Sie das Arbeitsverzeichnis im Container
-WORKDIR /app
+# Use official node image as the base image
+FROM node:latest as build
 
-# Kopieren Sie die Abhängigkeiten in das Arbeitsverzeichnis
-COPY package.json package-lock.json ./
+# Set the working directory
+WORKDIR /usr/local/app
 
-# Installieren Sie die Abhängigkeiten
+# Add the source code to app
+COPY ./ /usr/local/app/
+
+# Install all the dependencies
 RUN npm install
 
-# Kopieren Sie den Rest der Anwendung
-COPY . .
-
-# Erstellen Sie die Angular-Anwendung
+# Generate the build of the application
 RUN npm run build
 
-# Verwenden Sie ein schlankes Basisimage für die Bereitstellung
-FROM nginx:alpine
 
-# Kopieren Sie die erstellte Angular-Anwendung in das Nginx-Verzeichnis
-COPY --from=build /app/dist/* /usr/share/nginx/html/
+# Stage 2: Serve app with nginx server
 
-# Ändern Sie die Standardkonfiguration von Nginx, um Anfragen zu bedienen
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Use official nginx image as the base image
+FROM nginx:latest
 
-# Port, auf dem Nginx läuft (Standard: 80)
+# Copy the build output to replace the default nginx contents.
+COPY --from=build /usr/local/app/dist/angular-frontend/browser /usr/share/nginx/html
+
+# Expose port 80
 EXPOSE 80
-
-# Befehl, der beim Starten des Containers ausgeführt wird
-CMD ["nginx", "-g", "daemon off;"]
