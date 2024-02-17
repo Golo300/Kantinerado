@@ -22,19 +22,19 @@ Um Requirements für ein Projekt zu definiern sollte als erstes eine Stakeholder
 3. **Bestellungen aufgeben:**
    - Mitarbeiter sollten in der Lage sein, ihre Bestellungen aus dem Produktkatalog auszuwählen und hinzuzufügen, die Anzahl der Artikel anzugeben und die Bestellung abzuschließen.
 
-4. **Zahlungsoptionen:**
+4. **Zahlungsoptionen (optional):**
    - Die App sollte verschiedene Zahlungsoptionen unterstützen, z. B. Kreditkarten, Debitkarten oder interne Abrechnungssysteme.
 
 5. **Bestellverwaltung:**
-   - Kantinenpersonal sollten in der Lage sein, den Status ihrer Bestellungen zu überprüfen, Änderungen vorzunehmen.
+   - Kantinenpersonal sollten in der Lage sein, Bestellungen übersichtlich einzusehen und zu Filtern. Zudem sollen Kantinenpersonal den Wöchentlichen Speiseplan zu verwalten und anzulegen.
 
 6. **Benachrichtigungen:**
    - Benutzer sollten Benachrichtigungen über den Bestellstatus erhalten, z. B. wenn die Bestellung bestätigt wurde, wenn sie zur Abholung bereit ist oder wenn es Verzögerungen gibt.
 
 7. **Verwaltung:**
     - Ein Admin Account kann Mitarbeiter und Kantinenpersonal Verwaltung. Dabei können Mitarbeiter auch zu Kantinenpersonal befördert/degradiert werden.
-8. *Webanwendung:**
-    - Die gesamte Prjekt soll als Webanwendung umgesetzt werden.
+8. **Webanwendung:**
+    - Das gesamte Projekt soll als Webanwendung umgesetzt werden.
 
 ## Non Funktional Requirements:
 
@@ -75,6 +75,8 @@ Zu beginn muss auf den voher definierten Anforderungen ein Tech-Stack erarbeitet
 - Frontend
 - Backend
 - Datenbank
+
+Als ein eher experimenteller Ansatz wurde zuerst eine erste Meinung zu den Technologien über eine KI eingeholt. Dadurch wird versucht, sich eine Durchschnittsmeinung zu erarbeiten. Die Angaben der KI wurden natürlich noch mit weiteren unabhängigen Quellen validiert. Der Ansatz stellte sich damit als erfolgreich heraus.
 
 #### Frontend
 
@@ -142,12 +144,18 @@ MySQL: 8.4/10
  
 ### Architecture Overview
 
+Für das Deployen und Hosten der Software soll Docker verwendet werden. Dadurch ist es möglich, die vorher beschriebenen Komponenten in einzelne Container zu packen. Das Managen der Container soll über eine Docker-compose erfolgen. Dies vereinfacht auch das Verwalten der Container untereinander, da diese somit gleich in einem Network verwaltet werden.
+
 
 <p align="center">
   <img src="resources/SystemOverview.png" alt="Architecture-Overview"/>
 </p>
 
 ### Entity Overview
+
+Erster Entwurf für die Modellierung der Datenstruktur um Backend. Dieser beachtet, dass es tägliche Menüs und Zusatzspeisen gibt sowie Frühstücksangebote, welche jeden Tag angeboten werden. Die Schwäche dieses Modells ist zurzeit noch, das eine Bestellung eines Menüs aus dem Speiseplan mit dem Tag übereinstimmen muss. Logischerweise kann es nicht möglich sein, eine Bestellung für einen Tag aufzugeben, an dem das Gericht nicht angeboten wird. Daher muss hier eine Validierung in der Geschäftslogik geschehen, bzw. das Frontend sollte natürlich solche Anfragen auch nicht zulassen, aber durch die REST Full Architektur ist eine Validierung im Backend unumgänglich (die gestrichelte Linie stellt diese Validierung dar). Die Stärke dieses Modells soll sich später in der einfachen Auswertungen der Bestellungen und der zugeordneten Gerichte zeigen. Auch die Mealplan Entity vereinfacht das Abfragen des Speiseplans für eine bestimmte Woche.
+
+Das System ist so gedacht das für die einzelnen Kategorien "Menü1", "Menü2", ... sowie für "Frühstück" eine "DishCategoray" erstellt wird. Dieses dynamische System erlaubt auch das einfache Erweitern das System. Denkbar ist z.b. auch das neue Menü, Special Deals oder weitere feste Produkte eingebaut werden können, ohne dass die Datenstruktur erweitert werden muss. Zu besseren Versändis wurde auch auch noch gezeigt welche Entitäten für die Darstellung der Besstellansicht wichtig sind.
 
 
 <p align="center">

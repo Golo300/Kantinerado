@@ -1,6 +1,6 @@
-<mxfile host="Electron" modified="2024-02-09T16:48:21.748Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.1.18 Chrome/120.0.6099.216 Electron/28.1.4 Safari/537.36" etag="HesR0rzzt4BSUdwyIZg9" version="22.1.18" type="device">
+<mxfile host="Electron" modified="2024-02-17T21:17:19.724Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.1.18 Chrome/120.0.6099.216 Electron/28.1.4 Safari/537.36" etag="dVyurFyD0GPC27-88Wgj" version="22.1.18" type="device">
   <diagram name="Seite-1" id="sgqPQjKhVZXb0571wNXU">
-    <mxGraphModel dx="1195" dy="725" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1195" dy="698" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -65,7 +65,7 @@
             <mxPoint x="353" y="600" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="pxNu8yLYfZmzI5YL1-k2-20" value="Contorller" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.layered_rect;dx=10;outlineConnect=0;whiteSpace=wrap;" parent="1" vertex="1">
+        <mxCell id="pxNu8yLYfZmzI5YL1-k2-20" value="Controller" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.layered_rect;dx=10;outlineConnect=0;whiteSpace=wrap;" parent="1" vertex="1">
           <mxGeometry x="224" y="510" width="100" height="150" as="geometry" />
         </mxCell>
         <mxCell id="pxNu8yLYfZmzI5YL1-k2-27" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" target="pxNu8yLYfZmzI5YL1-k2-22" edge="1">
@@ -128,7 +128,7 @@
         <mxCell id="pxNu8yLYfZmzI5YL1-k2-35" value="Port 3306" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="589" y="370" width="60" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="pxNu8yLYfZmzI5YL1-k2-38" value="Port 4200&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;4200" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+        <mxCell id="pxNu8yLYfZmzI5YL1-k2-38" value="Port 4200&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;80" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="79" y="300" width="111" height="30" as="geometry" />
         </mxCell>
         <mxCell id="pxNu8yLYfZmzI5YL1-k2-40" value="Port 8080&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;8080" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
@@ -137,7 +137,7 @@
         <mxCell id="pxNu8yLYfZmzI5YL1-k2-47" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://ertan-toker.de/wp-content/uploads/2018/04/spring-boot-project-logo-1-thegem-blog-default.png;" parent="1" vertex="1">
           <mxGeometry x="288.52000000000004" y="440" width="77.78" height="70" as="geometry" />
         </mxCell>
-        <mxCell id="t94c_FdWUVDSunw1kjLL-1" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://upload.wikimedia.org/wikipedia/de/thumb/d/dd/MySQL_logo.svg/640px-MySQL_logo.svg.png;" vertex="1" parent="1">
+        <mxCell id="t94c_FdWUVDSunw1kjLL-1" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://upload.wikimedia.org/wikipedia/de/thumb/d/dd/MySQL_logo.svg/640px-MySQL_logo.svg.png;" parent="1" vertex="1">
           <mxGeometry x="619.36" y="287.5" width="79.28" height="55" as="geometry" />
         </mxCell>
       </root>
