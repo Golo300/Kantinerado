@@ -19,6 +19,8 @@
             pkgs.nodejs
             pkgs.jetbrains.idea-ultimate
             pkgs.soapui
+            pkgs.pandoc 
+            pkgs.texliveTeTeX
           ];
 
           /*shellHook = ''

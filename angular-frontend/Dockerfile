@@ -1,29 +1,28 @@
-FROM --platform=$BUILDPLATFORM node:latest as builder
+# Stage 1: Compile and Build angular codebase
 
-RUN mkdir /project
-WORKDIR /project
+# Use official node image as the base image
+FROM node:latest as build
 
-RUN npm install -g @angular/cli@13
+# Set the working directory
+WORKDIR /usr/local/app
 
-COPY package.json package-lock.json ./
-RUN npm ci
+# Add the source code to app
+COPY ./ /usr/local/app/
 
-COPY . .
-CMD ["ng", "serve", "--host", "0.0.0.0"]
+# Install all the dependencies
+RUN npm install
 
-FROM builder as dev-envs
+# Generate the build of the application
+RUN npm run build
 
-RUN <<EOF
-apt-get update
-apt-get install -y --no-install-recommends git
-EOF
 
-RUN <<EOF
-useradd -s /bin/bash -m vscode
-groupadd docker
-usermod -aG docker vscode
-EOF
-# install Docker tools (cli, buildx, compose)
-COPY --from=gloursdocker/docker / /
+# Stage 2: Serve app with nginx server
 
-CMD ["ng", "serve", "--host", "0.0.0.0"]
+# Use official nginx image as the base image
+FROM nginx:latest
+
+# Copy the build output to replace the default nginx contents.
+COPY --from=build /usr/local/app/dist/angular-frontend/browser /usr/share/nginx/html
+
+# Expose port 80
+EXPOSE 80
