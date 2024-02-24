@@ -1,83 +1,75 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kantinerado</title>
-</head>
-<body>
-
-<header>
-  <h1>Kantinerado</h1>
-  <nav>
-    <ul>
-      <!-- Weitere Seiten hier hinzufügen -->
-    </ul>
-  </nav>
-  <a href="login.html" id="loginLink">Anmeldung</a>
-</header>
-
 <main>
 <section id="Speiseplan">
     <h1>Speiseplan</h1>
 </section>    
 
   <section id="week">
-    <h2>KW {{kw}}</h2>
-    <div id="week-selector">
-      <button (click)="lastWeek()" id="prev-week">Vorherige Woche</button>
-      <button (click)="nextWeek()" id="next-week">Nächste Woche</button>
+     <div id="week-selector">
+
+      <h2>KW {{kw}}</h2>
+
+      <span class="material-symbols-outlined" (click)="lastWeek()" id="last-week">
+        arrow_back_ios
+        </span>
+
+      <span class="material-symbols-outlined" (click)="nextWeek()" id="next-week">
+        arrow_forward_ios
+        </span>
     </div>
   </section>
 
   <section id="menu">
-    <table>
-      <thead>
-        <tr>
-          <th> </th>
-          <th>Montag</th>
-          <th>Dienstag</th>
-          <th>Mittwoch</th>
-          <th>Donnerstag</th>
-          <th>Freitag</th>
-          <th>Samstag</th>
-          <!-- weitere Wochentage hier einfügen -->
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Menü1</td>
-          <td *ngFor="let day of weekDays">
-            <span *ngFor="let dish of getDishes('Menü1', day)">
-              {{ dish.title }}
-            </span>
-          </td>
-        </tr>
-        <tr>
-          <td>Menü2</td>
-          <td *ngFor="let day of weekDays">
-            <span *ngFor="let dish of getDishes('Menü2', day)">
-              {{ dish.title }}
-            </span>
-          </td>
-        </tr>
-        <tr>
-          <td>Dessert</td>
-          <td *ngFor="let day of weekDays">
-            <span *ngFor="let dish of getDishes('Dessert', day)">
-              {{ dish.title }}
-            </span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    
-    
-    
-    
-    
-    
-    
+    <div>
+      <div>
+        <table class="mdc-data-table__table">
+          <thead>
+            <tr class="mdc-data-table__header-row">
+              <th class="mdc-data-table__header-cell" role="columnheader" scope="col"> </th>
+              <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Montag</th>
+              <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Dienstag</th>
+              <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Mittwoch</th>
+              <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Donnerstag</th>
+              <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Freitag</th>
+              <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Samstag</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="mdc-data-table__header-row">
+              <td class="mdc-data-table__cell">Menü 1</td>
+              <td class="mdc-data-table__cell" *ngFor="let day of weekDays">
+                <span *ngFor="let dish of getDishes('Menü1', day)">
+                  {{ dish.title }}
+                </span>
+              </td>
+            </tr>
+            <tr class="mdc-data-table__header-row">
+              <td class="mdc-data-table__cell">Menü 2</td>
+              <td class="mdc-data-table__cell" *ngFor="let day of weekDays">
+                <span *ngFor="let dish of getDishes('Menü2', day)">
+                  {{ dish.title }}
+                </span>
+              </td>
+            </tr>
+            <tr class="mdc-data-table__header-row">
+              <td class="mdc-data-table__cell">Nachspeise</td>
+              <td class="mdc-data-table__cell" *ngFor="let day of weekDays">
+                <span *ngFor="let dish of getDishes('Dessert', day)">
+                  {{ dish.title }}
+                </span>
+              </td>
+            </tr>
+            <tr class="mdc-data-table__header-row">
+              <td class="mdc-data-table__cell">Suppe</td>
+              <td class="mdc-data-table__cell" *ngFor="let day of weekDays">
+                <span *ngFor="let dish of getDishes('Soup', day)">
+                  {{ dish.title }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
     
   </section>
 
@@ -87,11 +79,4 @@
     <ul>Samstags wird nur Menü 2 und Nachtisch angeboten</ul>
   </section>
 </main>
-
-<footer>
-  <p>&copy; 2024 Kantinerado. Alle Rechte vorbehalten.</p>
-</footer>
-
-</body>
-</html>
 
