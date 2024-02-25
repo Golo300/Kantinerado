@@ -10,6 +10,7 @@ import { MealplanOrderComponent } from './mealplan-order/mealplan-order.componen
 import { CheckoutComponent } from './checkout/checkout.component';
 import { LoginComponent } from './login/login.component';
 import { OrderProcessComponent } from './order-process/order-process.component';
+import { DetailViewComponent } from './detail-view/detail-view.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { OrderProcessComponent } from './order-process/order-process.component';
     MealplanOrderComponent,
     CheckoutComponent,
     LoginComponent,
-    OrderProcessComponent
+    OrderProcessComponent,
+    DetailViewComponent
   ],
   imports: [
     BrowserModule,
