@@ -7,10 +7,12 @@
     <h2>Speiseplan</h2>
   </div>  
 </section>    
+  <br>
 
   <br>
 
   <section id="menu">
+
     <div class="card text-begin divWidth">
      <div class="card-header">
          Auswahl der Bestellung
@@ -55,6 +57,7 @@
                     <th class="align-middle">Menü 1</th>
                     <td *ngFor="let day of weekDays" class="setMargin align-middle">
                         <span *ngFor="let dish of getDishes('Menü1', day)">
+
                             <div>
                                 {{ dish.title }}
                             </div>
@@ -94,6 +97,7 @@
             </tbody>
         </table>
     </div>
+
  </div>
 </section>
 
