@@ -57,10 +57,10 @@
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav me-auto mb-2 mb-md-0">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Home</a>
+                <a class="nav-link active" aria-current="page" href="/">Home</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                <a class="nav-link active" aria-current="page" href="/order" >Bestellung</a>
               </li>
             </ul>
             <button class="btn btn-outline-success" type="button">Login</button>
@@ -69,7 +69,7 @@
       </nav>
     </header>
 
-    <app-checkout></app-checkout>
+    <router-outlet></router-outlet>
 
     <footer class="navbar navbar-expand-md navbar-dark bg-dark">
       <div
