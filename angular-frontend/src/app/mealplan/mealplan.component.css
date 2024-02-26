@@ -1,6 +1,4 @@
 .table{
-    margin: auto;
-    width: 95%;
     padding-top: 20px;
     padding-bottom: 20px;
 }
@@ -10,7 +8,11 @@
     width: 98%;
 }
 
-td, th{
+td{
     text-align: center;
+    height: 5rem;
 }
 
+th{
+    text-align: center;
+}

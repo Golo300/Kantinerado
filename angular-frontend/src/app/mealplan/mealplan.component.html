@@ -11,34 +11,34 @@
   <br>
 
   <section id="menu">
-     <div class="card text-begin divWidth">
-      <div class="card-header">
-          Auswahl der Kalenderwoche
-      </div>
-      <div class="card-body d-flex justify-content-between align-items-center">
-          <div class="col d-flex justify-content-center align-items-center">
-              <p class="m-0 mr-3">Zeitraum der Kalenderwoche</p>
-          </div>
-          <nav aria-label="Page navigation example">
-              <ul class="pagination m-0">
-                  <li class="page-item">
-                      <a class="page-link" (click)="lastWeek()" id="last-week">
-                          <span aria-hidden="true">&laquo;</span>
-                      </a>
-                  </li>
-                  <li class="page-item mx-2 d-flex align-items-center">
-                      <p class="m-0">KW {{kw}}</p>
-                  </li>
-                  <li class="page-item">
-                      <a class="page-link" (click)="nextWeek()" id="next-week">
-                          <span aria-hidden="true">&raquo;</span>
-                      </a>
-                  </li>
-              </ul>
-          </nav>
-      </div>
-      <div class="table divWidth">
-        <table class="table table-bordered">
+    <div class="card text-begin divWidth">
+     <div class="card-header">
+         Auswahl der Bestellung
+     </div>
+     <div class="card-body d-flex justify-content-between align-items-center divWidth">
+         <div class="col d-flex justify-content-center align-items-center">
+            <p class="m-0 mr-3">{{ startDate | date: 'dd.MM.yyyy' }} - {{ endDate | date: 'dd.MM.yyyy' }}</p>
+         </div>
+         <nav aria-label="Page navigation example">
+             <ul class="pagination m-0">
+                 <li class="page-item">
+                     <a class="page-link" (click)="lastWeek()" id="last-week">
+                         <span aria-hidden="true">&laquo;</span>
+                     </a>
+                 </li>
+                 <li class="page-item mx-2 d-flex align-items-center">
+                     <p class="m-0">KW {{kw}}</p>
+                 </li>
+                 <li class="page-item">
+                     <a class="page-link" (click)="nextWeek()" id="next-week">
+                         <span aria-hidden="true">&raquo;</span>
+                     </a>
+                 </li>
+             </ul>
+         </nav>
+     </div>
+     <div class="table divWidth">
+        <table class="table table-bordered rounded">
             <thead>
                 <tr>
                     <th class="align-middle"> </th>
@@ -55,7 +55,9 @@
                     <th class="align-middle">Menü 1</th>
                     <td *ngFor="let day of weekDays" class="setMargin align-middle">
                         <span *ngFor="let dish of getDishes('Menü1', day)">
-                            {{ dish.title }}
+                            <div>
+                                {{ dish.title }}
+                            </div>
                         </span>
                     </td>
                 </tr>
@@ -63,7 +65,9 @@
                     <th class="align-middle">Menü 2</th>
                     <td *ngFor="let day of weekDays" class="align-middle">
                         <span *ngFor="let dish of getDishes('Menü2', day)">
-                            {{ dish.title }}
+                            <div>
+                                {{ dish.title }}
+                            </div>
                         </span>
                     </td>
                 </tr>
@@ -71,7 +75,9 @@
                     <th class="align-middle">Nachspeise</th>
                     <td *ngFor="let day of weekDays" class="align-middle">
                         <span *ngFor="let dish of getDishes('Dessert', day)">
-                            {{ dish.title }}
+                            <div>
+                                {{ dish.title }}
+                            </div>
                         </span>
                     </td>
                 </tr>
@@ -79,14 +85,16 @@
                     <th class="align-middle">Suppe</th>
                     <td *ngFor="let day of weekDays" class="align-middle">
                         <span *ngFor="let dish of getDishes('Soup', day)">
-                            {{ dish.title }}
+                            <div>
+                                {{ dish.title }}
+                            </div>
                         </span>
                     </td>
                 </tr>
             </tbody>
         </table>
     </div>
-  </div>
+ </div>
 </section>
 
 <br>
