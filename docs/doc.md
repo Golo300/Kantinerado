@@ -161,4 +161,3 @@ Das System ist so gedacht das für die einzelnen Kategorien "Menü1", "Menü2", 
 <p align="center">
   <img src="resources/Database.png" alt="Architecture-Overview"/>
 </p>
- 
