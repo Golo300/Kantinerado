@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MealserviceService } from '../mealplan.service';
+import { MealserviceService } from '../services/mealplan.service';
 import { Mealplan } from '../Mealplan';
 import { lastDayOfWeek, setWeek, subDays } from 'date-fns';
 

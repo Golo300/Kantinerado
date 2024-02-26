@@ -56,14 +56,19 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav me-auto mb-2 mb-md-0">
+              
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="/">Home</a>
               </li>
-              <li class="nav-item">
+              
+              <li *ngIf="userAccess" class="nav-item">
                 <a class="nav-link active" aria-current="page" href="/order" >Bestellung</a>
               </li>
+            
             </ul>
-            <button class="btn btn-outline-success" type="button">Login</button>
+            
+            <a *ngIf="!loggedIn" class="btn btn-outline-success" type="button" href="/login">Login</a>
+            <button *ngIf="loggedIn" (click)="logout()" class="btn btn-outline-success" type="button">Logout</button>
           </div>
         </div>
       </nav>
