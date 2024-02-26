@@ -4,11 +4,11 @@ import { Mealplan } from '../Mealplan';
 import { lastDayOfWeek, setWeek, subDays } from 'date-fns';
 
 @Component({
-  selector: 'app-mealplan',
-  templateUrl: './mealplan.component.html',
-  styleUrls: ['./mealplan.component.css']
+  selector: 'app-mealplan-order',
+  templateUrl: './mealplan-order.component.html',
+  styleUrls: ['./mealplan-order.component.css']
 })
-export class MealplanComponent implements OnInit {
+export class MealplanOrderComponent implements OnInit {
   kw: number = 10;
   mealplan!: Mealplan;
   weekDays = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'];
@@ -40,7 +40,7 @@ export class MealplanComponent implements OnInit {
         this.mealplan = meaplan;
         console.log(this.mealplan); // Debugging-Information
       });
-  }
+  }  
 
   getDishes(category: string, day: string) {
     const selectedDay = this.mealplan.days.find(d => d.dayofWeek === day);
@@ -59,5 +59,9 @@ export class MealplanComponent implements OnInit {
 
     this.startDate = monday;
     this.endDate = saturday;
-}
+  } 
+
+  addToCart(): void {
+    
+  }
 }

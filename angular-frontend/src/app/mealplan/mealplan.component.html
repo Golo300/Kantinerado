@@ -1,97 +1,117 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kantinerado</title>
-</head>
-<body>
-
-<header>
-  <h1>Kantinerado</h1>
-  <nav>
-    <ul>
-      <!-- Weitere Seiten hier hinzufügen -->
-    </ul>
-  </nav>
-  <a href="login.html" id="loginLink">Anmeldung</a>
-</header>
-
 <main>
-<section id="Speiseplan">
-    <h1>Speiseplan</h1>
+
+<br>
+
+<section id="speiseplan">
+  <div class="divWidth">
+    <h2>Speiseplan</h2>
+  </div>  
 </section>    
 
-  <section id="week">
-    <h2>KW {{kw}}</h2>
-    <div id="week-selector">
-      <button (click)="lastWeek()" id="prev-week">Vorherige Woche</button>
-      <button (click)="nextWeek()" id="next-week">Nächste Woche</button>
+  <br>
+
+  <section id="menu">
+    <div class="card text-begin divWidth">
+     <div class="card-header">
+         Auswahl der Bestellung
+     </div>
+     <div class="card-body d-flex justify-content-between align-items-center divWidth">
+         <div class="col d-flex justify-content-center align-items-center">
+            <h4 class="m-0 mr-3">{{ startDate | date: 'dd.MM.yyyy' }} - {{ endDate | date: 'dd.MM.yyyy' }}</h4>
+         </div>
+         <nav aria-label="Page navigation example">
+             <ul class="pagination m-0">
+                 <li class="page-item">
+                     <a class="page-link" (click)="lastWeek()" id="last-week">
+                         <span aria-hidden="true">&laquo;</span>
+                     </a>
+                 </li>
+                 <li class="page-item mx-2 d-flex align-items-center">
+                     <h4 class="m-0">KW {{kw}}</h4>
+                 </li>
+                 <li class="page-item">
+                     <a class="page-link" (click)="nextWeek()" id="next-week">
+                         <span aria-hidden="true">&raquo;</span>
+                     </a>
+                 </li>
+             </ul>
+         </nav>
+     </div>
+     <div class="table divWidth">
+        <table class="table table-bordered rounded">
+            <thead>
+                <tr>
+                    <th class="align-middle"> </th>
+                    <th class="align-middle">Montag</th>
+                    <th class="align-middle">Dienstag</th>
+                    <th class="align-middle">Mittwoch</th>
+                    <th class="align-middle">Donnerstag</th>
+                    <th class="align-middle">Freitag</th>
+                    <th class="align-middle">Samstag</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th class="align-middle">Menü 1</th>
+                    <td *ngFor="let day of weekDays" class="setMargin align-middle">
+                        <span *ngFor="let dish of getDishes('Menü1', day)">
+                            <div>
+                                {{ dish.title }}
+                            </div>
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="align-middle">Menü 2</th>
+                    <td *ngFor="let day of weekDays" class="align-middle">
+                        <span *ngFor="let dish of getDishes('Menü2', day)">
+                            <div>
+                                {{ dish.title }}
+                            </div>
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="align-middle">Nachspeise</th>
+                    <td *ngFor="let day of weekDays" class="align-middle">
+                        <span *ngFor="let dish of getDishes('Dessert', day)">
+                            <div>
+                                {{ dish.title }}
+                            </div>
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="align-middle">Suppe</th>
+                    <td *ngFor="let day of weekDays" class="align-middle">
+                        <span *ngFor="let dish of getDishes('Soup', day)">
+                            <div>
+                                {{ dish.title }}
+                            </div>
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+ </div>
+</section>
+
+<br>
+
+  <section id="notes">
+    <div class="card text-center divWidth">
+      <div class="card-header">
+        Hinweise
+      </div>
+      <div class="card-body">
+        <ul>Menü 2 ist auch als vegetarische Variante zu erhalten</ul>
+        <ul>Samstags wird nur Menü 2 und Nachtisch angeboten</ul>
+      </div>
     </div>
   </section>
 
-  <section id="menu">
-    <table>
-      <thead>
-        <tr>
-          <th> </th>
-          <th>Montag</th>
-          <th>Dienstag</th>
-          <th>Mittwoch</th>
-          <th>Donnerstag</th>
-          <th>Freitag</th>
-          <th>Samstag</th>
-          <!-- weitere Wochentage hier einfügen -->
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Menü1</td>
-          <td *ngFor="let day of weekDays">
-            <span *ngFor="let dish of getDishes('Menü1', day)">
-              {{ dish.title }}
-            </span>
-          </td>
-        </tr>
-        <tr>
-          <td>Menü2</td>
-          <td *ngFor="let day of weekDays">
-            <span *ngFor="let dish of getDishes('Menü2', day)">
-              {{ dish.title }}
-            </span>
-          </td>
-        </tr>
-        <tr>
-          <td>Dessert</td>
-          <td *ngFor="let day of weekDays">
-            <span *ngFor="let dish of getDishes('Dessert', day)">
-              {{ dish.title }}
-            </span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    
-    
-    
-    
-    
-    
-    
-    
-  </section>
+<br>
 
-  <section id="notes">
-    <h2>Hinweise:</h2>
-    <ul>Menü 2 ist auch als vegetarische Variante zu erhalten</ul>
-    <ul>Samstags wird nur Menü 2 und Nachtisch angeboten</ul>
-  </section>
 </main>
-
-<footer>
-  <p>&copy; 2024 Kantinerado. Alle Rechte vorbehalten.</p>
-</footer>
-
-</body>
-</html>
 
