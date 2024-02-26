@@ -1,18 +1,18 @@
-.table{
-    padding-top: 20px;
-    padding-bottom: 20px;
+.table {
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
-.divWidth{
-    margin: auto;
-    width: 98%;
+.divWidth {
+  margin: auto;
+  width: 98%;
 }
 
-td{
-    text-align: center;
-    height: 5rem;
+td {
+  text-align: center;
+  height: 5rem;
 }
 
-th{
-    text-align: center;
+th {
+  text-align: center;
 }

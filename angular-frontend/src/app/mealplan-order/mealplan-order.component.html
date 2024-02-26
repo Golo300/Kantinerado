@@ -1,29 +1,37 @@
 <main>
+  <br />
 
-<br>
-
-<section id="order">
+  <section id="order">
     <div class="divWidth">
       <h2>Bestellung</h2>
-    </div>  
+    </div>
   </section>
 
-<br>
+  <br />
 
   <section id="menu-selection">
     <div class="card text-begin divWidth">
-      <div class="card-header">
-        Auswahl des Menüs
-      </div>
+      <div class="card-header">Auswahl des Menüs</div>
       <div class="card-body">
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="flexRadioDefault" id="radioBreakfast">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="flexRadioDefault"
+            id="radioBreakfast"
+          />
           <label class="form-check-label" for="flexRadioDefault1">
             Frühstück
           </label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="flexRadioDefault" id="radioLunch" checked>
+          <input
+            class="form-check-input"
+            type="radio"
+            name="flexRadioDefault"
+            id="radioLunch"
+            checked
+          />
           <label class="form-check-label" for="flexRadioDefault2">
             Mittagessen
           </label>
@@ -32,128 +40,157 @@
     </div>
   </section>
 
-<br>
+  <br />
 
-<section id="menu">
+  <section id="menu">
     <div class="card text-begin divWidth">
-     <div class="card-header">
-         Auswahl der Bestellung
-     </div>
-     <div class="card-body d-flex justify-content-between align-items-center divWidth">
-         <div class="col d-flex justify-content-center align-items-center">
-            <p class="m-0 mr-3">{{ startDate | date: 'dd.MM.yyyy' }} - {{ endDate | date: 'dd.MM.yyyy' }}</p>
-         </div>
-         <nav aria-label="Page navigation example">
-             <ul class="pagination m-0">
-                 <li class="page-item">
-                     <a class="page-link" (click)="lastWeek()" id="last-week">
-                         <span aria-hidden="true">&laquo;</span>
-                     </a>
-                 </li>
-                 <li class="page-item mx-2 d-flex align-items-center">
-                     <p class="m-0">KW {{kw}}</p>
-                 </li>
-                 <li class="page-item">
-                     <a class="page-link" (click)="nextWeek()" id="next-week">
-                         <span aria-hidden="true">&raquo;</span>
-                     </a>
-                 </li>
-             </ul>
-         </nav>
-     </div>
-     <div class="table divWidth">
-        <table class="table table-bordered rounded">
-            <thead>
-                <tr>
-                    <th class="align-middle"> </th>
-                    <th class="align-middle">Montag</th>
-                    <th class="align-middle">Dienstag</th>
-                    <th class="align-middle">Mittwoch</th>
-                    <th class="align-middle">Donnerstag</th>
-                    <th class="align-middle">Freitag</th>
-                    <th class="align-middle">Samstag</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th class="align-middle">Menü 1</th>
-                    <td *ngFor="let day of weekDays" class="setMargin align-middle">
-                        <span *ngFor="let dish of getDishes('Menü1', day)">
-                            <div>
-                                {{ dish.title }}
-                            </div>
-                            <div>
-                                <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="checkBoxMenu1">
-                            </div>
-                        </span>
-                    </td>
-                </tr>
-                <tr>
-                    <th class="align-middle">Menü 2</th>
-                    <td *ngFor="let day of weekDays" class="align-middle">
-                        <span *ngFor="let dish of getDishes('Menü2', day)">
-                            <div>
-                                {{ dish.title }}
-                            </div>
-                            <div>
-                                <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="checkBoxMenu2">
-                            </div>
-                        </span>
-                    </td>
-                </tr>
-                <tr>
-                    <th class="align-middle">Nachspeise</th>
-                    <td *ngFor="let day of weekDays" class="align-middle">
-                        <span *ngFor="let dish of getDishes('Dessert', day)">
-                            <div>
-                                {{ dish.title }}
-                            </div>
-                            <div>
-                                <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="checkBoxDessert">
-                            </div>
-                        </span>
-                    </td>
-                </tr>
-                <tr>
-                    <th class="align-middle">Suppe</th>
-                    <td *ngFor="let day of weekDays" class="align-middle">
-                        <span *ngFor="let dish of getDishes('Soup', day)">
-                            <div>
-                                {{ dish.title }}
-                            </div>
-                            <div>
-                                <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="checkBoxSoup">
-                            </div>
-                        </span>
-                    </td>
-                </tr>
-                <tr>
-                    <th></th>
-                    <td *ngFor="let day of weekDays" class="align-middle">
-                        <button type="button" (click)="addToCart()" class="btn btn-outline-success">Zum Warenkorb hinzufügen</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
- </div>
-</section>
-
-<br>
-
-  <section id="notes">
-    <div class="card text-center divWidth">
-      <div class="card-header">
-        Hinweise
+      <div class="card-header">Auswahl der Bestellung</div>
+      <div
+        class="card-body d-flex justify-content-between align-items-center divWidth"
+      >
+        <div class="col d-flex justify-content-center align-items-center">
+          <h4 class="m-0 mr-3">
+            {{ startDate | date : "dd.MM.yyyy" }} -
+            {{ endDate | date : "dd.MM.yyyy" }}
+          </h4>
+        </div>
+        <nav aria-label="Page navigation example">
+          <ul class="pagination m-0">
+            <li class="page-item">
+              <a class="page-link" (click)="lastWeek()" id="last-week">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            <li class="page-item mx-2 d-flex align-items-center">
+              <h4 class="m-0">KW {{ kw }}</h4>
+            </li>
+            <li class="page-item">
+              <a class="page-link" (click)="nextWeek()" id="next-week">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
       </div>
-      <div class="card-body">
-        <ul>Menü 2 ist auch als vegetarische Variante zu erhalten</ul>
-        <ul>Samstags wird nur Menü 2 und Nachtisch angeboten</ul>
+      <div class="table divWidth">
+        <table class="table table-bordered rounded">
+          <thead>
+            <tr>
+              <th class="align-middle"></th>
+              <th class="align-middle">Montag</th>
+              <th class="align-middle">Dienstag</th>
+              <th class="align-middle">Mittwoch</th>
+              <th class="align-middle">Donnerstag</th>
+              <th class="align-middle">Freitag</th>
+              <th class="align-middle">Samstag</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th class="align-middle">Menü 1</th>
+              <td *ngFor="let day of weekDays" class="setMargin align-middle">
+                <span *ngFor="let dish of getDishes('Menü1', day)">
+                  <div>
+                    {{ dish.title }}
+                  </div>
+                  <div>
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      name="flexRadioDefault"
+                      id="checkBoxMenu1"
+                    />
+                  </div>
+                </span>
+              </td>
+            </tr>
+            <tr>
+              <th class="align-middle">Menü 2</th>
+              <td *ngFor="let day of weekDays" class="align-middle">
+                <span *ngFor="let dish of getDishes('Menü2', day)">
+                  <div>
+                    {{ dish.title }}
+                  </div>
+                  <div>
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      name="flexRadioDefault"
+                      id="checkBoxMenu2"
+                    />
+                  </div>
+                </span>
+              </td>
+            </tr>
+            <tr>
+              <th class="align-middle">Nachspeise</th>
+              <td *ngFor="let day of weekDays" class="align-middle">
+                <span *ngFor="let dish of getDishes('Dessert', day)">
+                  <div>
+                    {{ dish.title }}
+                  </div>
+                  <div>
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      name="flexRadioDefault"
+                      id="checkBoxDessert"
+                    />
+                  </div>
+                </span>
+              </td>
+            </tr>
+            <tr>
+              <th class="align-middle">Suppe</th>
+              <td *ngFor="let day of weekDays" class="align-middle">
+                <span *ngFor="let dish of getDishes('Soup', day)">
+                  <div>
+                    {{ dish.title }}
+                  </div>
+                  <div>
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      name="flexRadioDefault"
+                      id="checkBoxSoup"
+                    />
+                  </div>
+                </span>
+              </td>
+            </tr>
+            <tr>
+              <th></th>
+              <td *ngFor="let day of weekDays" class="align-middle">
+                <button
+                  type="button"
+                  (click)="addToCart()"
+                  class="btn btn-outline-success"
+                >
+                  Zum Warenkorb hinzufügen
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </section>
 
-<br>
+  <br />
 
+  <section id="notes">
+    <div class="card text-center divWidth">
+      <div class="card-header">Hinweise</div>
+      <div class="card-body">
+        <ul>
+          Menü 2 ist auch als vegetarische Variante zu erhalten
+        </ul>
+        <ul>
+          Samstags wird nur Menü 2 und Nachtisch angeboten
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <br />
 </main>
-
