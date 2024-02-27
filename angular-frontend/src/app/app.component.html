@@ -42,7 +42,7 @@
     <header>
       <nav class="navbar navbar-expand-md navbar-dark bg-dark">
         <div class="container-fluid">
-          <a class="navbar-brand" href="#">Kantinderado</a>
+          <a class="navbar-brand">Kantinderado</a>
           <button
             class="navbar-toggler"
             type="button"
@@ -67,8 +67,8 @@
             
             </ul>
             
-            <a *ngIf="!loggedIn" class="btn btn-outline-success" type="button" href="/login">Login</a>
-            <button *ngIf="loggedIn" (click)="logout()" class="btn btn-outline-success" type="button">Logout</button>
+            <a *ngIf="!loggedIn" class="btn btn-success" type="button" href="/login">Login</a>
+            <button *ngIf="loggedIn" (click)="logout()" class="btn btn-success" type="button">Logout</button>
           </div>
         </div>
       </nav>
