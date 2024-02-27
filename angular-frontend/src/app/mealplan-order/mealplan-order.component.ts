@@ -15,6 +15,9 @@ export class MealplanOrderComponent implements OnInit {
   startDate!: Date;
   endDate!: Date;
 
+  isBreakfastOpen: boolean = false; // Initial status for breakfast collapse
+  isLunchOpen: boolean = true; // Initial status for lunch collapse
+
   constructor(private mealService: MealserviceService) {}
 
   ngOnInit(): void {
@@ -59,7 +62,15 @@ export class MealplanOrderComponent implements OnInit {
 
     this.startDate = monday;
     this.endDate = saturday;
-  } 
+  }
+
+  toggleCollapse(collapseId: string): void {
+    if (collapseId === 'collapseBreakfast') {
+      this.isBreakfastOpen = !this.isBreakfastOpen; // Toggle breakfast collapse
+    } else if (collapseId === 'collapseLunch') {
+      this.isLunchOpen = !this.isLunchOpen; // Toggle lunch collapse
+    }
+  }
 
   addToCart(): void {
     
