@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, map } from 'rxjs';
+import { Observable, catchError, map, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +29,14 @@ export class AuthService {
         return response;
       })
     );
+  }
+
+  register(newUserInfo: {employeeId: number, username: string, email: string, password: string }): Observable<any> {
+    
+    return this.http.post<any>(`${this.apiUrl}/register`, newUserInfo).pipe(
+      map((response) => {
+        return "Sucess";
+      }));
   }
 
    extractAuthorities(authoritiesArray: any[]) {
