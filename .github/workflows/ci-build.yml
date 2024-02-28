@@ -21,20 +21,6 @@ jobs:
         java-version: '17'
         distribution: 'adopt'
 
-    - name: Build with Gradle
-      run: |
-            docker ps
-            cd springboot-backend
-            ./gradlew build
-
-  setup-mysql:
-    name: Set up MySQL
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Check out code
-      uses: actions/checkout@v2
-
     - name: Install Docker Compose
       run: |
         sudo apt-get update
@@ -43,4 +29,10 @@ jobs:
     - name: Start MySQL with Docker Compose
       run: |
         docker-compose up -d mysql
+    
+    - name: Build with Gradle
+      run: |
+            docker ps
+            cd springboot-backend
+            ./gradlew build
 
