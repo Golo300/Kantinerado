@@ -1,4 +1,4 @@
-name: Spring Boot CI
+name: Kantinerado
 
 on:
   pull_request:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    name: Build
+    name: Build and Test
     runs-on: ubuntu-latest
 
     steps:
@@ -29,9 +29,8 @@ jobs:
       run: |
         docker-compose up -d mysql
     
-    - name: Build with Gradle
+    - name: Build and Test with Gradle
       run: |
-            docker ps
             cd springboot-backend
             ./gradlew build
 
