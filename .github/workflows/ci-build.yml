@@ -23,7 +23,7 @@ jobs:
     - name: Build with Gradle
       run: |
             cd springboot-backend
-            ./gradlew build
+            ./gradlew build -x test
 
   test:
     name: Run Tests
