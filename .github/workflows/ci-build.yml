@@ -25,7 +25,7 @@ jobs:
     - name: Build with Gradle
       run: |
         cd springboot-backend  # Wechseln Sie in den Unterordner
-        ./gradlew build
+        gradlew build
 
   test:
     name: Run Tests
@@ -47,5 +47,5 @@ jobs:
     - name: Run Tests with Gradle
       run: |
         cd springboot-backend  # Wechseln Sie in den Unterordner
-        ./gradlew test
+        gradlew test
 
