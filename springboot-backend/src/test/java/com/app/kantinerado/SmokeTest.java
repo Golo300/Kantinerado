@@ -15,11 +15,4 @@ class SmokeTest {
 
     }
 
-    @Test
-    void failingTest() {
-
-        Assert.isTrue(false, "Smoke test 2 faling");
-
-    }
-
 }
