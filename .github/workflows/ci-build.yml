@@ -23,6 +23,7 @@ jobs:
 
     - name: Build with Gradle
       run: |
+            docker ps
             cd springboot-backend
             ./gradlew build
 
