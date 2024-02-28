@@ -9,6 +9,7 @@ import { MealplanComponent } from './mealplan/mealplan.component';
 import { MealplanOrderComponent } from './mealplan-order/mealplan-order.component';
 import { CheckoutComponent } from './checkout/checkout.component';
 import { LoginComponent } from './login/login.component';
+import { OrderProcessComponent } from './order-process/order-process.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { LoginComponent } from './login/login.component';
     MealplanComponent,
     MealplanOrderComponent,
     CheckoutComponent,
-    LoginComponent
+    LoginComponent,
+    OrderProcessComponent
   ],
   imports: [
     BrowserModule,

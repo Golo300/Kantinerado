@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { MealserviceService } from '../services/mealplan.service';
-import { Mealplan } from '../Mealplan';
+import { Day, Dish, Mealplan } from '../Mealplan';
 import { lastDayOfWeek, setWeek, subDays } from 'date-fns';
+import { Order } from '../OrderProcess';
 
 @Component({
   selector: 'app-mealplan-order',
@@ -9,16 +10,20 @@ import { lastDayOfWeek, setWeek, subDays } from 'date-fns';
   styleUrls: ['./mealplan-order.component.css']
 })
 export class MealplanOrderComponent implements OnInit {
+  @Output() selectedDishesChanged = new EventEmitter<any[]>();
+
   kw: number = 10;
   mealplan!: Mealplan;
   weekDays = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'];
   startDate!: Date;
   endDate!: Date;
 
-  isBreakfastOpen: boolean = false; // Initial status for breakfast collapse
-  isLunchOpen: boolean = true; // Initial status for lunch collapse
+  isBreakfastOpen: boolean = false;
+  isLunchOpen: boolean = true;
 
-  constructor(private mealService: MealserviceService) {}
+  selectedDishes: Order[] = [];
+
+  constructor(private mealService: MealserviceService) { }
 
   ngOnInit(): void {
     this.getMealplan();
@@ -43,7 +48,7 @@ export class MealplanOrderComponent implements OnInit {
         this.mealplan = meaplan;
         console.log(this.mealplan); // Debugging-Information
       });
-  }  
+  }
 
   getDishes(category: string, day: string) {
     const selectedDay = this.mealplan.days.find(d => d.dayofWeek === day);
@@ -72,7 +77,20 @@ export class MealplanOrderComponent implements OnInit {
     }
   }
 
-  addToCart(): void {
-    
+  checkboxChanged(event: any, dish: Dish): void {
+    console.log(dish.title);
+    if (event.target.checked) {
+      const order: Order = {
+        dish_id: dish.id,
+        // day: selectedDay, // Verwendung des Day-Objekts
+        //ordered: 0
+      };
+      this.selectedDishes.push(order);
+    } else {
+      this.selectedDishes = this.selectedDishes.filter(order => {
+        return order.dish_id !== dish.id;
+    });
+    }
+    console.log(this.selectedDishes);
   }
 }

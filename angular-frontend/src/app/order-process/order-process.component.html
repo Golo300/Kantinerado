@@ -1,0 +1,4 @@
+<div>
+    <app-mealplan-order (selectedDishesChanged)="receiveSelectedDishes($event)"></app-mealplan-order>
+    <app-checkout [selectedDishes]="selectedDishes"></app-checkout>
+</div>
