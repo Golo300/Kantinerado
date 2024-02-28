@@ -23,9 +23,7 @@ jobs:
         distribution: 'adopt'
 
     - name: Build with Gradle
-      run: |
-        cd springboot-backend  # Wechseln Sie in den Unterordner
-        gradlew build
+      run: ./springboot/gradlew build
 
   test:
     name: Run Tests
@@ -45,7 +43,5 @@ jobs:
         distribution: 'adopt'
 
     - name: Run Tests with Gradle
-      run: |
-        cd springboot-backend  # Wechseln Sie in den Unterordner
-        gradlew test
+      run: ./springboot/gradlew test
 
