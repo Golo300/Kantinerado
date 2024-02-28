@@ -19,14 +19,18 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="users")
 public class ApplicationUser implements UserDetails{
 
-    @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
     private Integer userId;
 	@Column(unique=true)
     private String username;
+
+	@Column(unique=true)
+	private int employeeiD;
+
+	private String email;
     private String password;
 
     @ManyToMany(fetch=FetchType.EAGER)
@@ -43,11 +47,12 @@ public class ApplicationUser implements UserDetails{
 	}
 	
 
-	public ApplicationUser(Integer userId, String username, String password, Set<Role> authorities) {
+	public ApplicationUser(Integer employeeiD, String username, String email, String password, Set<Role> authorities) {
 		super();
-		this.userId = userId;
+		this.employeeiD = employeeiD;
 		this.username = username;
 		this.password = password;
+		this.email = email;
 		this.authorities = authorities;
 	}
 
@@ -57,6 +62,14 @@ public class ApplicationUser implements UserDetails{
 	
 	public void setId(Integer userId) {
 		this.userId = userId;
+	}
+
+	public Integer getEmployeeiD() {
+		return this.employeeiD;
+	}
+
+	public void getEmployeeiD(Integer employeeiD) {
+		this.employeeiD = employeeiD;
 	}
 	
 	public void setAuthorities(Set<Role> authorities) {
@@ -71,7 +84,6 @@ public class ApplicationUser implements UserDetails{
 
 	@Override
 	public String getPassword() {
-		// TODO Auto-generated method stub
 		return this.password;
 	}
 	
@@ -81,14 +93,21 @@ public class ApplicationUser implements UserDetails{
 
 	@Override
 	public String getUsername() {
-		// TODO Auto-generated method stub
 		return this.username;
 	}
 	
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	
+
+	public String getEmail() {
+		return this.email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	/* If you want account locking capabilities create variables and ways to set them for the methods below */
 	@Override
 	public boolean isAccountNonExpired() {
