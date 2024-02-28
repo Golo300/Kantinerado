@@ -1,5 +1,6 @@
 package com.app.kantinerado;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -81,8 +82,8 @@ public class AuthenticatedBackendApplication {
 			}
 			//Example Order
 			Order order = new Order();
-			order.setDate("exampleDate");
-			order.setOrdered(true);
+			order.setDate(new Date());
+			order.setVeggie(true);
 			order.setDish(new Dish());
 			orderRepository.save(order);
 

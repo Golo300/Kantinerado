@@ -1,18 +1,20 @@
 package com.app.kantinerado.models.mealplan;
 
-import com.app.kantinerado.models.mealplan.Dish;
 import jakarta.persistence.*;
 
+import java.util.Date;
+
 @Entity
+@Table(name = "order")
 public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    private String date;
+    private Date date;
 
-    private boolean ordered;
+    private boolean veggie;
 
     @ManyToOne()
     @JoinColumn(name = "dish_id")
@@ -21,10 +23,10 @@ public class Order {
     public Order() {
         super();
     }
-    public Order(Integer id, String date, boolean ordered, Dish dish) {
+    public Order(Integer id, Date date, boolean veggie, Dish dish) {
         this.id = id;
         this.date = date;
-        this.ordered = ordered;
+        this.veggie = veggie;
         this.dish = dish;
     }
 
@@ -37,20 +39,20 @@ public class Order {
         this.id = id;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
-    public boolean isOrdered() {
-        return ordered;
+    public boolean isVeggie() {
+        return veggie;
     }
 
-    public void setOrdered(boolean ordered) {
-        this.ordered = ordered;
+    public void setVeggie(boolean ordered) {
+        this.veggie = ordered;
     }
 
     public Dish getDish() {
