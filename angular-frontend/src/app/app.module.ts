@@ -11,6 +11,7 @@ import { CheckoutComponent } from './checkout/checkout.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { JwtInterceptor } from './helper/jwt.interceptor';
+import { OrderProcessComponent } from './order-process/order-process.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { JwtInterceptor } from './helper/jwt.interceptor';
     MealplanOrderComponent,
     CheckoutComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    OrderProcessComponent
   ],
   imports: [
     BrowserModule,
