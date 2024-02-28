@@ -23,7 +23,7 @@ jobs:
         distribution: 'adopt'
 
     - name: Build with Gradle
-      run: ./springboot/gradlew build
+      run: ./gradlew build
 
   test:
     name: Run Tests
@@ -43,5 +43,5 @@ jobs:
         distribution: 'adopt'
 
     - name: Run Tests with Gradle
-      run: ./springboot/gradlew test
+      run: ./gradlew test
 
