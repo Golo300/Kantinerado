@@ -1,6 +1,9 @@
 name: Kantinerado
 
 on:
+  push:
+    branches:
+      - main
   pull_request:
     branches:
       - main
