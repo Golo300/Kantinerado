@@ -23,7 +23,7 @@
             pkgs.texliveTeTeX
           ];
 
-          /*shellHook = ''
+          shellHook = ''
             export NPM_CONFIG_PREFIX="$out"
             
             # Entferne den Link, falls vorhanden
@@ -39,7 +39,7 @@
             export NODE_OPTIONS=--openssl-legacy-provider
             echo ../outputs/out/bin/ng serve
             cd ..
-            '';*/
+            '';
         };
    };
 }
