@@ -24,6 +24,7 @@ jobs:
 
     - name: Build with Gradle
       run: |
+            cd springboot-backend
             ls
             ./gradlew build
 
