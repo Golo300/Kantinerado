@@ -23,6 +23,7 @@ jobs:
         distribution: 'adopt'
 
     - name: Build with Gradle
+      run: ls
       run: ./gradlew build
 
   test:
