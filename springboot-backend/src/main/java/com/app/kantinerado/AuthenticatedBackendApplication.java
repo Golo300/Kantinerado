@@ -3,10 +3,7 @@ package com.app.kantinerado;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.app.kantinerado.models.mealplan.Day;
-import com.app.kantinerado.models.mealplan.Dish;
-import com.app.kantinerado.models.mealplan.DishCategory;
-import com.app.kantinerado.models.mealplan.Mealplan;
+import com.app.kantinerado.models.mealplan.*;
 import com.app.kantinerado.repository.*;
 import com.app.kantinerado.utils.Roles;
 import org.springframework.boot.CommandLineRunner;
@@ -27,7 +24,7 @@ public class AuthenticatedBackendApplication {
 	@Bean
 	CommandLineRunner run(RoleRepository roleRepository, UserRepository userRepository, MealplanRepository mealplanRepository,
 						  DayRepository dayRepository, DishRepository dishRepository, DishCategoryRepository dishCategoryRepository,
-						  PasswordEncoder passwordEncode){
+						  OrderRepository orderRepository, PasswordEncoder passwordEncode){
 		return args ->{
 
 			if(roleRepository.findByAuthority("ADMIN").isPresent()) return;
@@ -82,6 +79,12 @@ public class AuthenticatedBackendApplication {
 				day.setDishes(dishes);
 				dayRepository.save(day);
 			}
+			//Example Order
+			Order order = new Order();
+			order.setDate("exampleDate");
+			order.setOrdered(true);
+			order.setDish(new Dish());
+			orderRepository.save(order);
 
 			mealplan.setDays(days);
 			mealplan = mealplanRepository.save(mealplan);
