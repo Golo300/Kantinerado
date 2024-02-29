@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MealserviceService } from '../services/mealplan.service';
 import { Mealplan } from '../Mealplan';
-import { lastDayOfWeek, setWeek, subDays } from 'date-fns';
+import { getISOWeek, lastDayOfWeek, setWeek, subDays } from 'date-fns';
 import { AuthService } from '../services/auth.service';
 
 @Component({
@@ -10,22 +10,28 @@ import { AuthService } from '../services/auth.service';
   styleUrls: ['./mealplan.component.css']
 })
 export class MealplanComponent implements OnInit {
-  kw: number = 10;
-  mealplan!: Mealplan;
+  kw!: number;
+  mealplan!: Mealplan | null;
   weekDays = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'];
   startDate!: Date;
   endDate!: Date;
 
-  constructor(private mealService: MealserviceService, private authService: AuthService) {}
+  constructor(private mealService: MealserviceService, private authService: AuthService) { }
 
   ngOnInit(): void {
+    this.setCurrentKW();
     this.getMealplan();
     this.calculateWeekRange();
-    
+
     this.authService.test()
-    .subscribe(response => {
-      console.log(response); // Debugging-Information
-    });
+      .subscribe(response => {
+        console.log(response); // Debugging-Information
+      });
+  }
+
+  setCurrentKW() {
+    const currentDate = new Date();
+    this.kw = getISOWeek(currentDate);
   }
 
   nextWeek(): void {
@@ -41,6 +47,7 @@ export class MealplanComponent implements OnInit {
   }
 
   getMealplan(): void {
+    this.mealplan = null;
     this.mealService.getMealplan(this.kw)
       .subscribe(meaplan => {
         this.mealplan = meaplan;
@@ -49,9 +56,11 @@ export class MealplanComponent implements OnInit {
   }
 
   getDishes(category: string, day: string) {
-    const selectedDay = this.mealplan.days.find(d => d.dayofWeek === day);
-    if (selectedDay) {
-      return selectedDay.dishes.filter(dish => dish.dishCategory.name === category);
+    if (this.mealplan != null) {
+      const selectedDay = this.mealplan.days.find(d => d.dayofWeek === day);
+      if (selectedDay) {
+        return selectedDay.dishes.filter(dish => dish.dishCategory.name === category);
+      }
     }
     return [];
   }
@@ -65,5 +74,5 @@ export class MealplanComponent implements OnInit {
 
     this.startDate = monday;
     this.endDate = saturday;
-}
+  }
 }
