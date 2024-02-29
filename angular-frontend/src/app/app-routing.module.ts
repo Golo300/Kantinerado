@@ -6,9 +6,12 @@ import { CheckoutComponent } from './checkout/checkout.component';
 import { LoginComponent } from './login/login.component';
 import { AuthGuardService } from './services/auth.guard.service';
 import { RegisterComponent } from './register/register.component';
+import { DetailViewComponent } from './detail-view/detail-view.component';
 
 const routes: Routes = [
   { path: '', component: MealplanComponent },
+  { path: 'mealplan', component: MealplanComponent },
+  { path: 'detailview/:kw/:day', component: DetailViewComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'order', component: MealplanOrderComponent, canActivate: [AuthGuardService], data: { allowedRoles: ['ADMIN', 'USER', 'KANTEEN'] }},
