@@ -1,6 +1,9 @@
 package com.app.kantinerado.controllers;
 
+import com.app.kantinerado.models.LoginDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,6 +15,8 @@ import com.app.kantinerado.models.LoginResponseDTO;
 import com.app.kantinerado.models.RegistrationDTO;
 import com.app.kantinerado.services.AuthenticationService;
 
+import java.net.URI;
+
 @RestController
 @RequestMapping("/auth")
 @CrossOrigin("*")
@@ -21,12 +26,18 @@ public class AuthenticationController {
     private AuthenticationService authenticationService;
 
     @PostMapping("/register")
-    public ApplicationUser registerUser(@RequestBody RegistrationDTO body){
-        return authenticationService.registerUser(body.getUsername(), body.getPassword());
+    public ResponseEntity<String> registerUser(@RequestBody RegistrationDTO body){
+        boolean response = authenticationService.registerUser(body);
+
+        if (response) {
+            return ResponseEntity.created(URI.create("test")).build();
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
     }
     
     @PostMapping("/login")
-    public LoginResponseDTO loginUser(@RequestBody RegistrationDTO body){
-        return authenticationService.loginUser(body.getUsername(), body.getPassword());
+    public LoginResponseDTO loginUser(@RequestBody LoginDTO body){
+        return authenticationService.loginUser(body);
     }
 }   
