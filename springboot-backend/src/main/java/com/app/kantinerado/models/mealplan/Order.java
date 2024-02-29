@@ -14,7 +14,6 @@ public class Order {
 
     private Date date;
 
-
     private Date ordered;
     private boolean veggie;
 
