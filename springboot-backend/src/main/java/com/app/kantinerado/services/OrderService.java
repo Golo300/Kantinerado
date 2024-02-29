@@ -12,22 +12,12 @@ import java.util.Date;
 public class OrderService {
 
 
-    public String message;
+    public String message = "Unbekannter Fehler";
 
     //Validierung der Bestellung
     public boolean checkOrder(Order order) {
 
-        Date currentDate = new Date();
-        Calendar currentCalendarDate = Calendar.getInstance();
-        currentCalendarDate.setTime(currentDate);
-        int currentDayOfWeek = currentCalendarDate.get(Calendar.DAY_OF_WEEK);
-        int daysUntilNextThursday = Calendar.THURSDAY - currentDayOfWeek;
-        if (daysUntilNextThursday <= 0) {
-            daysUntilNextThursday += 7; // Wenn der heutige Tag bereits ein Donnerstag ist, fügen Sie 7 Tage hinzu
-        }
-        currentCalendarDate.add(Calendar.DAY_OF_YEAR, daysUntilNextThursday);
-        currentCalendarDate.set(Calendar.HOUR_OF_DAY, 18);
-        Date nextThursday18 = currentCalendarDate.getTime();
+        Date nextThursday18 = getNextThursday18();
 
 
         //Bestellung ist bis Donnerstag, 1800 Uhr für die kommende Woche möglich
@@ -41,13 +31,27 @@ public class OrderService {
             return false;
         }
         //Samstags darf kein Menü 1 und keine Suppe bestellt werden
-        if (currentDayOfWeek == 6 && (order.getDish().getDishCategory().getName().equals("Menü1") ||
+        if (order.getDate().getDate() == 7 && (order.getDish().getDishCategory().getName().equals("Menü1") ||
                 order.getDish().getDishCategory().getName().equals("Suppe"))) {
             setMessage("Samstags darf kein Menü 1 und keine Suppe bestellt werden");
             return false;
         }
 
         return true;
+    }
+
+    private static Date getNextThursday18() {
+        Date currentDate = new Date();
+        Calendar currentCalendarDate = Calendar.getInstance();
+        currentCalendarDate.setTime(currentDate);
+        int currentDayOfWeek = currentCalendarDate.get(Calendar.DAY_OF_WEEK);
+        int daysUntilNextThursday = Calendar.THURSDAY - currentDayOfWeek;
+        if (daysUntilNextThursday <= 0) {
+            daysUntilNextThursday += 7; // Wenn der heutige Tag bereits ein Donnerstag ist, fügen Sie 7 Tage hinzu
+        }
+        currentCalendarDate.add(Calendar.DAY_OF_YEAR, daysUntilNextThursday);
+        currentCalendarDate.set(Calendar.HOUR_OF_DAY, 18);
+        return currentCalendarDate.getTime();
     }
 
     public String getMessage() {

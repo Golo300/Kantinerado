@@ -2,7 +2,9 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { MealserviceService } from '../services/mealplan.service';
 import { Day, Dish, Mealplan } from '../Mealplan';
 import { getISOWeek, lastDayOfWeek, setWeek, subDays } from 'date-fns';
-import { Order } from '../OrderProcess';
+import {Order} from "../Mealplan";
+import {OrderService} from '../services/order.service';
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
   selector: 'app-mealplan-order',
@@ -22,8 +24,9 @@ export class MealplanOrderComponent implements OnInit {
   isLunchOpen: boolean = true;
 
   selectedDishes: Order[] = [];
+  message : String = "";
 
-  constructor(private mealService: MealserviceService) { }
+  constructor(private mealService: MealserviceService, private orderService: OrderService) { }
 
   ngOnInit(): void {
     this.setCurrentKW();
@@ -66,6 +69,22 @@ export class MealplanOrderComponent implements OnInit {
     return [];
   }
 
+  createOrder(){
+    this.orderService.createOrder({ order: this.selectedDishes })
+      .subscribe((order: Order) => {
+          // Erfolgsfall
+          this.message = "Bestellung erfolgreich";
+          console.log(this.message); // Debugging-Information
+        },
+        (errorResponse: HttpErrorResponse) => {
+          // Fehlerfall
+          console.error('Fehler beim Erstellen der Bestellung:', errorResponse.error);
+          // Hier können Sie die Fehlermeldung behandeln und entsprechend reagieren
+          // Zum Beispiel, um die Fehlermeldung anzuzeigen oder andere Maßnahmen zu ergreifen
+        }
+      );
+  }
+
   calculateWeekRange(): void {
     const currentYear = new Date().getFullYear();
 
@@ -89,20 +108,23 @@ export class MealplanOrderComponent implements OnInit {
     console.log(dish.title);
     if (event.target.checked) {
       const order: Order = {
-        dish_id: dish.id,
-        // day: selectedDay, // Verwendung des Day-Objekts
-        //ordered: 0
+        date: new Date(),
+        dish: dish,
+        ordered: new Date(),
+        veggie: false //TODO: User muss angeben ob er veggie will oder nicht
       };
       this.selectedDishes.push(order);
     } else {
-      this.selectedDishes = this.selectedDishes.filter(order => {
-        return order.dish_id !== dish.id;
-      });
+      const index = this.selectedDishes.findIndex(item => item.dish === dish);
+      if (index !== -1) {
+        this.selectedDishes.splice(index, 1);
+      }
     }
     console.log(this.selectedDishes);
   }
 
   addToCart(): void {
+    this.createOrder()
     this.selectedDishesChanged.emit(this.selectedDishes);
   }
 }

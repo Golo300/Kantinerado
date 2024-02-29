@@ -61,7 +61,7 @@ public class SecurityConfiguration {
                 auth.requestMatchers("/mealplan/**").permitAll();
                 auth.requestMatchers("/admin/**").hasRole(Roles.ADMIN);
                 auth.requestMatchers("/user/**").hasAnyRole(Roles.ADMIN, Roles.USER);
-                auth.requestMatchers("/order/**").hasAnyRole(Roles.ADMIN, Roles.USER);
+//                auth.requestMatchers("/order/**").hasAnyRole(Roles.ADMIN, Roles.USER);
                 auth.anyRequest().authenticated();
             });
 

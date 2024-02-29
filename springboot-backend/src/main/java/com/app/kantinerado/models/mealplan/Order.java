@@ -25,8 +25,7 @@ public class Order {
         super();
     }
 
-    public Order(Integer id, Date date, boolean veggie, Dish dish, Date ordered) {
-        this.id = id;
+    public Order(Date date, boolean veggie, Dish dish, Date ordered) {
         this.date = date;
         this.veggie = veggie;
         this.dish = dish;

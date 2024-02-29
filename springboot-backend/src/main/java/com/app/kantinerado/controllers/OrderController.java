@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/order")
+@RequestMapping("/")
 @CrossOrigin("*")
 public class OrderController {
 
@@ -22,7 +22,8 @@ public class OrderController {
         this.orderRepository = orderRepository;
     }
 
-    @PostMapping("/")
+
+    @PostMapping("/order")
     public ResponseEntity<String> createOrder(@RequestBody Order[] body) {
         for (Order order: body) {
         if (!orderService.checkOrder(order)) {

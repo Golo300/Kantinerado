@@ -81,12 +81,6 @@ public class AuthenticatedBackendApplication {
 				day.setDishes(dishes);
 				dayRepository.save(day);
 			}
-			//Example Order
-			Order order = new Order();
-			order.setDate(new Date());
-			order.setVeggie(true);
-			order.setDish(new Dish());
-			orderRepository.save(order);
 
 			mealplan.setDays(days);
 			mealplan = mealplanRepository.save(mealplan);

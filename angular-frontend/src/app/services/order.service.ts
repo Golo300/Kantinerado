@@ -6,9 +6,9 @@ import {Order} from "../Mealplan";
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
+export class OrderService {
 
-  private apiUrl = 'http://localhost:8080/order';
+  private apiUrl = 'http://localhost:8080';
 
 
   constructor(private http: HttpClient) {

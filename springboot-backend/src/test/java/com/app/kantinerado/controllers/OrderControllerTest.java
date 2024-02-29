@@ -36,7 +36,7 @@ public class OrderControllerTest {
     @ParameterizedTest
     @MethodSource("testOrders")
     public void testCreateOrder(Date date, Dish dish, Date ordered, Boolean veggie) {
-        Order testOrder = new Order(1, date, veggie, dish, ordered);
+        Order testOrder = new Order(date, veggie, dish, ordered);
         assertEquals(true, orderService.checkOrder(testOrder));
     }
 
