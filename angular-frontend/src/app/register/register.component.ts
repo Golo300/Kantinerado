@@ -29,9 +29,7 @@ export class RegisterComponent {
         })
       )
       .subscribe(response => {
-        if (response) {
           this.router.navigate(['/login']);
-        }
       });
   }
 }
