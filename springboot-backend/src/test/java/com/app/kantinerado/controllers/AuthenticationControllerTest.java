@@ -1,14 +1,15 @@
 package com.app.kantinerado.controllers;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 import com.app.kantinerado.models.ApplicationUser;
+import com.app.kantinerado.models.LoginDTO;
 import com.app.kantinerado.models.LoginResponseDTO;
 import com.app.kantinerado.models.RegistrationDTO;
 import com.app.kantinerado.services.AuthenticationService;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,38 +24,91 @@ public class AuthenticationControllerTest {
 
 
     @Test
-    public void testRegisterUser_Success() {
+    /**
+     * Tests the creation of a new user and the succesfull login
+     */
+    public void testRegisterUserLogin_Success() {
         // Arrange
-        RegistrationDTO registrationDTO = new RegistrationDTO();
-        registrationDTO.setUsername("testUser");
-        registrationDTO.setPassword("password");
 
-        ApplicationUser expectedUser = new ApplicationUser();
-        expectedUser.setUsername(registrationDTO.getUsername());
+        final String username = "testUesr";
+        final String password = "password";
+
+        RegistrationDTO registrationDTO = new RegistrationDTO();
+        registrationDTO.setEmployeeId(1234);
+        registrationDTO.setUsername(username);
+        registrationDTO.setEmail("email@test.com");
+        registrationDTO.setPassword(password);
 
         // Act
-        //ApplicationUser actualUser = authenticationService.registerUser(registrationDTO);
+        boolean sucess = authenticationService.registerUser(registrationDTO);
+        assertTrue(sucess);
 
+        LoginDTO loginDTO = new LoginDTO(username, password);
+        LoginResponseDTO response = authenticationService.loginUser(loginDTO);
         // Assert
-        //assertEquals(expectedUser.getUsername(), actualUser.getUsername());
+
+        assertEquals(username, response.getUser().getUsername());
     }
 
     @Test
-    public void testLoginUser_Success() {
-        // Arrange
-        RegistrationDTO registrationDTO = new RegistrationDTO();
-        registrationDTO.setUsername("admin");
-        registrationDTO.setPassword("password");
+    /**
+     * Test that new user can't be created witch same employeeId, username or email
+     */
+    public void testRegisterDup_Success() {
 
-        ApplicationUser expectedUser = new ApplicationUser();
-        expectedUser.setUsername(registrationDTO.getUsername());
+        final String username = "testUesr";
+        final String password = "password";
+        final int employeeId = 1234;
+        final String email = "email@test.com";
+
+        RegistrationDTO registrationDTO = new RegistrationDTO();
+        registrationDTO.setEmployeeId(employeeId);
+        registrationDTO.setUsername(username);
+        registrationDTO.setEmail(email);
+        registrationDTO.setPassword(password);
 
         // Act
-        //LoginResponseDTO response = authenticationService.loginUser(registrationDTO.getUsername(), registrationDTO.getPassword());
+        boolean sucess = authenticationService.registerUser(registrationDTO);
+        assertTrue(sucess);
 
-        // Assert
-        //assertTrue("" != response.getJwt());
-        //assertEquals(expectedUser.getUsername(), response.getUser().getUsername());
+        // same id
+        registrationDTO = new RegistrationDTO();
+        registrationDTO.setEmployeeId(employeeId);
+        registrationDTO.setUsername("testUser2");
+        registrationDTO.setEmail("email2@test.com");
+        registrationDTO.setPassword(password);
+
+
+        // Act
+        sucess = authenticationService.registerUser(registrationDTO);
+        assertFalse(sucess);
+
+
+        // same user name
+        registrationDTO = new RegistrationDTO();
+        registrationDTO.setEmployeeId(12344);
+        registrationDTO.setUsername(username);
+        registrationDTO.setEmail("email3@test.com");
+        registrationDTO.setPassword(password);
+
+
+        // Act
+         sucess = authenticationService.registerUser(registrationDTO);
+        assertFalse(sucess);
+
+
+        // same email
+        registrationDTO = new RegistrationDTO();
+        registrationDTO.setEmployeeId(12334);
+        registrationDTO.setUsername("testUser3");
+        registrationDTO.setEmail(email);
+        registrationDTO.setPassword(password);
+
+
+        // Act
+        sucess = authenticationService.registerUser(registrationDTO);
+        assertFalse(sucess);
+
     }
 }
 

@@ -30,7 +30,7 @@ public class AuthenticationController {
         boolean response = authenticationService.registerUser(body);
 
         if (response) {
-            return ResponseEntity.created(URI.create("test")).build();
+            return ResponseEntity.created(URI.create(body.getUsername())).build();
         } else {
             return ResponseEntity.badRequest().build();
         }

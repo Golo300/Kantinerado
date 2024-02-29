@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MealserviceService } from '../services/mealplan.service';
 import { Mealplan } from '../Mealplan';
 import { lastDayOfWeek, setWeek, subDays } from 'date-fns';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-mealplan',
@@ -15,11 +16,16 @@ export class MealplanComponent implements OnInit {
   startDate!: Date;
   endDate!: Date;
 
-  constructor(private mealService: MealserviceService) {}
+  constructor(private mealService: MealserviceService, private authService: AuthService) {}
 
   ngOnInit(): void {
     this.getMealplan();
     this.calculateWeekRange();
+    
+    this.authService.test()
+    .subscribe(response => {
+      console.log(response); // Debugging-Information
+    });
   }
 
   nextWeek(): void {
