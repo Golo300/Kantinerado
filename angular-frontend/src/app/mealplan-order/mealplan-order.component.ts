@@ -93,4 +93,8 @@ export class MealplanOrderComponent implements OnInit {
     }
     console.log(this.selectedDishes);
   }
+
+  addToCart(): void {
+    this.selectedDishesChanged.emit(this.selectedDishes);
+  }
 }

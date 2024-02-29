@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="de">
+
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -41,7 +42,7 @@
     <header>
       <nav class="navbar navbar-expand-md navbar-dark bg-dark">
         <div class="container-fluid">
-          <a class="navbar-brand" href="#">Kantinderado</a>
+          <a class="navbar-brand">Kantinderado</a>
           <button
             class="navbar-toggler"
             type="button"
@@ -55,20 +56,26 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav me-auto mb-2 mb-md-0">
+              
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Home</a>
+                <a class="nav-link active" aria-current="page" href="/">Home</a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+              
+              <li *ngIf="userAccess" class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/order" >Bestellung</a>
               </li>
+            
             </ul>
-            <button class="btn btn-outline-success" type="button">Login</button>
+            
+            <a *ngIf="loggedIn" class="btn btn-outline-light" type="button" href="/checkout" style="margin-right: 10px;">Warenkorb</a>
+            <a *ngIf="!loggedIn" class="btn btn-success" type="button" href="/login">Login</a>
+            <button *ngIf="loggedIn" (click)="logout()" class="btn btn-success" type="button">Logout</button>
           </div>
         </div>
       </nav>
     </header>
 
-    <app-checkout></app-checkout>
+    <router-outlet></router-outlet>
 
     <footer class="navbar navbar-expand-md navbar-dark bg-dark">
       <div

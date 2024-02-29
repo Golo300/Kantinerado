@@ -10,4 +10,7 @@ export class CheckoutComponent {
   @Input() selectedDishes: Order[] = [];
 
   // Hier kannst du die ausgewählten Gerichte in der Checkout-Komponente verwenden
+  ngOnInit(): void {
+    console.log(this.selectedDishes);
+  }
 }
