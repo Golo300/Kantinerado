@@ -2,49 +2,16 @@
     <section>
           <h1>Detail Ansicht</h1>
             <div style="display: flex;">
-                <div class="card m-2" style="width: 18rem;">
+                <div *ngFor="let dish of dishes" class="card m-2" style="width: 18rem;">
                     <img src="https://cdn.koch-form.de/rezepte/1460_2400/Kartoffelpuffer.jpg" class="card-img-top">
                     <div class="card-body">
-                        <h6 class="card-title">Menü 1</h6>
-                        <h5 class="card-title">Kartoffelpuffer</h5>
-                        <p class="card-text">Ein Text über die genauen Inhaltsangaben der Speise</p>
-                        <p>Preis: <b>8,50€</b></p>
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
-                    </div>
-                </div>
-                <div class="card m-2" style="width: 18rem;">
-                    <img src="https://essenrezept.de/wp-content/uploads/2021/07/Geschnetzeltes-Rezept.jpg" class="card-img-top">
-                    <div class="card-body">
-                        <h6 class="card-title">Menü 2</h6>
-                        <h5 class="card-title">Geschnetzelter Grazikofski</h5>
-                        <p class="card-text">Ein Text über die genauen Inhaltsangaben der Speise</p>
-                        <p>Preis: <b>13,50€</b></p>
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
-                    </div>
-                </div>
-                
-                <div class="card m-2" style="width: 18rem;">
-                    <img src="https://www.cuisineetsentiments.com/images/pudding_1.jpg" class="card-img-top">
-                    <div class="card-body">
-                        <h6 class="card-title">Nachspeise</h6>
-                        <h5 class="card-title">Pudding</h5>
-                        <p class="card-text">Ein Text über die genauen Inhaltsangaben der Speise</p>
-                        <p>Preis: <b>3,50€</b></p>
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
-                    </div>
-                </div>
-
-                <div class="card m-2" style="width: 18rem;">
-                    <img src="https://cdn.koch-form.de/rezepte/1460_2400/Kartoffelpuffer.jpg" class="card-img-top">
-                    <div class="card-body">
-                        <h6 class="card-title">Suppe</h6>
-                        <h5 class="card-title">Kartoffelsuppe</h5>
-                        <p class="card-text">Ein Text über die genauen Inhaltsangaben der Speise</p>
-                        <p>Preis: <b>2,50€</b></p>
+                        <h6 class="card-title">{{dish.dishCategory.name }}</h6>
+                        <h5 class="card-title">{{ dish.title }}</h5>
+                        <p class="card-text">{{ dish.description }}</p>
+                        <p>Preis: <b>{{ dish.price }}</b></p>
                         <a href="#" class="btn btn-primary">Go somewhere</a>
                     </div>
                 </div>
             </div>
-        
     </section>
 </main>
