@@ -13,6 +13,8 @@ export class CheckoutComponent implements OnInit {
   constructor(private orderService : OrderService) {}
 
   ngOnInit( ): void {
+    this.selectedDishes = this.orderService.getLastProducts();
+    
     this.orderService.selectedProduct$.subscribe((value) => {
       this.selectedDishes = value;
     });

@@ -13,4 +13,8 @@ export class OrderService {
   setProduct(product: any) {
     this.product$.next(product);
   }
+
+  getLastProducts(): any[] {
+    return this.product$.getValue();
+  }
 }
