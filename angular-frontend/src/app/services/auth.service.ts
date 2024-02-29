@@ -35,7 +35,15 @@ export class AuthService {
     
     return this.http.post<any>(`${this.apiUrl}/register`, newUserInfo).pipe(
       map((response) => {
-        return "Sucess";
+        return response;
+      }));
+  }
+
+  test(): Observable<String> {
+    
+    return this.http.get<any>(`http://localhost:8080/user/`).pipe(
+      map((response) => {
+        return response;
       }));
   }
 

@@ -19,7 +19,12 @@ export class AppComponent {
   constructor(private authGuardService: AuthGuardService, 
               private authService: AuthService,) 
   {
-    //authService.logout();
+    this.loggedIn = this.authService.isLoggedIn();
+
+    this.userAccess = this.authGuardService.hasUserAcces();
+    this.kanteenAccess = this.authGuardService.hasKanteenAcces();
+    this.adminAcess = this.authGuardService.hasUserAcces();
+    console.log("is logged in: " + this.authService.isLoggedIn());
   }
 
   logout()
@@ -30,11 +35,6 @@ export class AppComponent {
 
   ngOnInit()
   {
-    this.loggedIn = this.authService.isLoggedIn();
-
-    this.userAccess = this.authGuardService.hasUserAcces();
-    this.kanteenAccess = this.authGuardService.hasKanteenAcces();
-    this.adminAcess = this.authGuardService.hasUserAcces();
-    console.log("is logged in: " + this.authService.isLoggedIn());
+    
   }
 }
