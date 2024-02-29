@@ -12,9 +12,9 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'order', component: MealplanOrderComponent, canActivate: [AuthGuardService], data: { allowedRoles: ['ADMIN', 'USER', 'KANTEEN'] }},
   { path: 'checkout', component: CheckoutComponent, canActivate: [AuthGuardService], data: { allowedRoles: ['ADMIN', 'USER', 'KANTEEN'] }},
-  { path: '**', component: LoginComponent },
   { path: 'mealplan', component: MealplanComponent },
-  { path: 'detailview/:kw/:day', component: DetailViewComponent }
+  { path: 'detailview/:kw/:day', component: DetailViewComponent },
+  { path: '**', component: LoginComponent },
   // Weitere Routen können hier hinzugefügt werden
 ];
 
