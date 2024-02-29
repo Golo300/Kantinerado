@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MealserviceService } from '../mealplan.service';
+import { MealserviceService } from '../services/mealplan.service';
 import { Mealplan } from '../Mealplan';
 import { lastDayOfWeek, setWeek, subDays } from 'date-fns';
 
@@ -36,7 +36,7 @@ export class MealplanOrderComponent implements OnInit {
 
   getMealplan(): void {
     this.mealService.getMealplan(this.kw)
-      .subscribe(meaplan => {
+      .subscribe((meaplan: Mealplan) => {
         this.mealplan = meaplan;
         console.log(this.mealplan); // Debugging-Information
       });
