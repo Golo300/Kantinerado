@@ -15,7 +15,10 @@ export class DetailViewComponent implements OnInit {
   dishes!: Dish[];
 
   private route = inject(ActivatedRoute);
-  private mealService = inject(MealserviceService);
+  constructor(private mealService: MealserviceService) 
+  {
+
+  }
 
   ngOnInit(): void {
     const kw = this.route.snapshot.paramMap.get('kw');
@@ -28,15 +31,17 @@ export class DetailViewComponent implements OnInit {
 
     this.getMealplan();
 
-    const detailDay = this.mealplan.days.find(e => (e.id == this.day));
-
-    if (detailDay) {
-      this.dishes = detailDay.dishes;
-    }
   }
 
   getMealplan(): void {
     this.mealService.getMealplan(this.kw)
-      .subscribe(meaplan => this.mealplan = meaplan);
+      .subscribe(meaplan => {this.mealplan = meaplan;
+                            console.log(this.mealplan);
+                            const detailDay = this.mealplan.days.find(e => (e.id == this.day));
+
+                            if (detailDay) {
+                              this.dishes = detailDay.dishes;
+                            }});
+      console.log(this.mealplan);
   }
 }
