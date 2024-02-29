@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MealserviceService } from '../services/mealplan.service';
 import { Day, Dish, Mealplan } from '../Mealplan';
 import { getISOWeek, lastDayOfWeek, setWeek, subDays } from 'date-fns';
@@ -10,7 +10,8 @@ import { Order } from '../OrderProcess';
   styleUrls: ['./mealplan-order.component.css']
 })
 export class MealplanOrderComponent implements OnInit {
-  @Output() selectedDishesChanged = new EventEmitter<any[]>();
+  @Input() productList: Order[] = [];
+  @Output() selectedDishesChanged = new EventEmitter<any>();
 
   kw!: number;
   mealplan!: Mealplan | null;
