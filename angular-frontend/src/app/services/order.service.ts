@@ -14,12 +14,12 @@ export class AuthService {
   constructor(private http: HttpClient) {
   }
 
-  createOrder(credentials: { order: Order }): Observable<any> {
+  createOrder(credentials: { order: Order[] }): Observable<any> {
 
     return this.http.post<any>(`${this.apiUrl}/order`, credentials).pipe(
       catchError(error => {
         if (error.status === 406) {
-          console.error('Bestellung nicht möglich')
+          console.error(error.error) //Error aus dem Backend
         }
         throw error; // Andere Fehler weiterwerfen
       })

@@ -10,6 +10,10 @@ import java.util.Date;
 @Service
 @Transient
 public class OrderService {
+
+
+    public String message;
+
     //Validierung der Bestellung
     public boolean checkOrder(Order order) {
 
@@ -28,18 +32,29 @@ public class OrderService {
 
         //Bestellung ist bis Donnerstag, 1800 Uhr für die kommende Woche möglich
         if (order.getDate().after(nextThursday18)) {
+            setMessage("Bestellung ist nur bis Donnerstag, 1800 Uhr für die kommende Woche möglich");
             return false;
         }
         //Vegetarisch darf nur gewählt werden, wenn auch Menü 2 gewählt wurde
         if (!order.getDish().getDishCategory().isCanVeggie() && order.isVeggie()) {
+            setMessage("Vegetarisch darf nur gewählt werden, wenn auch Menü 2 gewählt wurde");
             return false;
         }
         //Samstags darf kein Menü 1 und keine Suppe bestellt werden
         if (currentDayOfWeek == 6 && (order.getDish().getDishCategory().getName().equals("Menü1") ||
                 order.getDish().getDishCategory().getName().equals("Suppe"))) {
+            setMessage("Samstags darf kein Menü 1 und keine Suppe bestellt werden");
             return false;
         }
 
         return true;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

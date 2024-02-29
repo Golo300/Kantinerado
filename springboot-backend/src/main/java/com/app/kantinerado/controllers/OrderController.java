@@ -22,16 +22,15 @@ public class OrderController {
         this.orderRepository = orderRepository;
     }
 
-
     @PostMapping("/")
-    public ResponseEntity<Order> createOrder(@RequestBody Order body)
-    {
-        if (orderService.checkOrder(body)) {
-            orderRepository.save(body);
-            return new ResponseEntity<>(HttpStatus.CREATED);
-        } else {
-            return  new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-        }
-    }
+    public ResponseEntity<String> createOrder(@RequestBody Order[] body) {
+        for (Order order: body) {
+        if (!orderService.checkOrder(order)) {
 
+            return  new ResponseEntity<>(orderService.getMessage(), HttpStatus.NOT_ACCEPTABLE);
+        }
+        orderRepository.save(order);
+        }
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
 }
