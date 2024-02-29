@@ -1,0 +1,17 @@
+<main>
+    <section>
+          <h1>Detail Ansicht</h1>
+            <div style="display: flex;">
+                <div *ngFor="let dish of dishes" class="card m-2" style="width: 18rem;">
+                    <img src="https://cdn.koch-form.de/rezepte/1460_2400/Kartoffelpuffer.jpg" class="card-img-top">
+                    <div class="card-body">
+                        <h6 class="card-title">{{dish.dishCategory.name }}</h6>
+                        <h5 class="card-title">{{ dish.title }}</h5>
+                        <p class="card-text">{{ dish.description }}</p>
+                        <p>Preis: <b>{{ dish.price }}</b></p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                </div>
+            </div>
+    </section>
+</main>
