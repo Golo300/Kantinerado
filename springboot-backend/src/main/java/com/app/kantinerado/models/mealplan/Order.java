@@ -14,6 +14,8 @@ public class Order {
 
     private Date date;
 
+
+    private Date ordered;
     private boolean veggie;
 
     @ManyToOne()
@@ -23,6 +25,7 @@ public class Order {
     public Order() {
         super();
     }
+
     public Order(Integer id, Date date, boolean veggie, Dish dish) {
         this.id = id;
         this.date = date;
@@ -45,6 +48,14 @@ public class Order {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public Date getOrdered() {
+        return ordered;
+    }
+
+    public void setOrdered(Date ordered) {
+        this.ordered = ordered;
     }
 
     public boolean isVeggie() {
