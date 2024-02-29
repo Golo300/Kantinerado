@@ -10,13 +10,13 @@ import { DetailViewComponent } from './detail-view/detail-view.component';
 
 const routes: Routes = [
   { path: '', component: MealplanComponent },
-  { path: 'mealplan', component: MealplanComponent },
-  { path: 'detailview/:kw/:day', component: DetailViewComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'order', component: MealplanOrderComponent, canActivate: [AuthGuardService], data: { allowedRoles: ['ADMIN', 'USER', 'KANTEEN'] }},
   { path: 'checkout', component: CheckoutComponent, canActivate: [AuthGuardService], data: { allowedRoles: ['ADMIN', 'USER', 'KANTEEN'] }},
-  { path: '**', component: LoginComponent },
+  { path: 'mealplan', component: MealplanComponent },
+  { path: 'detailview/:kw/:day', component: DetailViewComponent },
+  { path: '**', component: LoginComponent }
   // Weitere Routen können hier hinzugefügt werden
 ];
 
