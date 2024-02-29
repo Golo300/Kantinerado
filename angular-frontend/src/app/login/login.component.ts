@@ -29,10 +29,10 @@ export class LoginComponent {
       .subscribe(response => {
         if (response) {
           console.log('Login erfolgreich:', response);
-        // Weiterleitung nach erfolgreichem Login
-        window.location.reload();
-        this.router.navigate(['/order']); // Hier 'dashboard' durch Ihre Zielseite ersetzen
+        while(!this.authService.isLoggedIn()){}
+        window.location.href="/order"
         }
+        
       });
   }
 }
