@@ -12,6 +12,7 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { JwtInterceptor } from './helper/jwt.interceptor';
 import { OrderProcessComponent } from './order-process/order-process.component';
+import { DetailViewComponent } from './detail-view/detail-view.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { OrderProcessComponent } from './order-process/order-process.component';
     CheckoutComponent,
     LoginComponent,
     RegisterComponent,
+    DetailViewComponent,
     OrderProcessComponent
   ],
   imports: [
