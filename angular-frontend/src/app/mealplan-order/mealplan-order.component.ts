@@ -3,6 +3,7 @@ import { MealserviceService } from '../services/mealplan.service';
 import { Day, Dish, Mealplan } from '../Mealplan';
 import { getISOWeek, lastDayOfWeek, setWeek, subDays } from 'date-fns';
 import { Order } from '../OrderProcess';
+import { OrderService } from '../services/order.service'
 
 @Component({
   selector: 'app-mealplan-order',
@@ -10,8 +11,7 @@ import { Order } from '../OrderProcess';
   styleUrls: ['./mealplan-order.component.css']
 })
 export class MealplanOrderComponent implements OnInit {
-  @Input() productList: Order[] = [];
-  @Output() selectedDishesChanged = new EventEmitter<any>();
+  productList: Order[] = [];
 
   kw!: number;
   mealplan!: Mealplan | null;
@@ -24,7 +24,8 @@ export class MealplanOrderComponent implements OnInit {
 
   selectedDishes: Order[] = [];
 
-  constructor(private mealService: MealserviceService) { }
+  constructor(private mealService: MealserviceService,
+    private orderService: OrderService) { }
 
   ngOnInit(): void {
     this.setCurrentKW();
@@ -104,6 +105,6 @@ export class MealplanOrderComponent implements OnInit {
   }
 
   addToCart(): void {
-    this.selectedDishesChanged.emit(this.selectedDishes);
+    this.orderService.setProduct(this.selectedDishes);
   }
 }

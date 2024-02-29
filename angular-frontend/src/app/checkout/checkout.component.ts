@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Order } from '../OrderProcess';
+import { OrderService } from '../services/order.service';
 
 @Component({
   selector: 'app-checkout',
@@ -9,13 +10,11 @@ import { Order } from '../OrderProcess';
 export class CheckoutComponent implements OnInit {
   selectedDishes: Order[] = [];
 
-  ngOnInit(): void {
-    
-  }
+  constructor(private orderService : OrderService) {}
 
-  onSelectedDishesChanged(selectedDishes: Order[]): void {
-    console.log('Ausgewählte Gerichte wurden aktualisiert:', selectedDishes);
-    // Hier können weitere Aktionen mit den aktualisierten Gerichten durchgeführt werden
-    this.selectedDishes = selectedDishes;
+  ngOnInit( ): void {
+    this.orderService.selectedProduct$.subscribe((value) => {
+      this.selectedDishes = value;
+    });
   }
 }
