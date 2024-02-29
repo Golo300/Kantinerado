@@ -11,8 +11,10 @@
 td {
   text-align: center;
   height: 5rem;
+  width: calc(100% / 7);
 }
 
 th {
   text-align: center;
+  width: calc(100% / 7);
 }

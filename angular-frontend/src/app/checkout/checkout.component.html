@@ -12,41 +12,34 @@
   <section id="checkout">
     <div class="card text-begin divWidth">
       <div class="card-header">Bestellübersicht</div>
-      <div
-        class="card-body d-flex justify-content-between align-items-center divWidth"
-      >
+      <div class="card-body d-flex justify-content-between align-items-center divWidth">
         <div class="divWidth">
-          <h4 class="d-flex justify-content-between align-items-center mb-3">
-            <span class="badge bg-success rounded-pill">Anzahl Spiesen: 3</span>
+          <h4 class="d-flex justify-content-end align-items-center mb-3">
+            <span *ngIf="selectedDishes.length !== 0" class="badge bg-success rounded-pill">Anzahl Speisen: {{ selectedDishes.length }}</span>
           </h4>
           <ul class="list-group mb-3">
-            <li class="list-group-item d-flex justify-content-between lh-sm">
-              <div>
-                <h6 class="my-0">Product name</h6>
-                <small class="text-body-secondary">Brief description</small>
-              </div>
-              <span class="text-body-secondary">$12</span>
+            <li *ngIf="selectedDishes.length === 0" class="list-group-item">
+              <span>
+                <p>Ihr Warenkorb ist leer</p>
+                <a class="btn btn-outline-dark" href="/order">Mehr bestellen</a>
+              </span>
             </li>
-            <li class="list-group-item d-flex justify-content-between lh-sm">
+            <li *ngFor="let dish of selectedDishes" class="list-group-item d-flex justify-content-between lh-sm">
               <div>
-                <h6 class="my-0">Second product</h6>
-                <small class="text-body-secondary">Brief description</small>
+                <h6 class="my-0">Gericht ID: {{ dish.dish_id }}</h6>
+                <!-- Hier können weitere Details zum Gericht angezeigt werden -->
               </div>
-              <span class="text-body-secondary">$8</span>
+              <!-- Hier könnte der Preis des Gerichts angezeigt werden -->
             </li>
-            <li class="list-group-item d-flex justify-content-between lh-sm">
-              <div>
-                <h6 class="my-0">Third item</h6>
-                <small class="text-body-secondary">Brief description</small>
-              </div>
-              <span class="text-body-secondary">$5</span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between">
+            <li *ngIf="selectedDishes.length !== 0" class="list-group-item d-flex justify-content-between" >
               <span>Gesamtpreis</span>
-              <strong>$20</strong>
+              <!-- Hier könnte der Gesamtpreis der Bestellung angezeigt werden -->
             </li>
           </ul>
-          <button class="w-100 btn btn-outline-success" type="submit">
+          <li *ngIf="selectedDishes.length !== 0" class="list-group-item">
+            <a class="btn-outline-dark" href="/order">Mehr bestellen</a>
+          </li>
+          <button *ngIf="selectedDishes.length !== 0" class="w-100 btn btn-outline-success" type="submit">
             Bestellung abschließen
           </button>
         </div>
