@@ -67,6 +67,7 @@
             
             </ul>
             
+            <a *ngIf="loggedIn" class="btn btn-outline-light" type="button" href="/checkout" style="margin-right: 10px;">Warenkorb</a>
             <a *ngIf="!loggedIn" class="btn btn-success" type="button" href="/login">Login</a>
             <button *ngIf="loggedIn" (click)="logout()" class="btn btn-success" type="button">Logout</button>
           </div>
