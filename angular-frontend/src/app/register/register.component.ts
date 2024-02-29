@@ -12,7 +12,7 @@ import { catchError, of, tap } from 'rxjs';
 export class RegisterComponent {
   username: string = "";
   email: string = "";
-  employeeId: number = 0;
+  employeeId!: number;
   password: string = "";
   registrationError: string = "";
 
