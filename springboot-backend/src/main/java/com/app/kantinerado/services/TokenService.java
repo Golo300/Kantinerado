@@ -3,20 +3,23 @@ package com.app.kantinerado.services;
 import java.time.Instant;
 import java.util.stream.Collectors;
 
+import com.app.kantinerado.models.ApplicationUser;
+import com.app.kantinerado.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.Transient;
-import org.springframework.security.oauth2.jwt.JwtClaimsSet;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.JwtEncoder;
-import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
+import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal;
+import org.springframework.security.oauth2.jwt.*;
 import org.springframework.stereotype.Service;
 
 @Service
 @Transient
 public class TokenService {
-    
+
+    @Autowired
+    private UserRepository userRepository;
+
     @Autowired
     private JwtEncoder jwtEncoder;
 
@@ -41,4 +44,10 @@ public class TokenService {
         return jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
     }
 
+    public ApplicationUser getUserFromAuthentication(Authentication authentication) {
+
+        String username = authentication.getName();
+        // Die Rollen können direkt aus dem Authentication-Objekt abgerufen werden
+        return userRepository.findByUsername(username).orElse(null);
+    }
 }

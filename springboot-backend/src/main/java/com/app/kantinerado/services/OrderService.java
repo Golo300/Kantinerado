@@ -1,6 +1,13 @@
 package com.app.kantinerado.services;
 
+import com.app.kantinerado.models.ApplicationUser;
+import com.app.kantinerado.models.OrderDTO;
+import com.app.kantinerado.models.mealplan.Dish;
 import com.app.kantinerado.models.mealplan.Order;
+import com.app.kantinerado.repository.DishRepository;
+import com.app.kantinerado.repository.OrderRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.Transient;
 import org.springframework.stereotype.Service;
 
@@ -11,29 +18,37 @@ import java.util.Date;
 @Transient
 public class OrderService {
 
+    @Autowired
+    private OrderRepository orderRepository;
+
+    @Autowired
+    private DishRepository dishRepository;
 
     public String message = "Unbekannter Fehler";
 
     //Validierung der Bestellung
-    public boolean checkOrder(Order order) {
+    public boolean placeOrder(OrderDTO order, ApplicationUser aplicationUser) {
+
+
+        Dish orderedDish = dishRepository.findById(order.getDish_id())
+                .orElse(null);
+
+        if(orderedDish == null) return false;
 
         Date nextThursday18 = getNextThursday18();
 
-
-        //Bestellung ist bis Donnerstag, 1800 Uhr für die kommende Woche möglich
-        if (order.getDate().after(nextThursday18)) {
-            setMessage("Bestellung ist nur bis Donnerstag, 1800 Uhr für die kommende Woche möglich");
-            return false;
-        }
         //Vegetarisch darf nur gewählt werden, wenn auch Menü 2 gewählt wurde
-        if (!order.getDish().getDishCategory().isCanVeggie() && order.isVeggie()) {
+        if (!orderedDish.getDishCategory().isCanVeggie() && order.isVeggie()) {
             setMessage("Vegetarisch darf nur gewählt werden, wenn auch Menü 2 gewählt wurde");
             return false;
         }
-        //Samstags darf kein Menü 1 und keine Suppe bestellt werden
-        if (order.getDate().getDate() == 7 && (order.getDish().getDishCategory().getName().equals("Menü1") ||
-                order.getDish().getDishCategory().getName().equals("Suppe"))) {
-            setMessage("Samstags darf kein Menü 1 und keine Suppe bestellt werden");
+
+        Order newOrder = new Order(order, orderedDish, aplicationUser);
+
+        try {
+            orderRepository.save(newOrder);
+        } catch (DataAccessException e) {
+            // Fehlerbehandlung für Datenbankzugriffsfehler
             return false;
         }
 

@@ -2,8 +2,8 @@ POST http://localhost:8080/auth/login HTTP/1.1
 content-type: application/json
 
 {
-    "username": "test",
-    "password": "test"
+    "username": "admin",
+    "password": "password"
 }
 
 
@@ -19,11 +19,14 @@ content-type: application/json
 
 ###
 
-POST http://localhost:8080/admin/promote HTTP/1.1
+POST http://localhost:8080/order/ HTTP/1.1
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzZWxmIiwic3ViIjoiYWRtaW4iLCJpYXQiOjE3MDc2MTk3MTAsInJvbGVzIjoiQURNSU4ifQ.EuaoqULAKIm2NsDkdMqyX-dYCh4q1YeRqeb1EjysCSfFT3pzgGOdsM20uXSdrJS7LCjIm9nhEa4LWb3O9rjC5qsyouzdIQ3J7qdhUYOytWe7WfggEXOGA4IHP41K9mtHvpoTvOWsXM2rlyL_7BNw_pk01n7i6sVB6Zqw9z8C2jLk1gQbZlBYFLj8gk6pWC-8KvRwYUhnu_bHJqz0D14LL0nzDQnyfo2JLJRdnc3mvG3JdhMvRR7EYIzaCE_cXqfLyB7Dxf3RkvKg2FDarbgPhhyaczLrCaG8Y8vuOY_1Ec55Qt55j0Yt3sRPJuNh4UBXV_5G7N9wFHNsujuBBN8IeA
+Authorization: Bearer eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzZWxmIiwic3ViIjoiYWRtaW4iLCJpYXQiOjE3MDkyNTAyMTIsInJvbGVzIjoiQURNSU4ifQ.iVCFO3AcxZSGxX0-f5FQD2JXUoO-JW1AxPr6h8imftmM-zPnEa2heCgx04dcz9w4-G33r6qoO9MntKXAw9cbt7YqGa4eE59lMprf8dsSdYJPjjrxfn_jSGjbCx-1nfD1_GMjrzE0Ly8czE0peg543pfXOyI5Fp9jtL0nu5ZRkPail02_InB4ycUjXqiLiIkaD_qmramFkm3kxPu47ZwNFk_xwtNY_5_rnnztXTGw4GELZ_sfChu08bQtfxlMGn-nMJHtaRscel1VTDb8S32oBzYuA9Dt_gtggf4fuPWRCvUFp4aVeE9UMxCTIDXwsLDicptqD6xEyVI8HuMIXTTFww
 
 {
-    "username": "test"
+        "dish_id": 33,
+        "veggie": false,
+        "date": "2024-03-01"
+       
 }
 

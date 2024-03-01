@@ -1,37 +1,42 @@
 package com.app.kantinerado.controllers;
 
+import com.app.kantinerado.models.ApplicationUser;
+import com.app.kantinerado.models.OrderDTO;
 import com.app.kantinerado.models.mealplan.Order;
 import com.app.kantinerado.repository.OrderRepository;
 import com.app.kantinerado.services.OrderService;
+import com.app.kantinerado.services.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/order")
 @CrossOrigin("*")
 public class OrderController {
 
     @Autowired
     OrderService orderService;
 
-    private final OrderRepository orderRepository;
+    @Autowired
+    private TokenService tokenService;
 
-    public OrderController(OrderRepository orderRepository) {
-        this.orderRepository = orderRepository;
-    }
+    @PostMapping("/")
+    public ResponseEntity<String> createOrder(@RequestBody OrderDTO order) {
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    @PostMapping("/order")
-    public ResponseEntity<String> createOrder(@RequestBody Order[] body) {
-        for (Order order: body) {
-        if (!orderService.checkOrder(order)) {
+        ApplicationUser user = tokenService.getUserFromAuthentication(authentication);
 
-            return  new ResponseEntity<>(orderService.getMessage(), HttpStatus.NOT_ACCEPTABLE);
+        boolean response = orderService.placeOrder(order, user);
+
+        if(response)
+        {
+            return new ResponseEntity<>(HttpStatus.OK);
         }
-        orderRepository.save(order);
-        }
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 }

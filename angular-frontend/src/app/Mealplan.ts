@@ -27,7 +27,6 @@ export interface Mealplan {
 
   export interface Order {
   date: Date;
-  dish: Dish;
-  ordered: Date;
+  dish_id: number;
   veggie: boolean;
   }

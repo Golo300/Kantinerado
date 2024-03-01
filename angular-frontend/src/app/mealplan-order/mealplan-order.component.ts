@@ -5,6 +5,7 @@ import { getISOWeek, lastDayOfWeek, setWeek, subDays } from 'date-fns';
 import {Order} from "../Mealplan";
 import {OrderService} from '../services/order.service';
 import {HttpErrorResponse} from "@angular/common/http";
+import { catchError, of, tap } from 'rxjs';
 
 @Component({
   selector: 'app-mealplan-order',
@@ -23,7 +24,15 @@ export class MealplanOrderComponent implements OnInit {
   isBreakfastOpen: boolean = false;
   isLunchOpen: boolean = true;
 
-  selectedDishes: Order[] = [];
+  selectedDishes: Order[] = [
+
+    {
+      date: new Date(2024, 3, 1), // Monate werden von 0 bis 11 gezählt, daher 2 für März
+      dish_id: 1,
+      veggie: false
+  }
+
+  ];
   message : String = "";
 
   constructor(private mealService: MealserviceService, private orderService: OrderService) { }
@@ -68,22 +77,21 @@ export class MealplanOrderComponent implements OnInit {
     }
     return [];
   }
-
-  createOrder(){
-    this.orderService.createOrder({ order: this.selectedDishes })
-      .subscribe((order: Order) => {
+  
+  createOrder() {
+      this.orderService.createOrder(this.selectedDishes[0]).pipe(
+        tap((response: any) => {
           // Erfolgsfall
           this.message = "Bestellung erfolgreich";
           console.log(this.message); // Debugging-Information
-        },
-        (errorResponse: HttpErrorResponse) => {
-          // Fehlerfall
-          console.error('Fehler beim Erstellen der Bestellung:', errorResponse.error);
-          // Hier können Sie die Fehlermeldung behandeln und entsprechend reagieren
-          // Zum Beispiel, um die Fehlermeldung anzuzeigen oder andere Maßnahmen zu ergreifen
-        }
-      );
+        }),
+        catchError(error => {
+          console.error(error); // Fehler ausgeben
+          return of(null); // Rückgabe eines Observable, um das Haupt-Observable fortzusetzen
+        })
+      ).subscribe();
   }
+  
 
   calculateWeekRange(): void {
     const currentYear = new Date().getFullYear();
@@ -109,13 +117,12 @@ export class MealplanOrderComponent implements OnInit {
     if (event.target.checked) {
       const order: Order = {
         date: new Date(),
-        dish: dish,
-        ordered: new Date(),
+        dish_id: dish.id,
         veggie: false //TODO: User muss angeben ob er veggie will oder nicht
       };
       this.selectedDishes.push(order);
     } else {
-      const index = this.selectedDishes.findIndex(item => item.dish === dish);
+      const index = this.selectedDishes.findIndex(item => item.dish_id === dish.id);
       if (index !== -1) {
         this.selectedDishes.splice(index, 1);
       }
