@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { MealserviceService } from '../mealplan.service';
-import { Mealplan } from '../Mealplan';
-import { lastDayOfWeek, setWeek, subDays } from 'date-fns';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { MealserviceService } from '../services/mealplan.service';
+import { Day, Dish, Mealplan } from '../Mealplan';
+import { getISOWeek, lastDayOfWeek, setWeek, subDays } from 'date-fns';
+import { Order } from '../OrderProcess';
 
 @Component({
   selector: 'app-mealplan-order',
@@ -9,17 +10,29 @@ import { lastDayOfWeek, setWeek, subDays } from 'date-fns';
   styleUrls: ['./mealplan-order.component.css']
 })
 export class MealplanOrderComponent implements OnInit {
-  kw: number = 10;
-  mealplan!: Mealplan;
+  @Output() selectedDishesChanged = new EventEmitter<any[]>();
+
+  kw!: number;
+  mealplan!: Mealplan | null;
   weekDays = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'];
   startDate!: Date;
   endDate!: Date;
 
-  constructor(private mealService: MealserviceService) {}
+  isBreakfastOpen: boolean = false;
+  isLunchOpen: boolean = true;
+
+  selectedDishes: Order[] = [];
+
+  constructor(private mealService: MealserviceService) { }
 
   ngOnInit(): void {
+    this.setCurrentKW();
     this.getMealplan();
     this.calculateWeekRange();
+  }
+  setCurrentKW() {
+    const currentDate = new Date();
+    this.kw = getISOWeek(currentDate);
   }
 
   nextWeek(): void {
@@ -35,17 +48,20 @@ export class MealplanOrderComponent implements OnInit {
   }
 
   getMealplan(): void {
+    this.mealplan = null;
     this.mealService.getMealplan(this.kw)
       .subscribe(meaplan => {
         this.mealplan = meaplan;
         console.log(this.mealplan); // Debugging-Information
       });
-  }  
+  }
 
   getDishes(category: string, day: string) {
-    const selectedDay = this.mealplan.days.find(d => d.dayofWeek === day);
-    if (selectedDay) {
-      return selectedDay.dishes.filter(dish => dish.dishCategory.name === category);
+    if (this.mealplan != null) {
+      const selectedDay = this.mealplan.days.find(d => d.dayofWeek === day);
+      if (selectedDay) {
+        return selectedDay.dishes.filter(dish => dish.dishCategory.name === category);
+      }
     }
     return [];
   }
@@ -59,9 +75,34 @@ export class MealplanOrderComponent implements OnInit {
 
     this.startDate = monday;
     this.endDate = saturday;
-  } 
+  }
+
+  toggleCollapse(collapseId: string): void {
+    if (collapseId === 'collapseBreakfast') {
+      this.isBreakfastOpen = !this.isBreakfastOpen; // Toggle breakfast collapse
+    } else if (collapseId === 'collapseLunch') {
+      this.isLunchOpen = !this.isLunchOpen; // Toggle lunch collapse
+    }
+  }
+
+  checkboxChanged(event: any, dish: Dish): void {
+    console.log(dish.title);
+    if (event.target.checked) {
+      const order: Order = {
+        dish_id: dish.id,
+        // day: selectedDay, // Verwendung des Day-Objekts
+        //ordered: 0
+      };
+      this.selectedDishes.push(order);
+    } else {
+      this.selectedDishes = this.selectedDishes.filter(order => {
+        return order.dish_id !== dish.id;
+      });
+    }
+    console.log(this.selectedDishes);
+  }
 
   addToCart(): void {
-    
+    this.selectedDishesChanged.emit(this.selectedDishes);
   }
 }
