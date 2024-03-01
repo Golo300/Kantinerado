@@ -161,3 +161,92 @@ Das System ist so gedacht das für die einzelnen Kategorien "Menü1", "Menü2", 
 <p align="center">
   <img src="resources/Database.png" alt="Architecture-Overview"/>
 </p>
+
+### API
+
+**Authentifizierung:**
+
+Einige Endpunkte erfordern Authentifizierung. Verwenden Sie die `/auth`-Endpunkte für Registrierung und Anmeldung.
+
+**Endpunkte:**
+
+**Admin:**
+
+- `GET /admin/`
+    - Gibt "Admin-Zugriffsebene" zurück
+- `POST /admin/promote`
+    - Befördert einen Benutzer zum Kanntienenmitarbeiter
+    - Anforderungstext:
+        ```json
+        {
+            "username": "String"
+        }
+        ```
+    - Antwort:
+        - `200 OK`: "Benutzername wurde befördert"
+        - `404 NOT FOUND`: Benutzer nicht gefunden
+
+**Authentifizierung:**
+
+- `POST /auth/register`
+    - Registriert einen neuen Benutzer
+    - Anforderungstext:
+        ```json
+        RegistrationDTO
+        ```
+    - Antwort:
+        - `201 CREATED`: "Benutzername des Benutzers"
+        - `400 BAD REQUEST`: Registrierung fehlgeschlagen
+- `POST /auth/login`
+    - Meldet einen Benutzer an
+    - Anforderungstext:
+        ```json
+        LoginDTO
+        ```
+    - Antwort:
+        ```json
+        LoginResponseDTO
+        ```
+
+**Speiseplan:**
+
+- `GET /mealplan/{kw}`
+    - Ruft einen Speiseplan anhand seiner Kalenderwoche ab
+    - Pfadvariable:
+        - `kw`: Integer (Kalenderwoche)
+    - Antwort:
+        - `200 OK`: Mealplan-Objekt
+        - `404 NOT FOUND`: Speiseplan nicht gefunden
+
+**Bestellung:**
+
+- `POST /order/`
+    - Erstellt eine neue Bestellung
+    - Anforderungstext:
+        ```json
+        OrderDTO
+        ```
+    - Antwort:
+        - `200 OK`: Bestellung erfolgreich erstellt
+        - `400 BAD REQUEST`: Fehler beim Erstellen der Bestellung
+- `POST /order/batch`
+    - Erstellt mehrere Bestellungen in einem Batch
+    - Anforderungstext:
+        - Liste von OrderDTO-Objekten
+    - Antwort:
+        - `200 OK`: "Alle Bestellungen erfolgreich aufgegeben"
+        - `400 BAD REQUEST`: Einige Bestellungen konnten nicht aufgegeben werden
+
+**Benutzer:**
+
+- `GET /user/`
+    - Gibt "Benutzerzugriffsebene" zurück
+
+**Zusätzliche Hinweise:**
+
+- Alle Controller sind mit `@CrossOrigin("*")` annotiert, was bedeutet, dass sie Anfragen von jedem Ursprung akzeptieren.
+- Der `tokenService` wird für die Authentifizierung und das Abrufen von Benutzerinformationen verwendet.
+- Die Fehlerbehandlung ist für einige Endpunkte implementiert und gibt hauptsächlich die entsprechenden HTTP-Statuscodes zurück.
+
+
+ 
