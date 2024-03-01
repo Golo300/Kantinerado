@@ -13,7 +13,6 @@ import { catchError, of, tap } from 'rxjs';
   styleUrls: ['./mealplan-order.component.css']
 })
 export class MealplanOrderComponent implements OnInit {
-  @Output() selectedDishesChanged = new EventEmitter<any[]>();
 
   kw!: number;
   mealplan!: Mealplan | null;
@@ -24,15 +23,7 @@ export class MealplanOrderComponent implements OnInit {
   isBreakfastOpen: boolean = false;
   isLunchOpen: boolean = true;
 
-  selectedDishes: Order[] = [
-
-    {
-      date: new Date(2024, 3, 1), // Monate werden von 0 bis 11 gezählt, daher 2 für März
-      dish_id: 1,
-      veggie: false
-  }
-
-  ];
+  selectedDishes: Order[] = [];
   message : String = "";
 
   constructor(private mealService: MealserviceService, private orderService: OrderService) { }
@@ -78,20 +69,6 @@ export class MealplanOrderComponent implements OnInit {
     return [];
   }
   
-  createOrder() {
-      this.orderService.createOrder(this.selectedDishes[0]).pipe(
-        tap((response: any) => {
-          // Erfolgsfall
-          this.message = "Bestellung erfolgreich";
-          console.log(this.message); // Debugging-Information
-        }),
-        catchError(error => {
-          console.error(error); // Fehler ausgeben
-          return of(null); // Rückgabe eines Observable, um das Haupt-Observable fortzusetzen
-        })
-      ).subscribe();
-  }
-  
 
   calculateWeekRange(): void {
     const currentYear = new Date().getFullYear();
@@ -117,21 +94,24 @@ export class MealplanOrderComponent implements OnInit {
     if (event.target.checked) {
       const order: Order = {
         date: new Date(),
-        dish_id: dish.id,
+        dish: dish,
         veggie: false //TODO: User muss angeben ob er veggie will oder nicht
       };
-      this.selectedDishes.push(order);
+
+      this.selectedDishes.push(order)
+
     } else {
-      const index = this.selectedDishes.findIndex(item => item.dish_id === dish.id);
-      if (index !== -1) {
-        this.selectedDishes.splice(index, 1);
-      }
+      this.selectedDishes.filter(item => item.dish !== dish)
+      
     }
     console.log(this.selectedDishes);
+    const shopping_cart = JSON.stringify(this.selectedDishes);
+    localStorage.setItem('shopping_cart', shopping_cart);
   }
 
   addToCart(): void {
-    this.createOrder()
-    this.selectedDishesChanged.emit(this.selectedDishes);
+    console.log(this.selectedDishes);
+    const shopping_cart = JSON.stringify(this.selectedDishes);
+    localStorage.setItem('shopping_cart', shopping_cart);
   }
 }
