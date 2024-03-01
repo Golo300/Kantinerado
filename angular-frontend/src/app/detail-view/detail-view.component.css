@@ -1,3 +1,12 @@
-.setMargin{
+.setMargin {
     margin: 10 px;
+}
+
+.divWidth {
+    margin: auto;
+    width: 98%;
+}
+
+.cardWidth {
+    width: calc(100% / 4);
 }

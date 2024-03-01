@@ -9,8 +9,8 @@ import { Dish, Day, Mealplan } from '../Mealplan';
   styleUrl: './detail-view.component.css'
 })
 export class DetailViewComponent implements OnInit {
-  private day!: number;
-  private kw!: number;
+  day!: number;
+  kw!: number;
   mealplan!: Mealplan;
   dishes!: Dish[];
 
@@ -30,7 +30,6 @@ export class DetailViewComponent implements OnInit {
     }
 
     this.getMealplan();
-
   }
 
   getMealplan(): void {
@@ -38,7 +37,7 @@ export class DetailViewComponent implements OnInit {
       .subscribe(meaplan => {this.mealplan = meaplan;
                             console.log(this.mealplan);
                             const detailDay = this.mealplan.days.find(e => (e.id == this.day));
-
+                            
                             if (detailDay) {
                               this.dishes = detailDay.dishes;
                             }});

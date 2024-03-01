@@ -32,8 +32,10 @@ td {
   border-color: lightslategray;
 }
 
-
-
 .form-check-input:checked {
   background-color: #28a745;
+}
+
+.a {
+  color: black;
 }
