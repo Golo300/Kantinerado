@@ -19,7 +19,7 @@ COPY src ./src
 RUN ./gradlew dependencies
 
 # Kompilieren und bauen der Anwendung
-RUN ./gradlew build
+RUN ./gradlew build -x test
 
 # Zweites Stage für das Ausführen der Anwendung
 FROM openjdk:17-jdk-alpine

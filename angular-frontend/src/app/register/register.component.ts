@@ -21,7 +21,8 @@ export class RegisterComponent {
   register() {
     this.authService.register({ employeeId:  this.employeeId, username: this.username, email: this.email, password: this.password })
       .pipe(
-        tap(() => console.log('Register erfolgreich')),
+        tap(() => {console.log('Register erfolgreich');
+                  this.router.navigate(['/login']);}),
         catchError(error => {
           console.error('Fehler beim Regestrieren:', error);
           this.registrationError = 'Fehler beim Registrieren. Überprüfen Sie Ihre Anmeldeinformationen und versuchen Sie es erneut.';
@@ -29,7 +30,6 @@ export class RegisterComponent {
         })
       )
       .subscribe(response => {
-          this.router.navigate(['/login']);
       });
   }
 }
