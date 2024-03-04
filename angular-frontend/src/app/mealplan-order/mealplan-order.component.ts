@@ -2,7 +2,10 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { MealserviceService } from '../services/mealplan.service';
 import { Day, Dish, Mealplan } from '../Mealplan';
 import { getISOWeek, lastDayOfWeek, setWeek, subDays } from 'date-fns';
-import { Order } from '../OrderProcess';
+import {Order} from "../Mealplan";
+import {OrderService} from '../services/order.service';
+import {HttpErrorResponse} from "@angular/common/http";
+import { catchError, of, tap } from 'rxjs';
 
 @Component({
   selector: 'app-mealplan-order',
@@ -10,7 +13,6 @@ import { Order } from '../OrderProcess';
   styleUrls: ['./mealplan-order.component.css']
 })
 export class MealplanOrderComponent implements OnInit {
-  @Output() selectedDishesChanged = new EventEmitter<any[]>();
 
   kw!: number;
   mealplan!: Mealplan | null;
@@ -22,8 +24,9 @@ export class MealplanOrderComponent implements OnInit {
   isLunchOpen: boolean = true;
 
   selectedDishes: Order[] = [];
+  message : String = "";
 
-  constructor(private mealService: MealserviceService) { }
+  constructor(private mealService: MealserviceService, private orderService: OrderService) { }
 
   ngOnInit(): void {
     this.setCurrentKW();
@@ -50,7 +53,7 @@ export class MealplanOrderComponent implements OnInit {
   getMealplan(): void {
     this.mealplan = null;
     this.mealService.getMealplan(this.kw)
-      .subscribe(meaplan => {
+      .subscribe((meaplan: Mealplan) => {
         this.mealplan = meaplan;
         console.log(this.mealplan); // Debugging-Information
       });
@@ -65,6 +68,7 @@ export class MealplanOrderComponent implements OnInit {
     }
     return [];
   }
+  
 
   calculateWeekRange(): void {
     const currentYear = new Date().getFullYear();
@@ -89,20 +93,25 @@ export class MealplanOrderComponent implements OnInit {
     console.log(dish.title);
     if (event.target.checked) {
       const order: Order = {
-        dish_id: dish.id,
-        // day: selectedDay, // Verwendung des Day-Objekts
-        //ordered: 0
+        date: new Date(),
+        dish: dish,
+        veggie: false //TODO: User muss angeben ob er veggie will oder nicht
       };
-      this.selectedDishes.push(order);
+
+      this.selectedDishes.push(order)
+
     } else {
-      this.selectedDishes = this.selectedDishes.filter(order => {
-        return order.dish_id !== dish.id;
-      });
+      this.selectedDishes.filter(item => item.dish !== dish)
+      
     }
     console.log(this.selectedDishes);
+    const shopping_cart = JSON.stringify(this.selectedDishes);
+    localStorage.setItem('shopping_cart', shopping_cart);
   }
 
   addToCart(): void {
-    this.selectedDishesChanged.emit(this.selectedDishes);
+    console.log(this.selectedDishes);
+    const shopping_cart = JSON.stringify(this.selectedDishes);
+    localStorage.setItem('shopping_cart', shopping_cart);
   }
 }

@@ -24,22 +24,22 @@
                 <a class="btn btn-outline-dark" href="/order">Mehr bestellen</a>
               </span>
             </li>
-            <li *ngFor="let dish of selectedDishes" class="list-group-item d-flex justify-content-between lh-sm">
+            <li *ngFor="let order of selectedDishes" class="list-group-item d-flex justify-content-between lh-sm">
               <div>
-                <h6 class="my-0">Gericht ID: {{ dish.dish_id }}</h6>
+                <h6 class="my-0">Gericht: {{ order.dish.title }}</h6>
                 <!-- Hier können weitere Details zum Gericht angezeigt werden -->
               </div>
-              <!-- Hier könnte der Preis des Gerichts angezeigt werden -->
+              {{ order.dish.price }}
             </li>
             <li *ngIf="selectedDishes.length !== 0" class="list-group-item d-flex justify-content-between" >
               <span>Gesamtpreis</span>
-              <!-- Hier könnte der Gesamtpreis der Bestellung angezeigt werden -->
+              {{getTotalPrice()}}
             </li>
           </ul>
           <li *ngIf="selectedDishes.length !== 0" class="list-group-item">
             <a class="btn-outline-dark" href="/order">Mehr bestellen</a>
           </li>
-          <button *ngIf="selectedDishes.length !== 0" class="w-100 btn btn-outline-success" type="submit">
+          <button *ngIf="selectedDishes.length !== 0" class="w-100 btn btn-outline-success" (click)="createOrder()">
             Bestellung abschließen
           </button>
         </div>
