@@ -21,6 +21,7 @@
             pkgs.soapui
             pkgs.pandoc 
             pkgs.texliveTeTeX
+            pkgs.dbeaver
           ];
 
           shellHook = ''
