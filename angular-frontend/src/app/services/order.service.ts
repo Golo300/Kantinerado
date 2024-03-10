@@ -35,6 +35,14 @@ export class OrderService {
       }));
   }
 
+  getOrderByKw(kw: number, optionalParameter?: number): Observable<Order[]> {
+    return this.http.get<Order[]>(`${this.apiUrl}/${kw}`);
+  }
+
+  getAllOrders(): Observable<Order[]> {
+    return this.http.get<Order[]>(`${this.apiUrl}/`);
+  }
+
   getCart(): Order[] {
     const shopping_cartJson = localStorage.getItem('shopping_cart');
     if (shopping_cartJson == null) {return [];}
