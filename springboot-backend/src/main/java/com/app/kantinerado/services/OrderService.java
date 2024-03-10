@@ -29,6 +29,16 @@ public class OrderService {
     @Autowired
     private DayRepository dayRepository;
 
+    public List<Order> findOrderBy(int kw, ApplicationUser user)
+    {
+        return orderRepository.findByWeekNumber(kw, user.getUserId());
+    }
+
+    public List<Order> getAllOders(ApplicationUser user)
+    {
+        return orderRepository.findByUser(user);
+    }
+
     //Validierung der Bestellung
     public boolean placeOrder(OrderDTO order, ApplicationUser applicationUser) {
 
