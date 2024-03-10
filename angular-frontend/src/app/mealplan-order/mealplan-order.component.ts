@@ -104,12 +104,12 @@ export class MealplanOrderComponent implements OnInit {
       this.selectedDishes.push(order)
 
     } else {
-      this.selectedDishes.filter(item => item.dish !== dish)
+      this.selectedDishes = this.selectedDishes.filter(order => {
+        return order.dish.id !== dish.id;
+    });
       
     }
     console.log(this.selectedDishes);
-    const shopping_cart = JSON.stringify(this.selectedDishes);
-    localStorage.setItem('shopping_cart', shopping_cart);
   }
 
   addToCart(): void {
