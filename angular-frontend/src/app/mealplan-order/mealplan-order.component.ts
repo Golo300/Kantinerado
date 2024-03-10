@@ -1,11 +1,11 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { MealserviceService } from '../services/mealplan.service';
-import { Day, Dish, Mealplan } from '../Mealplan';
+import { Day, Dish, FullOrder, Mealplan } from '../Mealplan';
 import { getISOWeek, lastDayOfWeek, setWeek, subDays } from 'date-fns';
 import {Order} from "../Mealplan";
 import {OrderService} from '../services/order.service';
 import {HttpErrorResponse} from "@angular/common/http";
-import { catchError, of, tap } from 'rxjs';
+import { catchError, firstValueFrom, of, tap } from 'rxjs';
 
 @Component({
   selector: 'app-mealplan-order',
@@ -26,13 +26,14 @@ export class MealplanOrderComponent implements OnInit {
   selectedDishes: Order[] = [];
   message : String = "";
 
-  //orderedDishes: FullOrder[] = [];
+  orderedDishes: FullOrder[] = [];
 
   constructor(private mealService: MealserviceService, private orderService: OrderService) { }
 
   ngOnInit(): void {
     this.setCurrentKW();
     this.getMealplan();
+    this.getPreviousOrder();
     this.calculateWeekRange();
   }
   setCurrentKW() {
@@ -44,7 +45,6 @@ export class MealplanOrderComponent implements OnInit {
     this.kw++;
     this.getMealplan();
     this.calculateWeekRange();
-    this.getPriviousOrder();
   }
 
   lastWeek(): void {
@@ -58,7 +58,7 @@ export class MealplanOrderComponent implements OnInit {
     this.mealService.getMealplan(this.kw)
       .subscribe((meaplan: Mealplan) => {
         this.mealplan = meaplan;
-        console.log(this.mealplan); // Debugging-Information
+        //console.log(this.mealplan); // Debugging-Information
       });
   }
 
@@ -117,4 +117,29 @@ export class MealplanOrderComponent implements OnInit {
     const shopping_cart = JSON.stringify(this.selectedDishes);
     localStorage.setItem('shopping_cart', shopping_cart);
   }
+
+  getPreviousOrder() {
+    this.orderService.getAllOrders()
+      .subscribe((orders: any[]) => {
+        this.orderedDishes = orders;
+        console.log(this.orderedDishes); // Debugging-Information
+      });
+  }
+
+  checkIfOrdered(dish_id: number): boolean{
+    while (this.orderedDishes == undefined) {
+      
+    }
+   
+    let isOrdered : boolean = false;
+
+    this.orderedDishes.forEach(element  => {
+     if(dish_id === element.dish.id) {
+      isOrdered = true;
+     } 
+    });
+    return isOrdered;
+  }
 }
+
+
