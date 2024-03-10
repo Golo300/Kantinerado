@@ -166,7 +166,7 @@
                           {{ dish.title }}
                         </div>
                         <div>
-                          <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="checkBoxMenu2" (change)="checkboxChanged($event, dish)"/>
+                          <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="checkBoxMenu2" [checked]="checkIfOrdered(dish.id)" (change)="checkboxChanged($event, dish)"/>
                         </div>
                       </span>
                     </td>
@@ -180,7 +180,7 @@
                         </div>
                         <div>
                           <input class="form-check-input" type="checkbox" name="flexRadioDefault"
-                            id="checkBoxDessert" (change)="checkboxChanged($event, dish)"/>
+                            id="checkBoxDessert" [checked]="checkIfOrdered(dish.id)" (change)="checkboxChanged($event, dish)"/>
                         </div>
                       </span>
                     </td>
@@ -193,7 +193,7 @@
                           {{ dish.title }}
                         </div>
                         <div>
-                          <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="checkBoxSoup" (change)="checkboxChanged($event, dish)"/>
+                          <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="checkBoxSoup" [checked]="checkIfOrdered(dish.id)" (change)="checkboxChanged($event, dish)"/>
                         </div>
                       </span>
                     </td>

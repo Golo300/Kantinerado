@@ -23,6 +23,8 @@ export class MealplanOrderComponent implements OnInit {
   isBreakfastOpen: boolean = false;
   isLunchOpen: boolean = true;
 
+  orderReady: boolean = true;
+
   selectedDishes: Order[] = [];
   message : String = "";
 
@@ -122,15 +124,15 @@ export class MealplanOrderComponent implements OnInit {
     this.orderService.getAllOrders()
       .subscribe((orders: any[]) => {
         this.orderedDishes = orders;
+        this.orderReady = true;
         console.log(this.orderedDishes); // Debugging-Information
       });
   }
 
   checkIfOrdered(dish_id: number): boolean{
-    while (this.orderedDishes == undefined) {
-      
-    }
-   
+    
+    while(!this.orderReady) {}
+
     let isOrdered : boolean = false;
 
     this.orderedDishes.forEach(element  => {
