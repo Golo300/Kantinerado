@@ -1,7 +1,7 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {catchError, map, Observable} from 'rxjs';
-import {Order, sendOrder} from "../Mealplan";
+import {FullOrder, Order, sendOrder} from "../Mealplan";
 
 @Injectable({
   providedIn: 'root'
@@ -35,12 +35,12 @@ export class OrderService {
       }));
   }
 
-  getOrderByKw(kw: number): Observable<Order[]> {
-    return this.http.get<Order[]>(`${this.apiUrl}/order/${kw}`);
+  getOrderByKw(kw: number): Observable<FullOrder[]> {
+    return this.http.get<FullOrder[]>(`${this.apiUrl}/order/${kw}`);
   }
 
-  getAllOrders(): Observable<Order[]> {
-    return this.http.get<Order[]>(`${this.apiUrl}/order/`);
+  getAllOrders(): Observable<FullOrder[]> {
+    return this.http.get<FullOrder[]>(`${this.apiUrl}/order/`);
   }
 
   getCart(): Order[] {
