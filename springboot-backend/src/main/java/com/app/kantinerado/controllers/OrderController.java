@@ -2,6 +2,7 @@ package com.app.kantinerado.controllers;
 
 import com.app.kantinerado.models.ApplicationUser;
 import com.app.kantinerado.models.OrderDTO;
+import com.app.kantinerado.models.mealplan.Mealplan;
 import com.app.kantinerado.models.mealplan.Order;
 import com.app.kantinerado.repository.OrderRepository;
 import com.app.kantinerado.services.OrderService;
@@ -25,6 +26,26 @@ public class OrderController {
 
     @Autowired
     private TokenService tokenService;
+
+    @GetMapping("/{kw}")
+    public ResponseEntity<List<Order>> getOrderByKw(@PathVariable("kw") Integer kw, @RequestParam(required = false) Integer optionalParameter)
+    {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        ApplicationUser user = tokenService.getUserFromAuthentication(authentication);
+
+        List<Order> orders = orderService.findOrderBy(kw, user);
+        return new ResponseEntity<>(orders, HttpStatus.OK);
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<List<Order>> getAllOrders()
+    {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        ApplicationUser user = tokenService.getUserFromAuthentication(authentication);
+
+        List<Order> orders = orderService.getAllOders(user);
+        return new ResponseEntity<>(orders, HttpStatus.OK);
+    }
 
     @PostMapping("/")
     public ResponseEntity<String> createOrder(@RequestBody OrderDTO order) {
