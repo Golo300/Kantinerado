@@ -1,11 +1,11 @@
 package com.app.kantinerado;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-
-import com.app.kantinerado.models.mealplan.*;
+import com.app.kantinerado.models.ApplicationUser;
+import com.app.kantinerado.models.Role;
+import com.app.kantinerado.models.mealplan.Dish;
+import com.app.kantinerado.models.mealplan.DishCategory;
 import com.app.kantinerado.repository.*;
+import com.app.kantinerado.services.MealplanService;
 import com.app.kantinerado.utils.Roles;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -13,79 +13,70 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.app.kantinerado.models.ApplicationUser;
-import com.app.kantinerado.models.Role;
+import java.util.Calendar;
+import java.util.HashSet;
+import java.util.Set;
 
 @SpringBootApplication
 public class AuthenticatedBackendApplication {
-	public static void main(String[] args) {
-		SpringApplication.run(AuthenticatedBackendApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(AuthenticatedBackendApplication.class, args);
+    }
 
-	@Bean
-	CommandLineRunner run(RoleRepository roleRepository, UserRepository userRepository, MealplanRepository mealplanRepository,
-						  DayRepository dayRepository, DishRepository dishRepository, DishCategoryRepository dishCategoryRepository,
-						  OrderRepository orderRepository, PasswordEncoder passwordEncode){
-		return args ->{
+    @Bean
+    CommandLineRunner run(RoleRepository roleRepository, UserRepository userRepository, MealplanRepository mealplanRepository,
+                          DayRepository dayRepository, DishRepository dishRepository, DishCategoryRepository dishCategoryRepository,
+                          OrderRepository orderRepository, PasswordEncoder passwordEncode) {
+        return args -> {
 
-			if(roleRepository.findByAuthority("ADMIN").isPresent()) return;
+            if (roleRepository.findByAuthority("ADMIN").isPresent()) return;
 
-			Role adminRole = roleRepository.save(new Role(Roles.ADMIN));
-			Role userRole = roleRepository.save(new Role(Roles.USER));
-			Role canteenRole = roleRepository.save(new Role(Roles.KANTEEN));
+            Role adminRole = roleRepository.save(new Role(Roles.ADMIN));
+            Role userRole = roleRepository.save(new Role(Roles.USER));
+            Role canteenRole = roleRepository.save(new Role(Roles.KANTEEN));
 
-			// register main admin
-			Set<Role> roles = new HashSet<>();
-			roles.add(adminRole);
+            // register main admin
+            Set<Role> roles = new HashSet<>();
+            roles.add(adminRole);
 
-			ApplicationUser admin = new ApplicationUser(123, "admin", "test@test.de",
-																	passwordEncode.encode("password"), roles);
+            ApplicationUser admin = new ApplicationUser(123, "admin", "test@test.de",
+                    passwordEncode.encode("password"), roles);
 
-			userRepository.save(admin);
-
-			// Smaple Mealplan
-			DishCategory menü_1 = dishCategoryRepository.save( new DishCategory("Menü1", false));
-			DishCategory dessert = dishCategoryRepository.save( new DishCategory("Dessert", false));
+            userRepository.save(admin);
 
 
-			Mealplan mealplan = new Mealplan();
-			mealplan.setCalendarWeek(10);
-			mealplan.setPlanned(true);
-			mealplan = mealplanRepository.save(mealplan);
+            MealplanService mealplanService = new MealplanService();
 
-			// Erstelle Tage für den Speiseplan
-			Set<Day> days = new HashSet<>();
-			String[] weekdays = {"Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"};
-			for (String weekday : weekdays) {
-				Day day = new Day();
-				day.setDayofWeek(weekday);
-				days.add(day);
-				Set<Dish> dishes = new HashSet<>();
+            // Sample DishCategory
+            DishCategory menü_1 = dishCategoryRepository.save(new DishCategory("Menü1", false));
+            DishCategory dessert = dishCategoryRepository.save(new DishCategory("Dessert", false));
 
-				Dish dish1 = new Dish();
-				dish1.setDishCategory(menü_1);
-				dish1.setTitle("Gericht 1 " + weekday);
-				dish1.setDescription("Beschreibung für Gericht 1");
-				dish1.setPrice(9.99);
-				dishRepository.save(dish1);
-				dishes.add(dish1);
+            //Sample Dishes
+            Set<Dish> dishes = new HashSet<>();
 
-				Dish dish2 = new Dish();
-				dish2.setDishCategory(dessert);
-				dish2.setTitle("Dessert 1 " + weekday);
-				dish2.setDescription("Beschreibung für Dessert 1");
-				dish2.setPrice(4.99);
-				dishRepository.save(dish2);
-				dishes.add(dish2);
+            Dish dish1 = new Dish();
+            dish1.setDishCategory(menü_1);
+            dish1.setTitle("Gericht 1");
+            dish1.setDescription("Beschreibung für Gericht 1");
+            dish1.setPrice(9.99);
+            dishRepository.save(dish1);
+            dishes.add(dish1);
 
-				day.setDishes(dishes);
-				dayRepository.save(day);
-			}
+            Dish dish2 = new Dish();
+            dish2.setDishCategory(dessert);
+            dish2.setTitle("Dessert 1");
+            dish2.setDescription("Beschreibung für Dessert 1");
+            dish2.setPrice(4.99);
+            dishRepository.save(dish2);
+            dishes.add(dish2);
 
-			mealplan.setDays(days);
-			mealplan = mealplanRepository.save(mealplan);
 
-		};
-	}
+           //Sample Mealplan current Kw
+            Calendar calendar = Calendar.getInstance();
+            int currentKw = calendar.get(Calendar.WEEK_OF_YEAR);
 
+            mealplanService.createMealplanByKw(2024,currentKw, dishes);
+        };
+
+    }
 }

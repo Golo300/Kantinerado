@@ -2,8 +2,10 @@ package com.app.kantinerado.services;
 
 import com.app.kantinerado.models.ApplicationUser;
 import com.app.kantinerado.models.OrderDTO;
+import com.app.kantinerado.models.mealplan.Day;
 import com.app.kantinerado.models.mealplan.Dish;
 import com.app.kantinerado.models.mealplan.Order;
+import com.app.kantinerado.repository.DayRepository;
 import com.app.kantinerado.repository.DishRepository;
 import com.app.kantinerado.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +14,6 @@ import org.springframework.security.core.Transient;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
-import java.util.Date;
 
 @Service
 @Transient
@@ -25,17 +26,26 @@ public class OrderService {
     private DishRepository dishRepository;
 
     public String message = "Unbekannter Fehler";
+    @Autowired
+    private DayRepository dayRepository;
 
     //Validierung der Bestellung
-    public boolean placeOrder(OrderDTO order, ApplicationUser aplicationUser) {
-
+    public boolean placeOrder(OrderDTO order, ApplicationUser applicationUser) {
 
         Dish orderedDish = dishRepository.findById(order.getDish_id())
                 .orElse(null);
+        Day dayOfDish = dayRepository.findDayByDishesContains(orderedDish)
+                .orElse(null);
 
-        if(orderedDish == null) return false;
+        if(orderedDish == null || dayOfDish == null) return false;
 
-        Date nextThursday18 = getNextThursday18();
+        Calendar calendarDateOfDish = Calendar.getInstance();
+        calendarDateOfDish.setTime(dayOfDish.getDate());
+        int dayOfWeek = calendarDateOfDish.get(Calendar.DAY_OF_WEEK);
+
+        Calendar nextThursday = calendarDateOfDish;
+        nextThursday.add(Calendar.WEEK_OF_YEAR, 1); // eine Woche hinzufügen
+        nextThursday.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY); // auf Donnerstag setzen
 
         //Vegetarisch darf nur gewählt werden, wenn auch Menü 2 gewählt wurde
         if (!orderedDish.getDishCategory().isCanVeggie() && order.isVeggie()) {
@@ -44,19 +54,20 @@ public class OrderService {
         }
 
         //Bestellung ist bis Donnerstag, 18:00 Uhr für die kommende Woche möglich
-        if (order.getDate().after(nextThursday18)) {
+        if ( dayOfDish.getDate().after(nextThursday.getTime())) {
             setMessage("Bestellung ist nur bis Donnerstag, 18:00 Uhr für die kommende Woche möglich");
             return false;
         }
 
         //Samstags darf kein Menü 1 und keine Suppe bestellt werden
-        if (orderedDish.getDishCategory().getName().equals("Menü1") ||
-                orderedDish.getDishCategory().getName().equals("Suppe")) {
+        if ((orderedDish.getDishCategory().getName().equals("Menü1") ||
+                orderedDish.getDishCategory().getName().equals("Suppe")) &&
+        dayOfWeek == Calendar.SATURDAY) {
             setMessage("Samstags darf kein Menü 1 und keine Suppe bestellt werden");
             return false;
         }
 
-        Order newOrder = new Order(order, orderedDish, aplicationUser);
+        Order newOrder = new Order(order, orderedDish, applicationUser);
 
         try {
             orderRepository.save(newOrder);
@@ -66,21 +77,6 @@ public class OrderService {
         }
 
         return true;
-    }
-
-    //gibt Datum und Uhrzeit des nächsten Donnerstags 18 Uhr zurück
-    private static Date getNextThursday18() {
-        Date currentDate = new Date();
-        Calendar currentCalendarDate = Calendar.getInstance();
-        currentCalendarDate.setTime(currentDate);
-        int currentDayOfWeek = currentCalendarDate.get(Calendar.DAY_OF_WEEK);
-        int daysUntilNextThursday = Calendar.THURSDAY - currentDayOfWeek;
-        if (daysUntilNextThursday <= 0) {
-            daysUntilNextThursday += 7; // Wenn der heutige Tag bereits ein Donnerstag ist, fügen Sie 7 Tage hinzu
-        }
-        currentCalendarDate.add(Calendar.DAY_OF_YEAR, daysUntilNextThursday);
-        currentCalendarDate.set(Calendar.HOUR_OF_DAY, 18);
-        return currentCalendarDate.getTime();
     }
 
     public String getMessage() {
