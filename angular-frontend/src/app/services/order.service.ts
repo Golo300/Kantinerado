@@ -35,12 +35,12 @@ export class OrderService {
       }));
   }
 
-  getOrderByKw(kw: number, optionalParameter?: number): Observable<Order[]> {
-    return this.http.get<Order[]>(`${this.apiUrl}/${kw}`);
+  getOrderByKw(kw: number): Observable<Order[]> {
+    return this.http.get<Order[]>(`${this.apiUrl}/order/${kw}`);
   }
 
   getAllOrders(): Observable<Order[]> {
-    return this.http.get<Order[]>(`${this.apiUrl}/`);
+    return this.http.get<Order[]>(`${this.apiUrl}/order/`);
   }
 
   getCart(): Order[] {
