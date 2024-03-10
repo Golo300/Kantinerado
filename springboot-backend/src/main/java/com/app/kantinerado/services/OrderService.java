@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 @Service
 @Transient
@@ -25,6 +26,16 @@ public class OrderService {
     private DishRepository dishRepository;
 
     public String message = "Unbekannter Fehler";
+
+    public List<Order> findOrderBy(int kw, ApplicationUser user)
+    {
+        return orderRepository.findByWeekNumber(kw, user.getUserId());
+    }
+
+    public List<Order> getAllOders(ApplicationUser user)
+    {
+        return orderRepository.findByUser(user);
+    }
 
     //Validierung der Bestellung
     public boolean placeOrder(OrderDTO order, ApplicationUser aplicationUser) {
