@@ -114,4 +114,8 @@ export class MealplanOrderComponent implements OnInit {
     const shopping_cart = JSON.stringify(this.selectedDishes);
     localStorage.setItem('shopping_cart', shopping_cart);
   }
+
+  checkIfOrdered(): boolean{
+    return true;
+  }
 }
