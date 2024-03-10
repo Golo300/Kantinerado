@@ -26,6 +26,8 @@ export class MealplanOrderComponent implements OnInit {
   selectedDishes: Order[] = [];
   message : String = "";
 
+  //orderedDishes: FullOrder[] = [];
+
   constructor(private mealService: MealserviceService, private orderService: OrderService) { }
 
   ngOnInit(): void {
@@ -42,6 +44,7 @@ export class MealplanOrderComponent implements OnInit {
     this.kw++;
     this.getMealplan();
     this.calculateWeekRange();
+    this.getPriviousOrder();
   }
 
   lastWeek(): void {
@@ -113,6 +116,10 @@ export class MealplanOrderComponent implements OnInit {
     console.log(this.selectedDishes);
     const shopping_cart = JSON.stringify(this.selectedDishes);
     localStorage.setItem('shopping_cart', shopping_cart);
+  }
+
+  getPriviousOrder(): void {
+    //orderedDishes = ;
   }
 
   checkIfOrdered(): boolean{
