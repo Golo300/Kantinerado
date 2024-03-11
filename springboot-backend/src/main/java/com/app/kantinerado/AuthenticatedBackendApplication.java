@@ -7,6 +7,7 @@ import com.app.kantinerado.models.mealplan.DishCategory;
 import com.app.kantinerado.repository.*;
 import com.app.kantinerado.services.MealplanService;
 import com.app.kantinerado.utils.Roles;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -22,6 +23,9 @@ public class AuthenticatedBackendApplication {
     public static void main(String[] args) {
         SpringApplication.run(AuthenticatedBackendApplication.class, args);
     }
+
+    @Autowired
+    MealplanService mealplanService;
 
     @Bean
     CommandLineRunner run(RoleRepository roleRepository, UserRepository userRepository, MealplanRepository mealplanRepository,
@@ -43,9 +47,6 @@ public class AuthenticatedBackendApplication {
                     passwordEncode.encode("password"), roles);
 
             userRepository.save(admin);
-
-
-            MealplanService mealplanService = new MealplanService();
 
             // Sample DishCategory
             DishCategory menü_1 = dishCategoryRepository.save(new DishCategory("Menü1", false));
