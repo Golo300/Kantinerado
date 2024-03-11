@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Order } from '../Mealplan';
+import { Order } from '../Interfaces';
 import { OrderService } from '../services/order.service';
 import { catchError, of, tap } from 'rxjs';
 

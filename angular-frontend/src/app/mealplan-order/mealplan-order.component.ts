@@ -1,8 +1,9 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { MealserviceService } from '../services/mealplan.service';
-import { Day, Dish, FullOrder, Mealplan } from '../Mealplan';
-import { getISOWeek, lastDayOfWeek, setWeek, subDays } from 'date-fns';
-import { Order } from "../Mealplan";
+import { Day, Dish, FullOrder, Mealplan } from '../Interfaces';
+import { format, getISOWeek, lastDayOfWeek, setWeek, subDays } from 'date-fns';
+import { de } from 'date-fns/locale';
+import { Order } from "../Interfaces";
 import { OrderService } from '../services/order.service';
 import { HttpErrorResponse } from "@angular/common/http";
 import { catchError, firstValueFrom, of, tap } from 'rxjs';
@@ -68,8 +69,14 @@ export class MealplanOrderComponent implements OnInit {
     this.mealService.getMealplan(this.kw)
       .subscribe((meaplan: Mealplan) => {
         this.mealplan = meaplan;
-        //console.log(this.mealplan); // Debugging-Information
+        this.mealplan.days.forEach(day => {
+          day.dayofWeek = this.getWeekDayByDate(day.date);
+        });
       });
+  }
+
+  getWeekDayByDate(date: Date): string {
+    return format(date, 'EEEE', { locale: de });
   }
 
   getDishes(category: string, day: string) {

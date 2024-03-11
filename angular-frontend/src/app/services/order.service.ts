@@ -1,7 +1,7 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {catchError, map, Observable} from 'rxjs';
-import {FullOrder, Order, sendOrder} from "../Mealplan";
+import {FullOrder, Order, sendOrder} from "../Interfaces";
 
 @Injectable({
   providedIn: 'root'
