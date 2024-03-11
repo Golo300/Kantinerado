@@ -15,7 +15,7 @@ public class Day {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    private String dayofWeek;
+    private Date date;
 
     private boolean noFood;
 
@@ -32,11 +32,11 @@ public class Day {
         super();
         dishes = new HashSet<>();
     }
-    public Day(String dayofWeek, boolean noFood, Set<Dish> dishes)
+    public Day(Date date, boolean noFood, Set<Dish> dishes)
     {
         super();
         this.dishes = dishes;
-        this.dayofWeek = dayofWeek;
+        this.date = date;
         this.noFood = noFood;
     }
 
@@ -55,12 +55,12 @@ public class Day {
     public Set<Dish> getDishes() {
         return this.dishes;
     }
-    public String getDayofWeek() {
-        return dayofWeek;
+    public Date getDate() {
+        return date;
     }
 
-    public void setDayofWeek(String dayofWeek) {
-        this.dayofWeek = dayofWeek;
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public boolean isNoFood() {
