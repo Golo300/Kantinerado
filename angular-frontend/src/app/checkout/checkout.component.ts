@@ -15,7 +15,7 @@ export class CheckoutComponent {
 
 
   constructor(private orderService: OrderService){}
-  // Hier kannst du die ausgewählten Gerichte in der Checkout-Komponente verwenden
+
   ngOnInit(): void {
     this.selectedDishes = this.orderService.getCart();
   }
@@ -33,13 +33,12 @@ export class CheckoutComponent {
       })
     ).subscribe()
   localStorage.removeItem('shopping_cart');
-  //window.location.reload();
+  window.location.reload();
 }
 
   getTotalPrice(): number {
     let totalPrice = 0;
     for (const order of this.selectedDishes) {
-      // Annahme: Jede Bestellung (Order) hat ein price Attribut
       totalPrice += order.dish.price;
     }
     return totalPrice;

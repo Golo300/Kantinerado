@@ -2,9 +2,9 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { MealserviceService } from '../services/mealplan.service';
 import { Day, Dish, FullOrder, Mealplan } from '../Mealplan';
 import { getISOWeek, lastDayOfWeek, setWeek, subDays } from 'date-fns';
-import {Order} from "../Mealplan";
-import {OrderService} from '../services/order.service';
-import {HttpErrorResponse} from "@angular/common/http";
+import { Order } from "../Mealplan";
+import { OrderService } from '../services/order.service';
+import { HttpErrorResponse } from "@angular/common/http";
 import { catchError, firstValueFrom, of, tap } from 'rxjs';
 
 @Component({
@@ -25,10 +25,18 @@ export class MealplanOrderComponent implements OnInit {
 
   orderReady: boolean = true;
 
+  // Alle im Frontend ausgewählten Dishes (enthält orderedDishes und newSelectedDishes)
   selectedDishes: Order[] = [];
-  message : String = "";
+  message: String = "";
 
+  // Alle bereits bestellten Dishes aus dem Backend
   orderedDishes: FullOrder[] = [];
+
+  // Alle NEU im Frontend ausgewählten Dishes 
+  newSelectedDishes: Order[] = [];
+
+  // Alle im Backend bestellten oder im Frontend wieder abgewählten Dishes 
+  deletedDishes: FullOrder[] = [];
 
   constructor(private mealService: MealserviceService, private orderService: OrderService) { }
 
@@ -73,7 +81,7 @@ export class MealplanOrderComponent implements OnInit {
     }
     return [];
   }
-  
+
 
   calculateWeekRange(): void {
     const currentYear = new Date().getFullYear();
@@ -102,16 +110,40 @@ export class MealplanOrderComponent implements OnInit {
         dish: dish,
         veggie: false //TODO: User muss angeben ob er veggie will oder nicht
       };
+      // Hinzufügen zu selectedDishes
+      this.selectedDishes.push(order);
 
-      this.selectedDishes.push(order)
+      // Wenn Dish noch nicht in orderedDishes --> Zusätzlich hinzufügen zu newSelectedDishes
+      if (!this.checkIfOrdered(dish.id)) {
+        this.newSelectedDishes.push(order);
+      }
 
-    } else {
+      // Wenn Dish in orderdDishes und deletedDishes ist --> Zusätzlich entfernen aus deletedDishes
+      this.deletedDishes = this.deletedDishes.filter(fullOrder => fullOrder.dish.id !== dish.id);
+    }
+
+    else {
+      // Entfernen aus selectedDishes
       this.selectedDishes = this.selectedDishes.filter(order => {
         return order.dish.id !== dish.id;
-    });
-      
+      });
+
+      // Wenn Dish noch nicht in orderedDishes also in newSelectedDishes ist --> Zusätzlich entfernen aus newSelectedDishes
+      this.newSelectedDishes = this.newSelectedDishes.filter(order => order.dish.id !== dish.id);
+
+      // Wenn Dish bereist in orderedDishes ist --> Zusätzlich hinzufügen zu deletedDishes
+      if (this.checkIfOrdered(dish.id)) {
+        const deletedDish = this.orderedDishes.find(fullOrder => fullOrder.dish.id === dish.id);
+        if (deletedDish) {
+          this.deletedDishes.push(deletedDish);
+        }
+      }
     }
-    console.log(this.selectedDishes);
+    console.log("---------------------");
+    console.log("Selected Dishes:", this.selectedDishes);
+    console.log("New Selected Dishes:", this.newSelectedDishes);
+    console.log("Deleted Dishes:", this.deletedDishes);
+    console.log("Ordered Dishes:", this.orderedDishes);
   }
 
   addToCart(): void {
@@ -124,23 +156,91 @@ export class MealplanOrderComponent implements OnInit {
     this.orderService.getAllOrders()
       .subscribe((orders: any[]) => {
         this.orderedDishes = orders;
+
+        // Kopieren der bestellten Gerichte in selectedDishes
+        this.selectedDishes = this.orderedDishes.map(order => ({
+          date: order.date,
+          dish: order.dish,
+          veggie: order.veggie
+        }));
+
         this.orderReady = true;
-        console.log(this.orderedDishes); // Debugging-Information
+        console.log("Ordered Dishes:", this.orderedDishes); // Debugging-Information
       });
   }
 
-  checkIfOrdered(dish_id: number): boolean{
-    
-    while(!this.orderReady) {}
+  checkIfOrdered(dish_id: number): boolean {
 
-    let isOrdered : boolean = false;
+    while (!this.orderReady) { }
 
-    this.orderedDishes.forEach(element  => {
-     if(dish_id === element.dish.id) {
-      isOrdered = true;
-     } 
+    let isOrdered: boolean = false;
+
+    this.orderedDishes.forEach(element => {
+      if (dish_id === element.dish.id) {
+        isOrdered = true;
+      }
     });
     return isOrdered;
+  }
+
+  checkIfNewSelected(dish_id: number): boolean {
+
+    while (!this.orderReady) { }
+
+    let isNewSelected: boolean = false;
+
+    this.newSelectedDishes.forEach(element => {
+      if (dish_id === element.dish.id) {
+        isNewSelected = true;
+      }
+    });
+    return isNewSelected;
+  }
+
+  checkIfDeleted(dish_id: number): boolean {
+
+    while (!this.orderReady) { }
+
+    let isDeleted: boolean = false;
+
+    this.deletedDishes.forEach(element => {
+      if (dish_id === element.dish.id) {
+        isDeleted = true;
+      }
+    });
+    return isDeleted;
+  }
+
+  calculateTotalPricePerDay(currentDay: string): number {
+    let totalPrice = 0;
+
+    this.mealplan?.days.forEach(day => {
+      if (day.dayofWeek === currentDay) {
+        day.dishes.forEach(dish => {
+          this.selectedDishes.forEach(selectedDish => {
+            if (dish.id === selectedDish.dish.id) {
+              totalPrice += selectedDish.dish.price;
+            }
+          });
+        });
+      }
+    });
+    return totalPrice;
+  }
+
+  setSelectionType(dish: Dish): string {
+    if (this.checkIfNewSelected(dish.id)) {
+      return 'blue-text';
+    } 
+    else if (this.checkIfDeleted(dish.id)) {
+      return 'red-text'; 
+    } 
+    else if (this.checkIfOrdered(dish.id)) {
+      return 'green-text';
+    } 
+    else {
+      return 'black-text'; 
+    }
   }
 }
 

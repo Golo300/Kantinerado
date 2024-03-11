@@ -33,9 +33,26 @@ td {
 }
 
 .form-check-input:checked {
-  background-color: #28a745;
+  background-color: lightgray;
+  opacity: 50%;
 }
 
-.a {
+.text-decoration-none {
+  color: black;
+}
+
+.blue-text {
+  color: blue;
+}
+
+.green-text {
+  color: green;
+}
+
+.red-text {
+  color: red;
+}
+
+.black-text {
   color: black;
 }
