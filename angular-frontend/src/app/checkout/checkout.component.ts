@@ -32,8 +32,8 @@ export class CheckoutComponent {
         return of(null); // Rückgabe eines Observable, um das Haupt-Observable fortzusetzen
       })
     ).subscribe()
-  localStorage.removeItem('shopping_cart');
-  window.location.reload();
+  localStorage.removeItem('shopping_cart_new');
+  // window.location.reload();
 }
 
   getTotalPrice(): number {

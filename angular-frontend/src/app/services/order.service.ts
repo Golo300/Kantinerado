@@ -44,9 +44,9 @@ export class OrderService {
   }
 
   getCart(): Order[] {
-    const shopping_cartJson = localStorage.getItem('shopping_cart');
-    if (shopping_cartJson == null) {return [];}
+    const shopping_cart_newJson = localStorage.getItem('shopping_cart_new');
+    if (shopping_cart_newJson == null) {return [];}
     
-     return JSON.parse(shopping_cartJson);
+     return JSON.parse(shopping_cart_newJson);
   }
 }

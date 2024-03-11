@@ -45,19 +45,19 @@ public class OrderService {
 
         Dish orderedDish = dishRepository.findById(order.getDish_id())
                 .orElse(null);
-        Day dayOfDish = dayRepository.findDayByDishesContains(orderedDish)
-                .orElse(null);
+        //Day dayOfDish = dayRepository.findDayByDishesContains(orderedDish)
+        //        .orElse(null);
 
-        if(orderedDish == null || dayOfDish == null) return false;
+        //if(orderedDish == null || dayOfDish == null) return false;
 
-        Calendar calendarDateOfDish = Calendar.getInstance();
-        calendarDateOfDish.setTime(dayOfDish.getDate());
-        int dayOfWeek = calendarDateOfDish.get(Calendar.DAY_OF_WEEK);
+        //Calendar calendarDateOfDish = Calendar.getInstance();
+        //calendarDateOfDish.setTime(dayOfDish.getDate());
+        //int dayOfWeek = calendarDateOfDish.get(Calendar.DAY_OF_WEEK);
 
-        Calendar nextThursday = calendarDateOfDish;
-        nextThursday.add(Calendar.WEEK_OF_YEAR, 1); // eine Woche hinzufügen
-        nextThursday.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY); // auf Donnerstag setzen
-
+        //Calendar nextThursday = calendarDateOfDish;
+        //nextThursday.add(Calendar.WEEK_OF_YEAR, 1); // eine Woche hinzufügen
+        //nextThursday.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY); // auf Donnerstag setzen
+        
         //Vegetarisch darf nur gewählt werden, wenn auch Menü 2 gewählt wurde
         if (!orderedDish.getDishCategory().isCanVeggie() && order.isVeggie()) {
             setMessage("Vegetarisch darf nur gewählt werden, wenn auch Menü 2 gewählt wurde");
@@ -65,18 +65,18 @@ public class OrderService {
         }
 
         //Bestellung ist bis Donnerstag, 18:00 Uhr für die kommende Woche möglich
-        if ( dayOfDish.getDate().after(nextThursday.getTime())) {
-            setMessage("Bestellung ist nur bis Donnerstag, 18:00 Uhr für die kommende Woche möglich");
-            return false;
-        }
+        //if ( dayOfDish.getDate().after(nextThursday.getTime())) {
+          //  setMessage("Bestellung ist nur bis Donnerstag, 18:00 Uhr für die kommende Woche möglich");
+            //return false;
+        //}
 
         //Samstags darf kein Menü 1 und keine Suppe bestellt werden
-        if ((orderedDish.getDishCategory().getName().equals("Menü1") ||
-                orderedDish.getDishCategory().getName().equals("Suppe")) &&
-        dayOfWeek == Calendar.SATURDAY) {
-            setMessage("Samstags darf kein Menü 1 und keine Suppe bestellt werden");
-            return false;
-        }
+        //if ((orderedDish.getDishCategory().getName().equals("Menü1") ||
+        //        orderedDish.getDishCategory().getName().equals("Suppe")) &&
+        //dayOfWeek == Calendar.SATURDAY) {
+         //   setMessage("Samstags darf kein Menü 1 und keine Suppe bestellt werden");
+         //   return false;
+        //}
 
         Order newOrder = new Order(order, orderedDish, applicationUser);
 

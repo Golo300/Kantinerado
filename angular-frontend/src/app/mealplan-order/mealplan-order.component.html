@@ -149,11 +149,11 @@
                     <th class="align-middle">Menü 1</th>
                     <td *ngFor="let day of weekDays" class="setMargin align-middle">
                       <span *ngFor="let dish of getDishes('Menü1', day)">
-                        <div [ngClass]="setSelectionType(dish)">
+                        <div [ngClass]="setSelectionType(dish, day)">
                           {{ dish.title }}
                         </div>
                         <div>
-                          <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="checkBoxMenu1" [checked]="checkIfOrdered(dish.id)" (change)="checkboxChanged($event, dish)"/>
+                          <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="checkBoxMenu1" [checked]="checkIfOrdered(dish, day)" (change)="checkboxChanged($event, dish, day)"/>
                         </div>
                       </span>
                     </td>
@@ -162,11 +162,11 @@
                     <th class="align-middle">Menü 2</th>
                     <td *ngFor="let day of weekDays" class="align-middle">
                       <span *ngFor="let dish of getDishes('Menü2', day)">
-                        <div [ngClass]="setSelectionType(dish)">
+                        <div [ngClass]="setSelectionType(dish, day)">
                           {{ dish.title }}
                         </div>
                         <div>
-                          <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="checkBoxMenu2" [checked]="checkIfOrdered(dish.id)" (change)="checkboxChanged($event, dish)"/>
+                          <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="checkBoxMenu2" [checked]="checkIfOrdered(dish, day)" (change)="checkboxChanged($event, dish, day)"/>
                         </div>
                       </span>
                     </td>
@@ -175,12 +175,12 @@
                     <th class="align-middle">Nachspeise</th>
                     <td *ngFor="let day of weekDays" class="align-middle">
                       <span *ngFor="let dish of getDishes('Dessert', day)">
-                        <div [ngClass]="setSelectionType(dish)">
+                        <div [ngClass]="setSelectionType(dish, day)">
                           {{ dish.title }}
                         </div>
                         <div>
                           <input class="form-check-input" type="checkbox" name="flexRadioDefault"
-                            id="checkBoxDessert" [checked]="checkIfOrdered(dish.id)" (change)="checkboxChanged($event, dish)"/>
+                            id="checkBoxDessert" [checked]="checkIfOrdered(dish, day)" (change)="checkboxChanged($event, dish, day)"/>
                         </div>
                       </span>
                     </td>
@@ -189,11 +189,11 @@
                     <th class="align-middle">Suppe</th>
                     <td *ngFor="let day of weekDays" class="align-middle">
                       <span *ngFor="let dish of getDishes('Soup', day)">
-                        <div [ngClass]="setSelectionType(dish)">
+                        <div [ngClass]="setSelectionType(dish, day)">
                           {{ dish.title }}
                         </div>
                         <div>
-                          <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="checkBoxSoup" [checked]="checkIfOrdered(dish.id)" (change)="checkboxChanged($event, dish)"/>
+                          <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="checkBoxSoup" [checked]="checkIfOrdered(dish, day)" (change)="checkboxChanged($event, dish, day)"/>
                         </div>
                       </span>
                     </td>

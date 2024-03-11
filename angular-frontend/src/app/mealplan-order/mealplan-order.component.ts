@@ -79,6 +79,34 @@ export class MealplanOrderComponent implements OnInit {
     return format(date, 'EEEE', { locale: de });
   }
 
+  getDateFromDayOfWeekAndKW(dayOfWeek: string, kw: number): Date {
+    // Mapping der Wochentage auf entsprechende Zahlen
+    const dayIndexMap: { [key: string]: number } = {
+      'Montag': 1,
+      'Dienstag': 2,
+      'Mittwoch': 3,
+      'Donnerstag': 4,
+      'Freitag': 5,
+      'Samstag': 6,
+    };
+
+    // Berechnung des Datums basierend auf der Kalenderwoche und dem Wochentag
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const monday = setWeek(new Date(currentYear, 0, 1), kw, { weekStartsOn: 1 }); // Erster Tag der Kalenderwoche
+    const mondayDayOfWeek = monday.getDay(); // Wochentag des ersten Tages der Kalenderwoche
+
+    // Differenz zwischen dem Montag der Kalenderwoche und dem gewünschten Wochentag
+    const dayDifference = dayIndexMap[dayOfWeek] - mondayDayOfWeek;
+
+    // Berechnung des gewünschten Datums
+    const resultDate = new Date(monday);
+    resultDate.setDate(monday.getDate() + dayDifference);
+
+    return resultDate;
+  }
+
+
   getDishes(category: string, day: string) {
     if (this.mealplan != null) {
       const selectedDay = this.mealplan.days.find(d => d.dayofWeek === day);
@@ -88,7 +116,6 @@ export class MealplanOrderComponent implements OnInit {
     }
     return [];
   }
-
 
   calculateWeekRange(): void {
     const currentYear = new Date().getFullYear();
@@ -109,11 +136,16 @@ export class MealplanOrderComponent implements OnInit {
     }
   }
 
-  checkboxChanged(event: any, dish: Dish): void {
+  checkboxChanged(event: any, dish: Dish, dayOfWeek: string): void {
     console.log(dish.title);
+
     if (event.target.checked) {
+      let kw = -1;
+      if (this.mealplan) { kw = this.mealplan.calendarWeek; }
+
+      // Anlegen einer neuen Order
       const order: Order = {
-        date: new Date(),
+        date: this.getDateFromDayOfWeekAndKW(dayOfWeek, kw),
         dish: dish,
         veggie: false //TODO: User muss angeben ob er veggie will oder nicht
       };
@@ -121,30 +153,35 @@ export class MealplanOrderComponent implements OnInit {
       this.selectedDishes.push(order);
 
       // Wenn Dish noch nicht in orderedDishes --> Zusätzlich hinzufügen zu newSelectedDishes
-      if (!this.checkIfOrdered(dish.id)) {
+      if (!this.checkIfOrdered(dish, dayOfWeek)) {
         this.newSelectedDishes.push(order);
       }
 
-      // Wenn Dish in orderdDishes und deletedDishes ist --> Zusätzlich entfernen aus deletedDishes
-      this.deletedDishes = this.deletedDishes.filter(fullOrder => fullOrder.dish.id !== dish.id);
+      // Wenn Dish in orderedDishes und deletedDishes ist --> Zusätzlich entfernen aus deletedDishes
+      else {
+        this.deletedDishes = this.deletedDishes.filter(element => {
+          const orderedDay = this.getWeekDayByDate(element.date);
+          return !(dish.id === element.dish.id && orderedDay === dayOfWeek);
+      });
+      }
     }
 
     else {
       // Entfernen aus selectedDishes
       this.selectedDishes = this.selectedDishes.filter(order => {
-        return order.dish.id !== dish.id;
+        return order.dish.id !== dish.id || this.getWeekDayByDate(order.date) !== dayOfWeek;
       });
 
       // Wenn Dish noch nicht in orderedDishes also in newSelectedDishes ist --> Zusätzlich entfernen aus newSelectedDishes
-      this.newSelectedDishes = this.newSelectedDishes.filter(order => order.dish.id !== dish.id);
+      this.newSelectedDishes = this.newSelectedDishes.filter(order => order.dish !== dish);
 
       // Wenn Dish bereist in orderedDishes ist --> Zusätzlich hinzufügen zu deletedDishes
-      if (this.checkIfOrdered(dish.id)) {
-        const deletedDish = this.orderedDishes.find(fullOrder => fullOrder.dish.id === dish.id);
-        if (deletedDish) {
-          this.deletedDishes.push(deletedDish);
+      this.orderedDishes.forEach(element => {
+        const orderedDay = this.getWeekDayByDate(element.date);
+        if (dish.id === element.dish.id && orderedDay === dayOfWeek) {
+          this.deletedDishes.push(element);
         }
-      }
+      });
     }
     console.log("---------------------");
     console.log("Selected Dishes:", this.selectedDishes);
@@ -155,8 +192,9 @@ export class MealplanOrderComponent implements OnInit {
 
   addToCart(): void {
     console.log(this.selectedDishes);
-    const shopping_cart = JSON.stringify(this.selectedDishes);
-    localStorage.setItem('shopping_cart', shopping_cart);
+    const shopping_cart_new = JSON.stringify(this.newSelectedDishes);
+    localStorage.setItem('shopping_cart_new', shopping_cart_new);
+
   }
 
   getPreviousOrder() {
@@ -176,42 +214,44 @@ export class MealplanOrderComponent implements OnInit {
       });
   }
 
-  checkIfOrdered(dish_id: number): boolean {
+  checkIfOrdered(dish: Dish, day: string): boolean {
 
     while (!this.orderReady) { }
 
     let isOrdered: boolean = false;
 
     this.orderedDishes.forEach(element => {
-      if (dish_id === element.dish.id) {
+      const orderedDay = this.getWeekDayByDate(element.date);
+      if (dish.id === element.dish.id && orderedDay === day) {
         isOrdered = true;
       }
     });
     return isOrdered;
   }
 
-  checkIfNewSelected(dish_id: number): boolean {
+  checkIfNewSelected(dish: Dish): boolean {
 
     while (!this.orderReady) { }
 
     let isNewSelected: boolean = false;
 
     this.newSelectedDishes.forEach(element => {
-      if (dish_id === element.dish.id) {
+      if (dish === element.dish) {
         isNewSelected = true;
       }
     });
     return isNewSelected;
   }
 
-  checkIfDeleted(dish_id: number): boolean {
+  checkIfDeleted(dish: Dish, day: string): boolean {
 
     while (!this.orderReady) { }
 
     let isDeleted: boolean = false;
 
     this.deletedDishes.forEach(element => {
-      if (dish_id === element.dish.id) {
+      const orderedDay = this.getWeekDayByDate(element.date);
+      if (dish.id === element.dish.id && orderedDay === day) {
         isDeleted = true;
       }
     });
@@ -225,8 +265,18 @@ export class MealplanOrderComponent implements OnInit {
       if (day.dayofWeek === currentDay) {
         day.dishes.forEach(dish => {
           this.selectedDishes.forEach(selectedDish => {
-            if (dish.id === selectedDish.dish.id) {
+            if (dish === selectedDish.dish) {
               totalPrice += selectedDish.dish.price;
+            }
+          });
+          this.orderedDishes.forEach(ordered => {
+            if (dish.id === ordered.dish.id && currentDay == this.getWeekDayByDate(ordered.date) && !(this.selectedDishes.find(ordered => ordered.dish === dish))) {
+              totalPrice += ordered.dish.price;
+            }
+          });
+          this.deletedDishes.forEach(deleted => {
+            if (dish.id === deleted.dish.id && currentDay == this.getWeekDayByDate(deleted.date)) {
+              totalPrice -= deleted.dish.price;
             }
           });
         });
@@ -235,18 +285,18 @@ export class MealplanOrderComponent implements OnInit {
     return totalPrice;
   }
 
-  setSelectionType(dish: Dish): string {
-    if (this.checkIfNewSelected(dish.id)) {
+  setSelectionType(dish: Dish, day: string): string {
+    if (this.checkIfNewSelected(dish)) {
       return 'blue-text';
-    } 
-    else if (this.checkIfDeleted(dish.id)) {
-      return 'red-text'; 
-    } 
-    else if (this.checkIfOrdered(dish.id)) {
+    }
+    else if (this.checkIfDeleted(dish, day)) {
+      return 'red-text';
+    }
+    else if (this.checkIfOrdered(dish, day)) {
       return 'green-text';
-    } 
+    }
     else {
-      return 'black-text'; 
+      return 'black-text';
     }
   }
 }
