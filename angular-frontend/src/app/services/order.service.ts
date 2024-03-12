@@ -43,10 +43,11 @@ export class OrderService {
     return this.http.get<FullOrder[]>(`${this.apiUrl}/order/`);
   }
 
-  getCart(): Order[] {
-    const shopping_cart_newJson = localStorage.getItem('shopping_cart_new');
-    if (shopping_cart_newJson == null) {return [];}
-    
-     return JSON.parse(shopping_cart_newJson);
+  getCart(): { newSelectedDishes: Order[], deletedDishes: FullOrder[] } {
+    const shoppingCartJson = localStorage.getItem('shopping_cart');
+    if (shoppingCartJson == null) {
+      return { newSelectedDishes: [], deletedDishes: [] };
+    }
+    return JSON.parse(shoppingCartJson);
   }
 }

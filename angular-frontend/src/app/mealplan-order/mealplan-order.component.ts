@@ -191,11 +191,18 @@ export class MealplanOrderComponent implements OnInit {
   }
 
   addToCart(): void {
-    console.log(this.selectedDishes);
-    const shopping_cart_new = JSON.stringify(this.newSelectedDishes);
-    localStorage.setItem('shopping_cart_new', shopping_cart_new);
+    console.log("New selected Dishes: ", this.newSelectedDishes);
+    console.log("Deleted Dishes: ", this.deletedDishes);
+    
+    const shoppingCart = {
+        newSelectedDishes: this.newSelectedDishes,
+        deletedDishes: this.deletedDishes
+    };
+    
+    const shoppingCartJSON = JSON.stringify(shoppingCart);
+    localStorage.setItem('shopping_cart', shoppingCartJSON);
+}
 
-  }
 
   getPreviousOrder() {
     this.orderService.getAllOrders()
@@ -282,7 +289,7 @@ export class MealplanOrderComponent implements OnInit {
         });
       }
     });
-    return totalPrice;
+    return parseFloat(totalPrice.toFixed(2));
   }
 
   setSelectionType(dish: Dish, day: string): string {
