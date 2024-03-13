@@ -45,10 +45,10 @@ public class OrderService {
 
         Dish orderedDish = dishRepository.findById(order.getDish_id())
                 .orElse(null);
-        //Day dayOfDish = dayRepository.findDayByDishesContains(orderedDish)
-        //        .orElse(null);
+        /**Day dayOfDish = dayRepository.findDayByDishesContains(orderedDish)
+                .orElse(null);
 
-        //if(orderedDish == null || dayOfDish == null) return false;
+        /if(orderedDish == null || dayOfDish == null) return false;
 
         //Calendar calendarDateOfDish = Calendar.getInstance();
         //calendarDateOfDish.setTime(dayOfDish.getDate());
@@ -65,18 +65,18 @@ public class OrderService {
         }
 
         //Bestellung ist bis Donnerstag, 18:00 Uhr für die kommende Woche möglich
-        //if ( dayOfDish.getDate().after(nextThursday.getTime())) {
-          //  setMessage("Bestellung ist nur bis Donnerstag, 18:00 Uhr für die kommende Woche möglich");
-            //return false;
-        //}
+        if ( dayOfDish.getDate().after(nextThursday.getTime())) {
+            setMessage("Bestellung ist nur bis Donnerstag, 18:00 Uhr für die kommende Woche möglich");
+            return false;
+        }**/
 
-        //Samstags darf kein Menü 1 und keine Suppe bestellt werden
-        //if ((orderedDish.getDishCategory().getName().equals("Menü1") ||
-        //        orderedDish.getDishCategory().getName().equals("Suppe")) &&
-        //dayOfWeek == Calendar.SATURDAY) {
-         //   setMessage("Samstags darf kein Menü 1 und keine Suppe bestellt werden");
-         //   return false;
-        //}
+        /**Samstags darf kein Menü 1 und keine Suppe bestellt werden
+        if ((orderedDish.getDishCategory().getName().equals("Menü1") ||
+                orderedDish.getDishCategory().getName().equals("Suppe")) &&
+        dayOfWeek == Calendar.SATURDAY) {
+            setMessage("Samstags darf kein Menü 1 und keine Suppe bestellt werden");
+            return false;
+        }**/
 
         Order newOrder = new Order(order, orderedDish, applicationUser);
 
