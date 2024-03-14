@@ -153,8 +153,8 @@
                           {{ dish.title }}
                         </div>
                         <div>
-                          <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="checkBoxMenu1" [checked]="checkIfOrdered(dish, day)" (change)="checkboxChanged($event, dish, day)"/>
-                        </div>
+                          <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="checkBoxMenu1" [checked]="checkIfOrdered(dish, day)" [disabled]="!isKWValid(kw)" (change)="checkboxChanged($event, dish, day)"/>
+                        </div>                   
                       </span>
                     </td>
                   </tr>
@@ -166,8 +166,12 @@
                           {{ dish.title }}
                         </div>
                         <div>
-                          <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="checkBoxMenu2" [checked]="checkIfOrdered(dish, day)" (change)="checkboxChanged($event, dish, day)"/>
+                          <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="checkBoxMenu2" [checked]="checkIfOrdered(dish, day)" [disabled]="!isKWValid(kw)" (change)="checkboxChanged($event, dish, day)"/>
                         </div>
+                        <!-- <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                          <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckMenu2Veggie">
+                          <label class="form-check-label" for="flexSwitchCheckMenu2Veggie">Vegetarisch</label>
+                        </div>   -->
                       </span>
                     </td>
                   </tr>
@@ -179,8 +183,7 @@
                           {{ dish.title }}
                         </div>
                         <div>
-                          <input class="form-check-input" type="checkbox" name="flexRadioDefault"
-                            id="checkBoxDessert" [checked]="checkIfOrdered(dish, day)" (change)="checkboxChanged($event, dish, day)"/>
+                          <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="checkBoxDessert" [checked]="checkIfOrdered(dish, day)" [disabled]="!isKWValid(kw)" (change)="checkboxChanged($event, dish, day)"/>
                         </div>
                       </span>
                     </td>
@@ -193,7 +196,7 @@
                           {{ dish.title }}
                         </div>
                         <div>
-                          <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="checkBoxSoup" [checked]="checkIfOrdered(dish, day)" (change)="checkboxChanged($event, dish, day)"/>
+                          <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="checkBoxSoup" [checked]="checkIfOrdered(dish, day)" [disabled]="!isKWValid(kw)" (change)="checkboxChanged($event, dish, day)"/>
                         </div>
                       </span>
                     </td>
