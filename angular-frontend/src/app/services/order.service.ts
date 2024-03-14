@@ -50,6 +50,7 @@ export class OrderService {
     return JSON.parse(shoppingCartJson);
   }
 
-  deleteOrders(deleteOrders: FullOrder[]): {
+  deleteOrders(deleteOrders: FullOrder[]) {
     // TODO
   }
+}
