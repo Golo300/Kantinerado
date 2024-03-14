@@ -1,7 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { MealserviceService } from '../services/mealplan.service';
 import { Day, Dish, FullOrder, Mealplan } from '../Interfaces';
-import { format, getISOWeek, lastDayOfWeek, setWeek, subDays } from 'date-fns';
+import { addWeeks, format, getISOWeek, getYear, isBefore, lastDayOfWeek, setDay, setHours, setMinutes, setWeek, subDays } from 'date-fns';
 import { de } from 'date-fns/locale';
 import { Order } from "../Interfaces";
 import { OrderService } from '../services/order.service';
@@ -140,73 +140,107 @@ export class MealplanOrderComponent implements OnInit {
   checkboxChanged(event: any, dish: Dish, dayOfWeek: string): void {
     console.log(dish.title);
 
-    if (event.target.checked) {
-      let kw = -1;
-      if (this.mealplan) { kw = this.mealplan.calendarWeek; }
+    let kw = -1;
+    if (this.mealplan) { kw = this.mealplan.calendarWeek; }
 
-      // Anlegen einer neuen Order
-      const order: Order = {
-        date: this.getDateFromDayOfWeekAndKW(dayOfWeek, kw),
-        dish: dish,
-        veggie: false //TODO: User muss angeben ob er veggie will oder nicht
-      };
-      // Hinzufügen zu selectedDishes
-      this.selectedDishes.push(order);
+    if (this.isKWValid(kw)) {
+      if (event.target.checked) {
 
-      // Wenn Dish noch nicht in orderedDishes --> Zusätzlich hinzufügen zu newSelectedDishes
-      if (!this.checkIfOrdered(dish, dayOfWeek)) {
-        this.newSelectedDishes.push(order);
-      }
+        // Anlegen einer neuen Order
+        const order: Order = {
+          date: this.getDateFromDayOfWeekAndKW(dayOfWeek, kw),
+          dish: dish,
+          veggie: false //TODO: User muss angeben ob er veggie will oder nicht
+        };
+        // Hinzufügen zu selectedDishes
+        this.selectedDishes.push(order);
 
-      // Wenn Dish in orderedDishes und deletedDishes ist --> Zusätzlich entfernen aus deletedDishes
-      else {
-        this.deletedDishes = this.deletedDishes.filter(element => {
-          const orderedDay = this.getWeekDayByDate(element.date);
-          return !(dish.id === element.dish.id && orderedDay === dayOfWeek);
-      });
-      }
-    }
-
-    else {
-      // Entfernen aus selectedDishes
-      this.selectedDishes = this.selectedDishes.filter(order => {
-        return order.dish.id !== dish.id || this.getWeekDayByDate(order.date) !== dayOfWeek;
-      });
-
-      // Wenn Dish noch nicht in orderedDishes also in newSelectedDishes ist --> Zusätzlich entfernen aus newSelectedDishes
-      this.newSelectedDishes = this.newSelectedDishes.filter(order => order.dish !== dish);
-
-      // Wenn Dish bereist in orderedDishes ist --> Zusätzlich hinzufügen zu deletedDishes
-      this.orderedDishes.forEach(element => {
-        const orderedDay = this.getWeekDayByDate(element.date);
-        if (dish.id === element.dish.id && orderedDay === dayOfWeek) {
-          this.deletedDishes.push(element);
+        // Wenn Dish noch nicht in orderedDishes --> Zusätzlich hinzufügen zu newSelectedDishes
+        if (!this.checkIfOrdered(dish, dayOfWeek)) {
+          this.newSelectedDishes.push(order);
         }
-      });
+
+        // Wenn Dish in orderedDishes und deletedDishes ist --> Zusätzlich entfernen aus deletedDishes
+        else {
+          this.deletedDishes = this.deletedDishes.filter(element => {
+            const orderedDay = this.getWeekDayByDate(element.date);
+            return !(dish.id === element.dish.id && orderedDay === dayOfWeek);
+          });
+        }
+      }
+
+      else {
+        // Entfernen aus selectedDishes
+        this.selectedDishes = this.selectedDishes.filter(order => {
+          return order.dish.id !== dish.id || this.getWeekDayByDate(order.date) !== dayOfWeek;
+        });
+
+        // Wenn Dish noch nicht in orderedDishes also in newSelectedDishes ist --> Zusätzlich entfernen aus newSelectedDishes
+        this.newSelectedDishes = this.newSelectedDishes.filter(order => order.dish !== dish);
+
+        // Wenn Dish bereist in orderedDishes ist --> Zusätzlich hinzufügen zu deletedDishes
+        this.orderedDishes.forEach(element => {
+          const orderedDay = this.getWeekDayByDate(element.date);
+          if (dish.id === element.dish.id && orderedDay === dayOfWeek) {
+            this.deletedDishes.push(element);
+          }
+        });
+      }
+
+      console.log("---------------------");
+      console.log("Selected Dishes:", this.selectedDishes);
+      console.log("New Selected Dishes:", this.newSelectedDishes);
+      console.log("Deleted Dishes:", this.deletedDishes);
+      console.log("Ordered Dishes:", this.orderedDishes);
     }
-    console.log("---------------------");
-    console.log("Selected Dishes:", this.selectedDishes);
-    console.log("New Selected Dishes:", this.newSelectedDishes);
-    console.log("Deleted Dishes:", this.deletedDishes);
-    console.log("Ordered Dishes:", this.orderedDishes);
+  }
+
+  isKWValid(selected_kw: number): boolean {
+    let valid = false;
+
+    const currentDate = new Date();
+
+    // Aktuelle KW und Jahr
+    const currentKW = getISOWeek(currentDate);
+    const currentYear = getYear(currentDate);
+
+    // Nächste KW und Jahr
+    const nextWeek = addWeeks(currentDate, 1);
+    const nextKW = getISOWeek(nextWeek);
+    const nextYear = getYear(nextWeek);
+
+    // Nächster Donnerstag, 18 Uhr
+    const nextThursdaySixPM = setMinutes(setHours(setDay(currentDate, 4), 18), 0);
+
+    if (nextYear === currentYear) {
+      if (currentKW < nextKW ) {
+        valid = isBefore(currentDate, nextThursdaySixPM);
+      }
+    }
+    else if (nextYear === currentYear + 1) {
+      if (currentKW - 52 < nextKW) {
+          valid = isBefore(currentDate, nextThursdaySixPM);
+      }
+    }
+
+    return valid;
   }
 
   addToCart(): void {
     console.log("New selected Dishes: ", this.newSelectedDishes);
     console.log("Deleted Dishes: ", this.deletedDishes);
-    
+
     const shoppingCart = {
-        newSelectedDishes: this.newSelectedDishes,
-        deletedDishes: this.deletedDishes
+      newSelectedDishes: this.newSelectedDishes,
+      deletedDishes: this.deletedDishes
     };
-    
+
     const shoppingCartJSON = JSON.stringify(shoppingCart);
     localStorage.setItem('shopping_cart', shoppingCartJSON);
 
     this.router.navigate(["/checkout"]);
-    
-}
 
+  }
 
   getPreviousOrder() {
     this.orderService.getAllOrders()
@@ -267,6 +301,20 @@ export class MealplanOrderComponent implements OnInit {
       }
     });
     return isDeleted;
+  }
+
+  checkIfSelected(dish: Dish): boolean {
+
+    while (!this.orderReady) { }
+
+    let isSelected: boolean = false;
+
+    this.selectedDishes.forEach(element => {
+      if (dish === element.dish) {
+        isSelected = true;
+      }
+    });
+    return isSelected;
   }
 
   calculateTotalPricePerDay(currentDay: string): number {
