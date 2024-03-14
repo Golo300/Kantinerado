@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { FullOrder, Order } from '../Interfaces';
 import { OrderService } from '../services/order.service';
 import { catchError, of, tap } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-checkout',
@@ -14,7 +15,7 @@ export class CheckoutComponent {
   public deletedDishes: FullOrder[] = [];
   message: string = "";
 
-  constructor(private orderService: OrderService) { }
+  constructor(private orderService: OrderService, private router: Router) { }
 
   ngOnInit(): void {
     const shoppingCart = this.orderService.getCart();
@@ -30,9 +31,11 @@ export class CheckoutComponent {
         // Erfolgsfall
         this.message = "Bestellung erfolgreich";
         console.log(this.message); // Debugging-Information
+        this.router.navigate(["/order"]);
+        
       }),
       catchError(error => {
-        console.error(error); // Fehler ausgeben
+        this.router.navigate(["/order"]);
         return of(null); // Rückgabe eines Observable, um das Haupt-Observable fortzusetzen
       })
     ).subscribe()
@@ -41,7 +44,6 @@ export class CheckoutComponent {
     this.orderService.deleteOrders(this.deletedDishes); // TODO
 
     localStorage.removeItem('shopping_cart');
-    window.location.reload();
   }
 
   getTotalPrice(): number {
