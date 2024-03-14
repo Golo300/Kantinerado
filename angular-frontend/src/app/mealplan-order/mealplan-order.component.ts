@@ -56,12 +56,14 @@ export class MealplanOrderComponent implements OnInit {
   nextWeek(): void {
     this.kw++;
     this.getMealplan();
+    this.getPreviousOrder();
     this.calculateWeekRange();
   }
 
   lastWeek(): void {
     this.kw--;
     this.getMealplan();
+    this.getPreviousOrder();
     this.calculateWeekRange();
   }
 
@@ -214,15 +216,27 @@ export class MealplanOrderComponent implements OnInit {
         this.orderedDishes = orders;
 
         // Kopieren der bestellten Gerichte in selectedDishes
-        this.selectedDishes = this.orderedDishes.map(order => ({
+        this.selectedDishes = this.orderedDishes 
+        .map(order => ({
           date: order.date,
           dish: order.dish,
           veggie: order.veggie
         }));
-
+        
+        this.selectedDishes = this.selectedDishes.filter(order => {console.log(this.getWeekNumber(order.date), this.kw); return this.getWeekNumber(order.date) === this.kw;});
+        this.orderedDishes = this.orderedDishes.filter(order => {console.log(this.getWeekNumber(order.date), this.kw); return this.getWeekNumber(order.date) === this.kw;});
         this.orderReady = true;
         console.log("Ordered Dishes:", this.orderedDishes); // Debugging-Information
       });
+  }
+
+  getWeekNumber(date: Date): number {
+    const d = new Date(date);
+    d.setHours(0, 0, 0, 0);
+    d.setDate(d.getDate() + 3 - (d.getDay() + 6) % 7);
+    const week1 = new Date(d.getFullYear(), 0, 4);
+    return 1 + Math.round(((d.getTime() - week1.getTime()) / 86400000
+              - 3 + (week1.getDay() + 6) % 7) / 7);
   }
 
   checkIfOrdered(dish: Dish, day: string): boolean {
