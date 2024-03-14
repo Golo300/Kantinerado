@@ -116,4 +116,22 @@ public class OrderService {
     public void setMessage(String message) {
         this.message = message;
     }
+
+    public boolean deleteOrder(Integer orderId, ApplicationUser user) {
+        Calendar calendar = Calendar.getInstance();
+        Date today = calendar.getTime();
+        calendar.add(Calendar.DAY_OF_YEAR, 1);
+
+        Date tomorrow = calendar.getTime();
+
+        Order order = orderRepository.getReferenceById(orderId);
+
+        if(order.getDate().after(tomorrow) &&
+        user.getUserId() == order.getUser().getUserId()) {
+            orderRepository.deleteById(orderId);
+            return true;
+        } else {
+            return  false;
+        }
+    }
 }

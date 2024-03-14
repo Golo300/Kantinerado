@@ -83,4 +83,24 @@ public class OrderController {
             return new ResponseEntity<>("Some orders failed to place", HttpStatus.BAD_REQUEST);
         }
     }
+
+    @PostMapping("/batchRemove")
+    public ResponseEntity<String> deleteOrders(@RequestBody List<Integer> orders) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        ApplicationUser user = tokenService.getUserFromAuthentication(authentication);
+
+        boolean allOrdersDeleted = true;
+        for (Integer order : orders) {
+            boolean response = orderService.deleteOrder(order, user);
+            if (!response) {
+                allOrdersDeleted = false;
+            }
+        }
+
+        if (allOrdersDeleted) {
+            return new ResponseEntity<>("All orders placed successfully", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Some orders failed to place", HttpStatus.BAD_REQUEST);
+        }
+    }
 }
