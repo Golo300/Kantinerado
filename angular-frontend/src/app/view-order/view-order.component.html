@@ -24,6 +24,14 @@
 
   <br>
 
+    <!-- Sortier-Dropdown-Menü -->
+    <select [(ngModel)]="selectedSortOption" (change)="sortOrders()">
+      <option value="asc">Aufsteigend</option>
+      <option value="desc">Absteigend</option>
+    </select>
+
+  <br>
+
   <h2 class="mt-5">Ausstehende Bestellungen</h2>
   <table class="table mt-3 table-sm">
     <thead>
@@ -71,4 +79,5 @@
   <div class="mt-3">
     <p>Gesamtpreis vergangener Bestellungen: {{ calculateTotalPrice(pastOrders) | currency:'EUR' }}</p>
   </div>
+
 </div>

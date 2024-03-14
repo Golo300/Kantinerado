@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { OrderService } from '../services/order.service';
-import { FullOrder } from '../Mealplan';
+import { FullOrder } from '../Interfaces';
 import { tap } from 'rxjs/operators';
 
 @Component({
@@ -12,6 +12,7 @@ export class ViewOrderComponent implements OnInit {
   pendingOrders: FullOrder[] = [];
   pastOrders: FullOrder[] = [];
   todayOrders: FullOrder[] = [];
+  selectedSortOption: string = 'asc'; // Default-Auswahl: Aufsteigend
 
   constructor(private orderService: OrderService) { }
 
@@ -35,6 +36,7 @@ export class ViewOrderComponent implements OnInit {
           this.todayOrders = orders.filter(order => this.isToday(new Date(order.date)));
           this.pendingOrders = orders.filter(order => new Date(order.date) > today);
           this.pastOrders = orders.filter(order => new Date(order.date) < yesterday);
+          this.sortOrders(); // Sortiere Bestellungen nach dem Laden
         })
       )
       .subscribe();
@@ -57,5 +59,20 @@ export class ViewOrderComponent implements OnInit {
     }
     const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'short', day: '2-digit' };
     return new Intl.DateTimeFormat('de-DE', options).format(date);
+  }
+
+  sortOrders() {
+    switch (this.selectedSortOption) {
+      case 'asc':
+        this.todayOrders.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+        this.pendingOrders.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+        this.pastOrders.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+        break;
+      case 'desc':
+        this.todayOrders.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        this.pendingOrders.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        this.pastOrders.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        break;
+    }
   }
 }

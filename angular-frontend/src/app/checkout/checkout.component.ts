@@ -41,7 +41,6 @@ export class CheckoutComponent {
     this.orderService.deleteOrders(this.deletedDishes); // TODO
 
     localStorage.removeItem('shopping_cart');
-    window.location.reload();
   }
 
   getTotalPrice(): number {
