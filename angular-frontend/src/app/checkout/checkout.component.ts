@@ -24,6 +24,7 @@ export class CheckoutComponent {
   }
 
   createOrder() {
+    // Hier werden neue Gerichte bestellt
     this.orderService.createOrder(this.newSelectedDishes).pipe(
       tap((response: any) => {
         // Erfolgsfall
@@ -35,8 +36,12 @@ export class CheckoutComponent {
         return of(null); // Rückgabe eines Observable, um das Haupt-Observable fortzusetzen
       })
     ).subscribe()
+
+    // Hier werden entfernte Gerichte gelöscht
+    this.orderService.deleteOrders(this.deletedDishes); // TODO
+
     localStorage.removeItem('shopping_cart');
-    // window.location.reload();
+    window.location.reload();
   }
 
   getTotalPrice(): number {

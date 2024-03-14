@@ -1,7 +1,7 @@
-import {HttpClient} from '@angular/common/http';
-import {Injectable} from '@angular/core';
-import {catchError, map, Observable} from 'rxjs';
-import {FullOrder, Order, sendOrder} from "../Interfaces";
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { catchError, map, Observable } from 'rxjs';
+import { FullOrder, Order, sendOrder } from "../Interfaces";
 
 @Injectable({
   providedIn: 'root'
@@ -18,15 +18,14 @@ export class OrderService {
 
     var sendOrders: sendOrder[] = []
 
-    for(var order of orders)
-    {
-    const sendOrder: sendOrder = 
-    {
+    for (var order of orders) {
+      const sendOrder: sendOrder =
+      {
         date: order.date,
         dish_id: order.dish.id,
         veggie: order.veggie
-    }
-    sendOrders.push(sendOrder);
+      }
+      sendOrders.push(sendOrder);
     }
 
     return this.http.post<any>(`${this.apiUrl}/order/batch`, sendOrders).pipe(
@@ -50,4 +49,7 @@ export class OrderService {
     }
     return JSON.parse(shoppingCartJson);
   }
-}
+
+  deleteOrders(deleteOrders: FullOrder[]): {
+    // TODO
+  }
