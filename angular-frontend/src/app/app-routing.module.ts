@@ -16,7 +16,7 @@ const routes: Routes = [
   { path: 'order', component: MealplanOrderComponent, canActivate: [AuthGuardService], data: { allowedRoles: ['ADMIN', 'USER', 'KANTEEN'] }},
   { path: 'checkout', component: CheckoutComponent, canActivate: [AuthGuardService], data: { allowedRoles: ['ADMIN', 'USER', 'KANTEEN'] }},
   { path: 'mealplan', component: MealplanComponent },
-  { path: 'view', component: ViewOrderComponent },
+  { path: 'view', component: ViewOrderComponent, canActivate: [AuthGuardService], data: { allowedRoles: ['ADMIN', 'USER', 'KANTEEN'] } },
   { path: 'detailview/:kw/:day', component: DetailViewComponent },
   { path: '**', component: LoginComponent },
   // Weitere Routen können hier hinzugefügt werden
