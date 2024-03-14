@@ -7,6 +7,7 @@ import { Order } from "../Interfaces";
 import { OrderService } from '../services/order.service';
 import { HttpErrorResponse } from "@angular/common/http";
 import { catchError, firstValueFrom, of, tap } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-mealplan-order',
@@ -39,7 +40,7 @@ export class MealplanOrderComponent implements OnInit {
   // Alle im Backend bestellten oder im Frontend wieder abgewählten Dishes 
   deletedDishes: FullOrder[] = [];
 
-  constructor(private mealService: MealserviceService, private orderService: OrderService) { }
+  constructor(private mealService: MealserviceService, private orderService: OrderService, private router: Router) { }
 
   ngOnInit(): void {
     this.setCurrentKW();
@@ -201,6 +202,9 @@ export class MealplanOrderComponent implements OnInit {
     
     const shoppingCartJSON = JSON.stringify(shoppingCart);
     localStorage.setItem('shopping_cart', shoppingCartJSON);
+
+    this.router.navigate(["/checkout"]);
+    
 }
 
 
