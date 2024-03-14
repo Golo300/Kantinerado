@@ -14,6 +14,7 @@ import org.springframework.security.core.Transient;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -45,38 +46,55 @@ public class OrderService {
 
         Dish orderedDish = dishRepository.findById(order.getDish_id())
                 .orElse(null);
-        /**Day dayOfDish = dayRepository.findDayByDishesContains(orderedDish)
-                .orElse(null);
 
-        /if(orderedDish == null || dayOfDish == null) return false;
+        Date dayOfDish = order.getDate();
+        Date currentDate = new Date();
 
-        //Calendar calendarDateOfDish = Calendar.getInstance();
-        //calendarDateOfDish.setTime(dayOfDish.getDate());
-        //int dayOfWeek = calendarDateOfDish.get(Calendar.DAY_OF_WEEK);
+        if(orderedDish == null || dayOfDish == null) return false;
 
-        //Calendar nextThursday = calendarDateOfDish;
-        //nextThursday.add(Calendar.WEEK_OF_YEAR, 1); // eine Woche hinzufügen
-        //nextThursday.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY); // auf Donnerstag setzen
-        
-        //Vegetarisch darf nur gewählt werden, wenn auch Menü 2 gewählt wurde
+        Calendar calendarDateOfDish = Calendar.getInstance();
+        calendarDateOfDish.setTime(dayOfDish);
+
+
+        // Das Bestelldatum muss mindestens in der nächsten Kalenderwoche liegen
+        Calendar nextWeek = Calendar.getInstance();
+        nextWeek.setTime(currentDate);
+        nextWeek.add(Calendar.WEEK_OF_YEAR, 1); // eine Woche hinzufügen
+
+        Calendar nextThursday = Calendar.getInstance();
+        nextThursday.setTime(dayOfDish);
+        nextThursday.set(Calendar.DAY_OF_WEEK, nextThursday.THURSDAY); // auf Donnerstag setzen
+        nextThursday.set(Calendar.HOUR_OF_DAY, 18); // auf 18 Uhr setzen
+        nextThursday.set(Calendar.MINUTE, 0); // auf 0 Minuten setzen
+        nextThursday.set(Calendar.SECOND, 0); // auf 0 Sekunden setzen
+        nextThursday.add(Calendar.WEEK_OF_YEAR, -1); // Donnerstag der letzen Woche
+        Date deadlineThursday = nextThursday.getTime();
+
+        // Das aktuelle Datum darf nicht nach Donnerstag 18:00 Uhr sein
+        if (currentDate.after(deadlineThursday)) {
+            setMessage("Bestellung ist nur bis Donnerstag, 18:00 Uhr für die kommende Woche möglich");
+            return false;
+        }
+
+        // Das Bestelldatum muss mindestens in der nächsten Kalenderwoche liegen
+        if (!calendarDateOfDish.after(nextWeek)) {
+            setMessage("Bestelldatum muss mindestens in der nächsten Kalenderwoche liegen");
+            return false;
+        }
+
+        // Vegetarisch darf nur gewählt werden, wenn auch Menü 2 gewählt wurde
         if (!orderedDish.getDishCategory().isCanVeggie() && order.isVeggie()) {
             setMessage("Vegetarisch darf nur gewählt werden, wenn auch Menü 2 gewählt wurde");
             return false;
         }
 
-        //Bestellung ist bis Donnerstag, 18:00 Uhr für die kommende Woche möglich
-        if ( dayOfDish.getDate().after(nextThursday.getTime())) {
-            setMessage("Bestellung ist nur bis Donnerstag, 18:00 Uhr für die kommende Woche möglich");
-            return false;
-        }**/
-
-        /**Samstags darf kein Menü 1 und keine Suppe bestellt werden
+        // Samstags darf kein Menü 1 und keine Suppe bestellt werden
         if ((orderedDish.getDishCategory().getName().equals("Menü1") ||
                 orderedDish.getDishCategory().getName().equals("Suppe")) &&
-        dayOfWeek == Calendar.SATURDAY) {
+                calendarDateOfDish.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
             setMessage("Samstags darf kein Menü 1 und keine Suppe bestellt werden");
             return false;
-        }**/
+        }
 
         Order newOrder = new Order(order, orderedDish, applicationUser);
 
@@ -89,6 +107,7 @@ public class OrderService {
 
         return true;
     }
+
 
     public String getMessage() {
         return message;
