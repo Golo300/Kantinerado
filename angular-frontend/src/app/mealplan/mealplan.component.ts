@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MealserviceService } from '../services/mealplan.service';
-import { Mealplan } from '../Mealplan';
-import { getISOWeek, lastDayOfWeek, setWeek, subDays } from 'date-fns';
+import { Mealplan } from '../Interfaces';
+import { format, getISOWeek, lastDayOfWeek, setWeek, subDays } from 'date-fns';
 import { AuthService } from '../services/auth.service';
+import { de } from 'date-fns/locale';
 
 @Component({
   selector: 'app-mealplan',
@@ -49,10 +50,16 @@ export class MealplanComponent implements OnInit {
   getMealplan(): void {
     this.mealplan = null;
     this.mealService.getMealplan(this.kw)
-      .subscribe(meaplan => {
+      .subscribe((meaplan: Mealplan) => {
         this.mealplan = meaplan;
-        console.log(this.mealplan); // Debugging-Information
+        this.mealplan.days.forEach(day => {
+          day.dayofWeek = this.getWeekDayByDate(day.date);
+        });
       });
+  }
+
+  getWeekDayByDate(date: Date): string {
+    return format(date, 'EEEE', { locale: de });
   }
 
   getDishes(category: string, day: string) {

@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MealserviceService } from '../mealplan.service';
-import { Dish, Day, Mealplan } from '../Mealplan';
+import { MealserviceService } from '../services/mealplan.service';
+import { Dish, Day, Mealplan } from '../Interfaces';
 
 @Component({
   selector: 'app-detail-view',
@@ -34,7 +34,7 @@ export class DetailViewComponent implements OnInit {
 
   getMealplan(): void {
     this.mealService.getMealplan(this.kw)
-      .subscribe(meaplan => {this.mealplan = meaplan;
+      .subscribe((meaplan: Mealplan) => {this.mealplan = meaplan;
                             console.log(this.mealplan);
                             const detailDay = this.mealplan.days.find(e => (e.id == this.day));
                             

@@ -7,6 +7,7 @@ export interface Mealplan {
 
 export interface Day {
   id: number;
+  date: Date;
   dayofWeek: string;
   noFood: boolean;
   dishes: Dish[];
@@ -30,11 +31,13 @@ date: Date;
 dish: Dish;
 veggie: boolean;
 }
+
 export interface sendOrder {
   date: Date;
   dish_id: number;
   veggie: boolean;
   }
+  
 export interface FullOrder {
   id: number;
   date: Date;

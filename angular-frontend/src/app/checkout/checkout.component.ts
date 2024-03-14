@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Order } from '../Mealplan';
+import { FullOrder, Order } from '../Interfaces';
 import { OrderService } from '../services/order.service';
 import { catchError, of, tap } from 'rxjs';
 
@@ -9,19 +9,23 @@ import { catchError, of, tap } from 'rxjs';
   styleUrl: './checkout.component.css'
 })
 export class CheckoutComponent {
-  
-  public selectedDishes: Order[] = [];
+
+  public newSelectedDishes: Order[] = [];
+  public deletedDishes: FullOrder[] = [];
   message: string = "";
 
+  constructor(private orderService: OrderService) { }
 
-  constructor(private orderService: OrderService){}
-  // Hier kannst du die ausgewählten Gerichte in der Checkout-Komponente verwenden
   ngOnInit(): void {
-    this.selectedDishes = this.orderService.getCart();
+    const shoppingCart = this.orderService.getCart();
+    // Aufteilen der Gerichte in selectedDishes und deletedDishes
+    this.newSelectedDishes = shoppingCart.newSelectedDishes;
+    this.deletedDishes = shoppingCart.deletedDishes;
   }
 
   createOrder() {
-    this.orderService.createOrder(this.selectedDishes).pipe(
+    // Hier werden neue Gerichte bestellt
+    this.orderService.createOrder(this.newSelectedDishes).pipe(
       tap((response: any) => {
         // Erfolgsfall
         this.message = "Bestellung erfolgreich";
@@ -32,16 +36,25 @@ export class CheckoutComponent {
         return of(null); // Rückgabe eines Observable, um das Haupt-Observable fortzusetzen
       })
     ).subscribe()
-  localStorage.removeItem('shopping_cart');
-  //window.location.reload();
-}
+
+    // Hier werden entfernte Gerichte gelöscht
+    this.orderService.deleteOrders(this.deletedDishes); // TODO
+
+    localStorage.removeItem('shopping_cart');
+    window.location.reload();
+  }
 
   getTotalPrice(): number {
     let totalPrice = 0;
-    for (const order of this.selectedDishes) {
-      // Annahme: Jede Bestellung (Order) hat ein price Attribut
-      totalPrice += order.dish.price;
-    }
-    return totalPrice;
+
+    this.newSelectedDishes.forEach(element => {
+      totalPrice += element.dish.price;
+    });
+
+    this.deletedDishes.forEach(element => {
+      totalPrice -= element.dish.price;
+    });
+
+    return parseFloat(totalPrice.toFixed(2));
   }
 }

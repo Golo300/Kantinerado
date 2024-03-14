@@ -11,7 +11,6 @@ import { CheckoutComponent } from './checkout/checkout.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { JwtInterceptor } from './helper/jwt.interceptor';
-import { OrderProcessComponent } from './order-process/order-process.component';
 import { DetailViewComponent } from './detail-view/detail-view.component';
 
 @NgModule({
@@ -22,8 +21,7 @@ import { DetailViewComponent } from './detail-view/detail-view.component';
     CheckoutComponent,
     LoginComponent,
     RegisterComponent,
-    DetailViewComponent,
-    OrderProcessComponent
+    DetailViewComponent
   ],
   imports: [
     BrowserModule,
