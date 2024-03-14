@@ -211,22 +211,45 @@ export class MealplanOrderComponent implements OnInit {
     const nextKW = getISOWeek(nextWeek);
     const nextYear = getYear(nextWeek);
 
-    // Nächster Donnerstag, 18 Uhr
-    const nextThursdaySixPM = setMinutes(setHours(setDay(currentDate, 4), 18), 0);
+     // Nächste KW und Jahr
+     const lastWeekFromSelected = addWeeks(selected_kw, -1);
+     const lastKWFromSelected = getISOWeek(lastWeekFromSelected);
+     const lastYearFromSelected = getYear(lastWeekFromSelected);
 
+    const thursday = this.donnerstagVorherigeKW(selected_kw);
+   
     if (nextYear === currentYear) {
-      if (currentKW < nextKW ) {
-        valid = isBefore(currentDate, nextThursdaySixPM);
+      if (selected_kw >= nextKW) {
+        valid = isBefore(currentDate, thursday);
       }
     }
     else if (nextYear === currentYear + 1) {
-      if (currentKW - 52 < nextKW) {
-          valid = isBefore(currentDate, nextThursdaySixPM);
-      }
+      if (selected_kw - 52 >= nextKW) {
+          valid = isBefore(currentDate, thursday);
+      } 
     }
 
     return valid;
-  }
+}
+
+donnerstagVorherigeKW(kw: number): Date {
+  const currentDate = new Date();
+  const year = currentDate.getFullYear();
+
+  // Datum des angegebenen Donnerstags in der Kalenderwoche
+  const kwDate = new Date(year, 0, (kw - 1) * 7); // Der 1. Januar liegt normalerweise in der KW 1
+  const dayOfWeek = kwDate.getDay(); // Tag der Woche (0 = Sonntag, 1 = Montag, ..., 6 = Samstag)
+
+  // Subtrahiere die Tage bis zum Donnerstag (Tag 4)
+  kwDate.setDate(kwDate.getDate() + (4 - dayOfWeek));
+
+  // Subtrahiere 7 Tage, um den Donnerstag der vorherigen Woche zu erhalten
+  kwDate.setDate(kwDate.getDate() - 7);
+
+  kwDate.setHours(18);
+
+  return kwDate;
+}
 
   addToCart(): void {
     console.log("New selected Dishes: ", this.newSelectedDishes);
