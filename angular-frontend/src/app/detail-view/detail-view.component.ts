@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MealserviceService } from '../services/mealplan.service';
 import { Dish, Day, Mealplan } from '../Interfaces';
 
@@ -15,7 +15,7 @@ export class DetailViewComponent implements OnInit {
   dishes!: Dish[];
 
   private route = inject(ActivatedRoute);
-  constructor(private mealService: MealserviceService) 
+  constructor(private mealService: MealserviceService, private router: Router) 
   {
 
   }
@@ -42,5 +42,10 @@ export class DetailViewComponent implements OnInit {
                               this.dishes = detailDay.dishes;
                             }});
       console.log(this.mealplan);
+  }
+
+  routeMealplan(): void {
+    this.router.navigate(['/order/' + this.kw]);
+
   }
 }
