@@ -50,6 +50,8 @@ public class AuthenticatedBackendApplication {
 
             // Sample DishCategory
             DishCategory menu_1 = dishCategoryRepository.save(new DishCategory("Menü1", false));
+            DishCategory menu_2 = dishCategoryRepository.save(new DishCategory("Menü2", true));
+            DishCategory suppe = dishCategoryRepository.save(new DishCategory("Soup", false));
             DishCategory dessert = dishCategoryRepository.save(new DishCategory("Dessert", false));
 
             // Sample Dishes
@@ -57,16 +59,32 @@ public class AuthenticatedBackendApplication {
 
             Dish dish1 = new Dish();
             dish1.setDishCategory(menu_1);
-            dish1.setTitle("Dish 1");
-            dish1.setDescription("Description for Dish 1");
+            dish1.setTitle("Schnitzel");
+            dish1.setDescription("Schnitzel mit Pommes");
             dish1.setPrice(9.99);
             dishRepository.save(dish1);
             dishes.add(dish1);
 
+            Dish dish3 = new Dish();
+            dish3.setDishCategory(menu_2);
+            dish3.setTitle("Maultaschen");
+            dish3.setDescription("Maultaschen Schwäbischer Art");
+            dish3.setPrice(6.99);
+            dishRepository.save(dish3);
+            dishes.add(dish3);
+
+            Dish dish4 = new Dish();
+            dish4.setDishCategory(suppe);
+            dish4.setTitle("Peking Suppe");
+            dish4.setDescription("Peking Suppe");
+            dish4.setPrice(3.99);
+            dishRepository.save(dish4);
+            dishes.add(dish4);
+
             Dish dish2 = new Dish();
             dish2.setDishCategory(dessert);
-            dish2.setTitle("Dessert 1");
-            dish2.setDescription("Description for Dessert 1");
+            dish2.setTitle("Kuchen");
+            dish2.setDescription("Bannanenkuchen");
             dish2.setPrice(4.99);
             dishRepository.save(dish2);
             dishes.add(dish2);
