@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, inject } from '@angular/core';
 import { MealserviceService } from '../services/mealplan.service';
 import { Day, Dish, FullOrder, Mealplan } from '../Interfaces';
 import { addWeeks, format, getISOWeek, getYear, isBefore, lastDayOfWeek, setDay, setHours, setMinutes, setWeek, subDays } from 'date-fns';
@@ -7,7 +7,7 @@ import { Order } from "../Interfaces";
 import { OrderService } from '../services/order.service';
 import { HttpErrorResponse } from "@angular/common/http";
 import { catchError, firstValueFrom, of, tap } from 'rxjs';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-mealplan-order',
@@ -21,6 +21,8 @@ export class MealplanOrderComponent implements OnInit {
   weekDays = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'];
   startDate!: Date;
   endDate!: Date;
+
+  private route = inject(ActivatedRoute);
 
   isBreakfastOpen: boolean = false;
   isLunchOpen: boolean = true;
@@ -43,7 +45,14 @@ export class MealplanOrderComponent implements OnInit {
   constructor(private mealService: MealserviceService, private orderService: OrderService, private router: Router) { }
 
   ngOnInit(): void {
-    this.setCurrentKW();
+    const kw = this.route.snapshot.paramMap.get('kw');
+
+    if (kw) {
+      this.kw = +kw;
+    } else {
+      this.setCurrentKW();
+    }
+
     this.getMealplan();
     this.getPreviousOrder();
     this.calculateWeekRange();
