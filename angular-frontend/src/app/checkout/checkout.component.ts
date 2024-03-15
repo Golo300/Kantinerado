@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { FullOrder, Order } from '../Interfaces';
 import { OrderService } from '../services/order.service';
-import { catchError, of, tap } from 'rxjs';
+import { catchError, forkJoin, of, tap } from 'rxjs';
 import { Router } from '@angular/router';
 
 @Component({
@@ -25,23 +25,31 @@ export class CheckoutComponent {
   }
 
   createOrder() {
-    // Hier werden neue Gerichte bestellt
-    this.orderService.createOrder(this.newSelectedDishes).pipe(
-      tap((response: any) => {
-        // Erfolgsfall
-        this.message = "Bestellung erfolgreich";
-        console.log(this.message); // Debugging-Information
-        this.router.navigate(["/order"]);
-        
-      }),
+    const createOrder$ = this.orderService.createOrder(this.newSelectedDishes).pipe(
       catchError(error => {
-        this.router.navigate(["/order"]);
-        return of(null); // Rückgabe eines Observable, um das Haupt-Observable fortzusetzen
+        return of(null);
       })
-    ).subscribe()
-
-    // Hier werden entfernte Gerichte gelöscht
-    this.orderService.deleteOrders(this.deletedDishes); // TODO
+    );
+  
+    const deleteOrders$ = this.orderService.deleteOrders(this.deletedDishes).pipe(
+      catchError(error => {
+        return of(null);
+      })
+    );
+  
+    forkJoin([createOrder$, deleteOrders$]).subscribe(
+      ([createOrderResponse, deleteOrdersResponse]) => {
+        // Both requests are successful
+        this.message = "Bestellung und Löschung erfolgreich";
+        console.log(this.message);
+        this.router.navigate(["/order"]);
+      },
+      error => {
+        // At least one request failed
+        console.error("An error occurred:", error);
+        this.router.navigate(["/order"]);
+      }
+    );
 
     localStorage.removeItem('shopping_cart');
   }

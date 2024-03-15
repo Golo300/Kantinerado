@@ -51,6 +51,16 @@ export class OrderService {
   }
 
   deleteOrders(deleteOrders: FullOrder[]) {
-    // TODO
+    
+    var deleted: number[] = []
+
+    for (var order of deleteOrders) {
+      deleted.push(order.id);
+    }
+
+    return this.http.post<any>(`${this.apiUrl}/order/batchRemove`, deleted).pipe(
+      map(response => {
+        return response;
+      }));
   }
 }
