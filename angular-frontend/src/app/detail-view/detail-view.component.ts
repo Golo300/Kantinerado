@@ -36,13 +36,25 @@ export class DetailViewComponent implements OnInit {
     this.mealService.getMealplan(this.kw)
       .subscribe((meaplan: Mealplan) => {this.mealplan = meaplan;
                             console.log(this.mealplan);
-                            const detailDay = this.mealplan.days.find(e => (e.id == this.day));
-                            
+                            const detailDay = this.mealplan.days.find(d => this.istWochentag(new Date(d.date), this.day));
+                            console.log(detailDay);
                             if (detailDay) {
                               this.dishes = detailDay.dishes;
                             }});
       console.log(this.mealplan);
   }
+
+  istWochentag(date: Date, wochentag: number): boolean {
+    // Den Wochentag des gegebenen Datums abrufen (0 = Sonntag, 1 = Montag, ..., 6 = Samstag)
+    const wochentagDesDatums = date.getDay();
+
+    // Umrechnung des JavaScript-Wochentags in den angegebenen Wochentag-Index
+    // (1 = Montag, 2 = Dienstag, ..., 7 = Sonntag)
+    const umgerechneterWochentag = (wochentagDesDatums === 0) ? 7 : wochentagDesDatums;
+
+    // Überprüfen, ob der umgerechnete Wochentag mit dem angegebenen Wochentag übereinstimmt
+    return umgerechneterWochentag === wochentag;
+}
 
   routeMealplan(): void {
     this.router.navigate(['/order/' + this.kw]);
