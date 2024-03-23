@@ -112,11 +112,7 @@ export class MealplanAdministrationComponent implements OnInit {
   }
 
   isNextKWSwitchPossible(): boolean {
-    // Maximal 2 kommende Wochen
-    if (this.limitNextKW < 5) {
-      return true;
-    }
-    return false;
+    return true;
   }
 
   planDish(day: String): void {

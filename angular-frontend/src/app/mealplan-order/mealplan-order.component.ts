@@ -1,7 +1,7 @@
 import { Component, EventEmitter, OnInit, Output, inject } from '@angular/core';
 import { MealserviceService } from '../services/mealplan.service';
 import { Day, Dish, FullOrder, Mealplan } from '../Interfaces';
-import { addWeeks, format, getISOWeek, getYear, isBefore, lastDayOfWeek, setDay, setHours, setMinutes, setWeek, subDays } from 'date-fns';
+import { addDays, addWeeks, format, getISOWeek, getYear, isBefore, lastDayOfWeek, setDay, setHours, setMinutes, setWeek, subDays } from 'date-fns';
 import { de } from 'date-fns/locale';
 import { Order } from "../Interfaces";
 import { OrderService } from '../services/order.service';
@@ -16,11 +16,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class MealplanOrderComponent implements OnInit {
 
-  kw!: number;
+  selectedKW!: number;
+  currentKW!: number;
+  selectedYear!: number;
   mealplan!: Mealplan | null;
   weekDays = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'];
   startDate!: Date;
   endDate!: Date;
+  limitNextKW!: number;
 
   private route = inject(ActivatedRoute);
 
@@ -48,37 +51,86 @@ export class MealplanOrderComponent implements OnInit {
     const kw = this.route.snapshot.paramMap.get('kw');
 
     if (kw) {
-      this.kw = +kw;
+      this.selectedKW = +kw;
     } else {
       this.setCurrentKW();
     }
 
+    this.limitNextKW = 0;
+
     this.getMealplan();
     this.getPreviousOrder();
-    this.calculateWeekRange();
+    this.calculateWeekRange(this.getDateFromMondayOfKW(this.selectedKW));
   }
+
   setCurrentKW() {
     const currentDate = new Date();
-    this.kw = getISOWeek(currentDate);
+    this.selectedKW = getISOWeek(currentDate);
+    this.currentKW = this.selectedKW;
+    this.selectedYear = currentDate.getFullYear();
   }
 
   nextWeek(): void {
-    this.kw++;
+    const mondayOfSelectedKW = this.startDate;
+
+    // Berechnung des Montags der nächsten Woche
+    const resultDate = addDays(mondayOfSelectedKW, 7);
+
+    // current kw, year und limit ändern
+    this.selectedKW = getISOWeek(resultDate);
+    this.selectedYear = resultDate.getFullYear();
+    this.limitNextKW++;
+
     this.getMealplan();
-    this.getPreviousOrder();
-    this.calculateWeekRange();
+    this.calculateWeekRange(resultDate);
   }
 
   lastWeek(): void {
-    this.kw--;
+    const mondayOfSelectedKW = this.startDate;
+
+    // Berechnung des Montags der letzten Woche
+    const resultDate = subDays(mondayOfSelectedKW, 7);
+
+    // current kw, year und limit ändern
+    this.selectedKW = getISOWeek(resultDate);
+    this.selectedYear = resultDate.getFullYear();
+    this.limitNextKW--;
+
     this.getMealplan();
-    this.getPreviousOrder();
-    this.calculateWeekRange();
+    this.calculateWeekRange(resultDate);
+  }
+
+  getDateFromMondayOfKW(kw: number): Date {
+    const monday = setWeek(new Date(this.selectedYear, 0, 1), kw, { weekStartsOn: 1 }); // Erster Tag (Montag) der Kalenderwoche
+    return monday;
+  }
+  calculateWeekRange(mondayOfSelectedKW: Date): void {
+    const monday = mondayOfSelectedKW;
+    const sunday = lastDayOfWeek(monday, { weekStartsOn: 1 });
+    const saturday = subDays(sunday, 1);
+
+    this.startDate = monday;
+    this.endDate = saturday;
+  }
+
+  isLastKWSwitchPossible(): boolean {
+    if (this.selectedKW != this.currentKW) {
+      return true;
+    }
+    return false;
+  }
+
+  isNextKWSwitchPossible(): boolean {
+    // Maximal 2 kommende Wochen
+    if (this.limitNextKW < 2) {
+      return true;
+    }
+    return false;
   }
 
   getMealplan(): void {
     this.mealplan = null;
-    this.mealService.getMealplan(this.kw)
+    this.mealService.getMealplan(this.selectedKW)
       .subscribe((meaplan: Mealplan) => {
         this.mealplan = meaplan;
         this.mealplan.days.forEach(day => {
@@ -129,16 +181,7 @@ export class MealplanOrderComponent implements OnInit {
     return [];
   }
 
-  calculateWeekRange(): void {
-    const currentYear = new Date().getFullYear();
 
-    const monday = setWeek(new Date(currentYear, 0, 1), this.kw, { weekStartsOn: 1 });
-    const sunday = lastDayOfWeek(monday, { weekStartsOn: 1 });
-    const saturday = subDays(sunday, 1);
-
-    this.startDate = monday;
-    this.endDate = saturday;
-  }
 
   toggleCollapse(collapseId: string): void {
     if (collapseId === 'collapseBreakfast') {
@@ -220,13 +263,13 @@ export class MealplanOrderComponent implements OnInit {
     const nextKW = getISOWeek(nextWeek);
     const nextYear = getYear(nextWeek);
 
-     // Nächste KW und Jahr
-     const lastWeekFromSelected = addWeeks(selected_kw, -1);
-     const lastKWFromSelected = getISOWeek(lastWeekFromSelected);
-     const lastYearFromSelected = getYear(lastWeekFromSelected);
+    // Nächste KW und Jahr
+    const lastWeekFromSelected = addWeeks(selected_kw, -1);
+    const lastKWFromSelected = getISOWeek(lastWeekFromSelected);
+    const lastYearFromSelected = getYear(lastWeekFromSelected);
 
     const thursday = this.donnerstagVorherigeKW(selected_kw);
-   
+
     if (nextYear === currentYear) {
       if (selected_kw >= nextKW) {
         valid = isBefore(currentDate, thursday);
@@ -234,31 +277,31 @@ export class MealplanOrderComponent implements OnInit {
     }
     else if (nextYear === currentYear + 1) {
       if (selected_kw - 52 >= nextKW) {
-          valid = isBefore(currentDate, thursday);
-      } 
+        valid = isBefore(currentDate, thursday);
+      }
     }
 
     return valid;
-}
+  }
 
-donnerstagVorherigeKW(kw: number): Date {
-  const currentDate = new Date();
-  const year = currentDate.getFullYear();
+  donnerstagVorherigeKW(kw: number): Date {
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
 
-  // Datum des angegebenen Donnerstags in der Kalenderwoche
-  const kwDate = new Date(year, 0, (kw - 1) * 7); // Der 1. Januar liegt normalerweise in der KW 1
-  const dayOfWeek = kwDate.getDay(); // Tag der Woche (0 = Sonntag, 1 = Montag, ..., 6 = Samstag)
+    // Datum des angegebenen Donnerstags in der Kalenderwoche
+    const kwDate = new Date(year, 0, (kw - 1) * 7); // Der 1. Januar liegt normalerweise in der KW 1
+    const dayOfWeek = kwDate.getDay(); // Tag der Woche (0 = Sonntag, 1 = Montag, ..., 6 = Samstag)
 
-  // Subtrahiere die Tage bis zum Donnerstag (Tag 4)
-  kwDate.setDate(kwDate.getDate() + (4 - dayOfWeek));
+    // Subtrahiere die Tage bis zum Donnerstag (Tag 4)
+    kwDate.setDate(kwDate.getDate() + (4 - dayOfWeek));
 
-  // Subtrahiere 7 Tage, um den Donnerstag der vorherigen Woche zu erhalten
-  kwDate.setDate(kwDate.getDate() - 7);
+    // Subtrahiere 7 Tage, um den Donnerstag der vorherigen Woche zu erhalten
+    kwDate.setDate(kwDate.getDate() - 7);
 
-  kwDate.setHours(18);
+    kwDate.setHours(18);
 
-  return kwDate;
-}
+    return kwDate;
+  }
 
   addToCart(): void {
     console.log("New selected Dishes: ", this.newSelectedDishes);
@@ -282,15 +325,15 @@ donnerstagVorherigeKW(kw: number): Date {
         this.orderedDishes = orders;
 
         // Kopieren der bestellten Gerichte in selectedDishes
-        this.selectedDishes = this.orderedDishes 
-        .map(order => ({
-          date: order.date,
-          dish: order.dish,
-          veggie: order.veggie
-        }));
-        
-        this.selectedDishes = this.selectedDishes.filter(order => {console.log(this.getWeekNumber(order.date), this.kw); return this.getWeekNumber(order.date) === this.kw;});
-        this.orderedDishes = this.orderedDishes.filter(order => {console.log(this.getWeekNumber(order.date), this.kw); return this.getWeekNumber(order.date) === this.kw;});
+        this.selectedDishes = this.orderedDishes
+          .map(order => ({
+            date: order.date,
+            dish: order.dish,
+            veggie: order.veggie
+          }));
+
+        this.selectedDishes = this.selectedDishes.filter(order => { console.log(this.getWeekNumber(order.date), this.selectedKW); return this.getWeekNumber(order.date) === this.selectedKW; });
+        this.orderedDishes = this.orderedDishes.filter(order => { console.log(this.getWeekNumber(order.date), this.selectedKW); return this.getWeekNumber(order.date) === this.selectedKW; });
         this.orderReady = true;
         console.log("Ordered Dishes:", this.orderedDishes); // Debugging-Information
       });
@@ -302,7 +345,7 @@ donnerstagVorherigeKW(kw: number): Date {
     d.setDate(d.getDate() + 3 - (d.getDay() + 6) % 7);
     const week1 = new Date(d.getFullYear(), 0, 4);
     return 1 + Math.round(((d.getTime() - week1.getTime()) / 86400000
-              - 3 + (week1.getDay() + 6) % 7) / 7);
+      - 3 + (week1.getDay() + 6) % 7) / 7);
   }
 
   checkIfOrdered(dish: Dish, day: string): boolean {
