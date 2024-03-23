@@ -173,7 +173,9 @@ Zeigt die statische Ansicht der einzelnen Komponenten im Frontend.
 
 ## Dynamic View
 
-Diese Abildung zeigt die einzelnen Komponenten wie sie zur Laufzeit Interagieren. Die Grafik umfasst dabei nicht jede einzelne Komponente sondern nur die Bestel-Komonente mit Servicen. Dies ist aber eqvivalent für alle andern Komonenten und Servicen zu betracheten.
+Diese Abildung zeigt die einzelnen Komponenten wie sie zur Laufzeit Interagieren. Die Grafik umfasst dabei nicht jede einzelne Komponente sondern nur die Bestellkomonente mit Servicen. Dies ist aber eqvivalent für alle andern Komonenten und Servicen zu betracheten.
+
+Dieses Diagramm soll vorallem denn Ablauf des Login und der Registrieung zeigen und an welchem Punkt das Token angehängt wird. Dieses wird unabhänig von der Anfrage angehängt. Dies macht die Entwicklung einzelner Komponenten und Services einfacher, da sie sich nicht einzeln um das anhängen des Token kümmern müssen.
 
 <p align="center">
   <img src="resources/RuntimeView.png" alt="Runtime View"/>
