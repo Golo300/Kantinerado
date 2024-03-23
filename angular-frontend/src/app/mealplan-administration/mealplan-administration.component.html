@@ -1,0 +1,156 @@
+<main>
+
+    <br>
+  
+    <section id="speiseplan">
+      <div class="divWidth">
+        <h2>Verwaltung der Speisepläne</h2>
+      </div>
+    </section>
+  
+    <br>
+  
+    <section id="week-selection">
+      <div class="card text-begin divWidth">
+        <div class="card-header">Auswahl der Kalenderwoche</div>
+        <div class="card-body d-flex justify-content-between align-items-center divWidth">
+          <div class="col-auto d-flex justify-content-center align-items-center">
+            <h4 class="m-0 mr-3">
+              {{ startDate | date : "dd.MM.yyyy" }} -
+              {{ endDate | date : "dd.MM.yyyy" }}
+            </h4>
+          </div>
+          <nav aria-label="Page navigation example">
+            <ul class="pagination m-0">
+              <li class="page-item">
+                <a class="page-link" (click)="lastWeek()" [class.disabled]="!isLastKWSwitchPossible()" id="last-week">
+                  <span aria-hidden="true">&laquo;</span>
+                </a>
+              </li>
+              <li class="page-item mx-2 d-flex align-items-center">
+                <h4 class="m-0">KW {{ selectedKW }}</h4>
+              </li>
+              <li class="page-item">
+                <a class="page-link" (click)="nextWeek()" [class.disabled]="!isNextKWSwitchPossible()" id="next-week">
+                  <span aria-hidden="true">&raquo;</span>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </section>
+  
+    <br>
+  
+    <section id="menu">
+  
+      <div class="card text-begin divWidth">
+        <div class="card-header">
+          Mittagessen
+        </div>
+        <div class="card-body d-flex justify-content-between align-items-center divWidth">
+          <div class="table">
+            <table class="table table-bordered rounded">
+              <thead>
+                <tr>
+                  <th class="align-middle"> </th>
+                  <th class="align-middle">Montag</th>
+                  <th class="align-middle">Dienstag</th>
+                  <th class="align-middle">Mittwoch</th>
+                  <th class="align-middle">Donnerstag</th>
+                  <th class="align-middle">Freitag</th>
+                  <th class="align-middle">Samstag</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th class="align-middle">Menü 1</th>
+                  <td *ngFor="let day of weekDays" class="setMargin align-middle">
+                    <span *ngIf="getDishes('Menü1', day).length">
+                        <span *ngFor="let dish of getDishes('Menü1', day)">
+                            <div>
+                                {{ dish.title }}
+                              </div>
+                              <div>
+                                {{ dish.price }}
+                              </div>
+                          </span>
+                    </span>
+                    <span *ngIf="!getDishes('Menü1', day).length">
+                        <button type="button" class="btn btn-outline-success" id="planMenu1">
+                            +
+                          </button>
+                      </span>
+                  </td>
+                </tr>
+                <tr>
+                  <th class="align-middle">Menü 2</th>
+                  <td *ngFor="let day of weekDays" class="align-middle">
+                    <span *ngIf="getDishes('Menü1', day).length">
+                        <span *ngFor="let dish of getDishes('Menü2', day)">
+                            <div>
+                                {{ dish.title }}
+                              </div>
+                              <div>
+                                {{ dish.price }}
+                              </div>
+                          </span>
+                    </span>
+                    <span *ngIf="!getDishes('Menü1', day).length">
+                        <button type="button" class="btn btn-outline-success" id="planMenu2">
+                            +
+                          </button>
+                      </span>
+                  </td>
+                </tr>
+                <tr>
+                  <th class="align-middle">Nachspeise</th>
+                  <td *ngFor="let day of weekDays" class="align-middle">
+                    <span *ngIf="getDishes('Menü1', day).length">
+                        <span *ngFor="let dish of getDishes('Dessert', day)">
+                            <div>
+                                {{ dish.title }}
+                              </div>
+                              <div>
+                                {{ dish.price }}
+                              </div>
+                          </span>
+                    </span>
+                    <span *ngIf="!getDishes('Menü1', day).length">
+                        <button type="button" class="btn btn-outline-success" id="planDessert">
+                            +
+                          </button>
+                      </span>
+                  </td>
+                </tr>
+                <tr>
+                  <th class="align-middle">Suppe</th>
+                  <td *ngFor="let day of weekDays" class="align-middle">
+                    <span *ngIf="getDishes('Menü1', day).length">
+                        <span *ngFor="let dish of getDishes('Soup', day)">
+                            <div>
+                                {{ dish.title }}
+                              </div>
+                              <div>
+                                {{ dish.price }}
+                              </div>
+                          </span>
+                    </span>
+                    <span *ngIf="!getDishes('Menü1', day).length">
+                        <button type="button" class="btn btn-outline-success" id="planSoup">
+                            +
+                          </button>
+                      </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+    <br>
+  
+  </main>

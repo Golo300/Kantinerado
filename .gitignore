@@ -62,3 +62,4 @@ angular-frontend/node_modules
 # System Files
 .DS_Store
 Thumbs.db
+springboot-backend/src/main/resources/application.properties
