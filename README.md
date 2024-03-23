@@ -2,6 +2,24 @@
 
 Semester Projekt für das 3/4 Semester. Einfache Kantinen App für eine mittelständische Firma mit Benutzerverwaltung.
 
+## Git Workflow
+
+### Branches
+
+Für jede Userstorie wird ein eigener Branch angelegt.
+
+Branchname:`#<userstory-id>-<Beschriebung mit - getrennt>`
+
+Alle Branches gehen immer von 'main' aus.
+
+### Commits
+
+Für jede Task sollte ein einzelner Commit erfolgen.
+
+### Mergen
+
+Vor jedem Merge muss ein Rebase auf auf 'main' erfolgen. Der Build und Test in der CI/CD Pipeline muss erfolgreich sein, sowie ein approvel durch ein Code Review. Das mergen in 'main' erfolgt erst nach erfolgreichem Abschluss der Userstorie
+
 ## Definition of done (Dod)
 
 Intern im Team wurden die folgenden Kriterien definiert, damit eine Aufgabe als abgeschlossen gilt:
