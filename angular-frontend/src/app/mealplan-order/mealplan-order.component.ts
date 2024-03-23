@@ -170,7 +170,6 @@ export class MealplanOrderComponent implements OnInit {
     return resultDate;
   }
 
-
   getDishes(category: string, day: string) {
     if (this.mealplan != null) {
       const selectedDay = this.mealplan.days.find(d => d.dayofWeek === day);
@@ -180,8 +179,6 @@ export class MealplanOrderComponent implements OnInit {
     }
     return [];
   }
-
-
 
   toggleCollapse(collapseId: string): void {
     if (collapseId === 'collapseBreakfast') {
