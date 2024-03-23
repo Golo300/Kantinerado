@@ -173,7 +173,12 @@ Zeigt die statische Ansicht der einzelnen Komponenten im Frontend.
 
 ## Dynamic View
 
-Diese Ablindung zeigt die einzelnen Komponenten wie sie zur Laufzeit Interagieren.
+Diese Abildung zeigt die einzelnen Komponenten wie sie zur Laufzeit Interagieren. Die Grafik umfasst dabei nicht jede einzelne Komponente sondern nur die Bestel-Komonente mit Servicen. Dies ist aber eqvivalent für alle andern Komonenten und Servicen zu betracheten.
+
+<p align="center">
+  <img src="resources/RuntimeView.png" alt="Runtime View"/>
+</p>
+
 
 ### API
 
