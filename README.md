@@ -10,6 +10,8 @@ Intern im Team wurden die folgenden Kriterien definiert, damit eine Aufgabe als 
 
 - Unit-Tests: Es wird versucht neue Features so gut wie möglich mit Unit Test abzudecken
 
+- Pipeline: Vor dem Merge eines PR muss die Pipeline mit allen Test erflogreich laufen
+
 - Dokumentation: Alle wichtigen Änderungen werden druch Kommentare und entsprechende Anpassung in der doc.md festgehalten.
 
 - Code-Stil: Der Code entspricht den vereinbarten Code-Standards und Best Practices.
