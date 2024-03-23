@@ -162,6 +162,19 @@ Das System ist so gedacht das für die einzelnen Kategorien "Menü1", "Menü2", 
   <img src="resources/Database.png" alt="Architecture-Overview"/>
 </p>
 
+
+## Block View 
+
+Zeigt die statische Ansicht der einzelnen Komponenten im Frontend.
+
+<p align="center">
+  <img src="resources/BlockView.png" alt="Block View"/>
+</p>
+
+## Dynamic View
+
+Diese Ablindung zeigt die einzelnen Komponenten wie sie zur Laufzeit Interagieren.
+
 ### API
 
 **Authentifizierung:**
