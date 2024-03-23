@@ -6,15 +6,15 @@ Semester Projekt für das 3/4 Semester. Einfache Kantinen App für eine mittelst
 
 ### Branches
 
-Für jede Userstorie wird ein eigener Branch angelegt.
+* Für jede Userstorie wird ein eigener Branch angelegt.
 
-Branchname:`#<userstory-id>-<Beschriebung mit - getrennt>`
+* Branchname:`#<userstory-id>-<Beschriebung mit - getrennt>`
 
-Alle Branches gehen immer von 'main' aus.
+* Alle Branches gehen immer von 'main' aus.
 
 ### Commits
 
-Für jede Task sollte ein einzelner Commit erfolgen.
+* Für jede Task sollte ein einzelner Commit erfolgen.
 
 ### Mergen
 
@@ -43,3 +43,49 @@ Intern im Team wurden die folgenden Kriterien definiert, damit eine Aufgabe als 
 - Review mit dem Product Owner: Der Product Owner hat das Ergebnis im Sprint Review überprüft und akzeptiert.
 
 Um Sicherzustellen das die Dod den aktuellen Anforderungen enspricht muss diese ständig hinterfragt und überarbeitet werden.
+
+## Developer Setup
+
+Für das Entwickeln sind folgende Tools von nöten:
+
+* ideas-ultimate von JetBrains
+* node
+* Angular-cli
+* Java
+* gradle
+
+Eine vollständige Entwicklungsumgebung ist auch über nix mit der beiligender falke möglich (enthält unfreie Software). 
+
+`nix develop`
+
+### Datenbank
+
+Das Projekt braucht um zu laufen eine MySQL Datenbank. Diese kann zum Entwickeln einfach über Docker gestartet werden.
+
+`docker-compose up -d mysql`
+
+### Frontend
+
+Das Angular Frontend wird zum Entwickeln über das Angular-cli tool gestartet.
+
+1. Pakete installieren
+
+    `npm intall`
+
+2. Frontend Starten
+
+    `ng serve --open`
+
+### Backend
+
+Das Backend kann auf zwei Arten gestartet werden.
+
+#### IDE
+
+Für das Entwickeln sollte `ideas-ultimate` von JetBrains verwendet werden. In der IDE die Hauptapplikation starten. Dies ermöglich auch das Debuggen.
+
+#### Docker
+
+Das Backend kann auch aus komfort Gründen über Docker als Kontainer gestartet werden.
+
+`docker-compose up -d spring-boot-app`
