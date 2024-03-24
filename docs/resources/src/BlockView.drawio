@@ -1,4 +1,4 @@
-<mxfile host="Electron" modified="2024-03-23T15:36:24.455Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.1.18 Chrome/120.0.6099.216 Electron/28.1.4 Safari/537.36" etag="5RThxr1oZX2UYaiTvds5" version="22.1.18" type="device">
+<mxfile host="Electron" modified="2024-03-24T21:58:22.651Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.1.18 Chrome/120.0.6099.216 Electron/28.1.4 Safari/537.36" etag="3Tymm80Fcw6YZhBuOMsy" version="22.1.18" type="device">
   <diagram name="Seite-1" id="EAUvFxbg5OZHKJNjUOAv">
     <mxGraphModel dx="1674" dy="958" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -22,7 +22,7 @@
         <mxCell id="QHlfB0NAWsfKA-rPPTjQ-30" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFB570;" parent="1" vertex="1">
           <mxGeometry x="40" y="230" width="770" height="120" as="geometry" />
         </mxCell>
-        <mxCell id="QHlfB0NAWsfKA-rPPTjQ-28" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#9999FF;" parent="1" vertex="1">
+        <mxCell id="QHlfB0NAWsfKA-rPPTjQ-28" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#7EA6E0;" parent="1" vertex="1">
           <mxGeometry x="40" y="80" width="770" height="120" as="geometry" />
         </mxCell>
         <mxCell id="QHlfB0NAWsfKA-rPPTjQ-4" value="&lt;p style=&quot;margin:0px;margin-top:6px;text-align:center;&quot;&gt;&lt;b&gt;checkout&lt;/b&gt;&lt;/p&gt;&lt;hr&gt;&lt;p style=&quot;margin:0px;margin-left:8px;&quot;&gt;+ createOrder()&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:8px;&quot;&gt;...&lt;/p&gt;" style="align=left;overflow=fill;html=1;dropTarget=0;whiteSpace=wrap;" parent="1" vertex="1">
