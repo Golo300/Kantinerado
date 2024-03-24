@@ -190,7 +190,7 @@ Dieses Diagramm soll vorallem denn Ablauf des Login und der Registrieung zeigen 
 
 ## Deployment
 
-Für das Deployen und Hosten der Software soll Docker verwendet werden. Dadurch ist es möglich, die vorher beschriebenen Komponenten in einzelne Container zu packen. Das Managen der Container erfolgt über eine Docker-compose. Dies vereinfacht auch das Verwalten der Container untereinander, da diese somit gleich in einem Network verwaltet werden. Auch ein zusätzlicher Sicherheitsaspekt wird dadurch hinzugefügt, da die Datenbank keine Verbindung nach außerhalb des Dockernetzwerkes hat. Damit alle Daten der Application einfach gesichert werden können, läuft die Datenbank mit einem extra Volume. Dieses Hosting Solution macht es einfach die Anwendung auf beliebige Container Infrastruktur zu deployen. Somit kann die Anwendung einfach in ein bestehendes Firmennetzwerk eingebunden werden.
+Für das Deployen und Hosten der Software soll Docker verwendet werden. Dadurch ist es möglich, die vorher beschriebenen Komponenten in einzelne Container zu packen. Das Managen der Container erfolgt über eine Docker-compose. Dies vereinfacht auch das Verwalten der Container untereinander, da diese somit gleich in einem Network verwaltet werden. Auch ein zusätzlicher Sicherheitsaspekt wird dadurch hinzugefügt, da die Datenbank keine Verbindung nach außerhalb des Dockernetzwerkes hat. Damit alle Daten der Application einfach gesichert werden können, läuft die Datenbank mit einem extra Volume. Diese Hosting Solution macht es einfach die Anwendung auf beliebige Container-Infrastruktur zu deployen. Somit kann die Anwendung einfach in ein bestehendes Firmennetzwerk eingebunden werden.
 
 
 <p align="center">
@@ -216,7 +216,7 @@ Das JWT-Token garantiert im Backend, dass nur autorisierte Nutzer auch auf besti
 
 ### User Interface 
 
-Das User-Interface soll wie vorgegeben über eine Web-App zur Verfügung gestellt werden. Der Auswahl der Bestellung und das Bearbeiten des Speiseplan (auch Frühstück) soll tabellarisch erfolgen. Das generelle Design soll sich an "common practices" orientieren (Warenkorb oben links, etc.).
+Das User-Interface soll wie vorgegeben über eine Web-App zur Verfügung gestellt werden. Der Auswahl der Bestellung und das Bearbeiten des Speiseplan (auch Frühstück) soll tabellarisch erfolgen. Das generelle Design soll sich an "common practices" orientieren (Warenkorb oben rechts, etc.).
 
 
 <p align="center">
@@ -226,7 +226,7 @@ Das User-Interface soll wie vorgegeben über eine Web-App zur Verfügung gestell
 ### Testability/CI
 
 Da im Backend die kritischen Funktionalitäten enthalten sind, sind für diese Unit-Tests anzulegen. Jeder Test muss dabei seine eigenen Testdaten anlegen. Das garantiert eine maximale Isolation der einzelnen Tests. Deshalb müssen Tests immer auf einer leeren Datenbank ausgeführt werden. Dem erfolgreichen Erstellen von Unit-Tests sind leider nicht alle Entwickler nachgekommen. Daher sollte ein Fokus in naher Zukunft auf die Testabdeckung gelegt werden.
-Im Frontend sollen das testen über Karmatests geschehen.
+Im Frontend sollte das Testen über Karmatests geschehen.
 
 Die im Backend vorhanden Unit-Tests sowie ein Smoke-Test werden bei jedem Durchlauf der Pipeline ausgeführt.
 
@@ -245,4 +245,4 @@ Zum Schluss noch die unschöne Seite. Zuerst ist hier auf die hohe Anzahl an off
 
 Zudem sind auch nicht alle erwünschten Features implementiert worden, welche für die 4 Sprints geplant wurden. Es fehlen entscheiden Funktionen wie das Anpassen seines Profils und die gesamte Benutzerverwaltung. Die App bietet zwar gewisse Grundfunktionen ist aber lange nicht fertig.
 
-Trotz dieser Festlegungen ist zu sagen, dass Projekt bei Weiterführung eine gute und realistische Chance hat vollständig und fertig zu werden.
+Trotz dieser Feststellungen ist zu sagen, dass das Projekt bei Weiterführung eine gute und realistische Chance hat, vollständig und fertig zu werden.
