@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { MealserviceService } from '../services/mealplan.service';
 import { DishService } from '../services/dish.service';
-import { Day, Dish, Mealplan } from '../Interfaces';
+import { Day, Dish, Mealplan, DishCategory, newDish, sendDish } from '../Interfaces';
 import { addDays, format, getISOWeek, lastDayOfWeek, setWeek, subDays } from 'date-fns';
 import { de } from 'date-fns/locale';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-mealplan-administration',
@@ -31,8 +32,12 @@ export class MealplanAdministrationComponent implements OnInit {
   showSoupSelection!: boolean;
 
   selectedDish!: number;
-  selectedDay!: String;
+  selectedDay!: string;
 
+  newDishTitle!: string;
+  newDishCategory!: string;
+  newDishDescription!: string;
+  newDishPrice!: number;
 
   constructor(private mealService: MealserviceService, private dishService: DishService) { }
 
@@ -42,7 +47,7 @@ export class MealplanAdministrationComponent implements OnInit {
     this.getMealplan();
     this.calculateWeekRange(this.getDateFromMondayOfKW(this.selectedKW));
     this.getDishLists();
-    this.showMenu1Selection = false;
+    this.newDishPrice = 0;
   }
 
   setCurrentKW() {
@@ -104,13 +109,13 @@ export class MealplanAdministrationComponent implements OnInit {
   }
 
   getDishes(category: string, day: string) {
-      if (this.mealplan == undefined) return [];
-      if (this.mealplan.days == undefined) return [];
-      
-      const selectedDay = this.mealplan.days.find(d => d.dayofWeek === day);
-      if (selectedDay) {
-        return selectedDay.dishes.filter(dish => dish.dishCategory.name === category);
-      }
+    if (this.mealplan == undefined) return [];
+    if (this.mealplan.days == undefined) return [];
+
+    const selectedDay = this.mealplan.days.find(d => d.dayofWeek === day);
+    if (selectedDay) {
+      return selectedDay.dishes.filter(dish => dish.dishCategory.name === category);
+    }
     return [];
   }
 
@@ -161,8 +166,45 @@ export class MealplanAdministrationComponent implements OnInit {
   }
 
   planDish(): void {
-    console.log(this.selectedDish);
-    console.log(this.selectedDay);
+    const dayAsDate = this.getDateFromDayOfWeekAndKW(this.selectedDay, this.selectedKW);
+    console.log(dayAsDate);
+
+    // Bereist vorhandes Gericht
+    if (this.selectedDish > 0) {
+      const dish: sendDish = {
+        id: this.selectedDish
+      };
+
+      console.log(this.selectedDish);
+
+      // TODO: Backend-Aufruf
+    }
+    // Neues Gericht
+    else {
+      const category: DishCategory = {
+        name: this.newDishCategory,
+        canVeggie: false
+      };
+
+      const dish: newDish = {
+        dishCategory: category,
+        title: this.newDishTitle,
+        description: this.newDishDescription,
+        price: this.newDishPrice
+      };
+
+      console.log(this.newDishCategory);
+      console.log(this.newDishTitle)
+      console.log(this.newDishDescription);
+      console.log(this.newDishPrice);
+
+      this.newDishCategory = '';
+      this.newDishTitle = '';
+      this.newDishDescription = '';
+      this.newDishPrice = 0;
+
+      // TODO: Backend-Aufruf
+    }
   }
 
   getDateFromDayOfWeekAndKW(dayOfWeek: string, kw: number): Date {

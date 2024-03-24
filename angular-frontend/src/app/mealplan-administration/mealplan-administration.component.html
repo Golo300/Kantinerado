@@ -202,16 +202,16 @@
           <tbody>
             <tr>
               <td>
-                <input type="text" id="newMenuTitle">
+                <input type="text" class="input-width" id="newMenu1Title" [(ngModel)]="newDishTitle">
               </td>
               <td>
-                <input type="text" id="newMenuDescription">
+                <input type="text" class="input-width" id="newMenu1Description" [(ngModel)]="newDishDescription">
               </td>
               <td>
-                <input type="number" id="newMenuPrice">
+                <input type="number" class="input-width" min="0" id="newMenu1Price" [(ngModel)]="newDishPrice">
               </td>
               <td>
-                <input type="radio" name="dishSelect" value="-1" (change)="selectedDish = -1">
+                <input type="radio" name="dishSelect" value="-1" (change)="selectedDish = -1; newDishCategory='Menü1'">
               </td>
             </tr>
           </tbody>
@@ -259,16 +259,16 @@
           <tbody>
             <tr>
               <td>
-                <input type="text" class="input-width" id="newMenuTitle">
+                <input type="text" class="input-width" id="newMenu2Title" [(ngModel)]="newDishTitle">
               </td>
               <td>
-                <input type="text" class="input-width" id="newMenuDescription">
+                <input type="text" class="input-width" id="newMenu2Description" [(ngModel)]="newDishDescription">
               </td>
               <td>
-                <input type="number" class="input-width" id="newMenuPrice">
+                <input type="number" class="input-width" min="0" id="newMenu2Price" [(ngModel)]="newDishPrice">
               </td>
               <td>
-                <input type="radio" name="dishSelect" value="-1" (change)="selectedDish = -1">
+                <input type="radio" name="dishSelect" value="-1" (change)="selectedDish = -1; newDishCategory='Menü2'">
               </td>
             </tr>
           </tbody>
@@ -316,16 +316,16 @@
           <tbody>
             <tr>
               <td>
-                <input type="text" class="input-width" id="newDessertTitle">
+                <input type="text" class="input-width" id="newDessertTitle" [(ngModel)]="newDishTitle">
               </td>
               <td>
-                <input type="text" class="input-width" id="newDessertDescription">
+                <input type="text" class="input-width" id="newDessertDescription" [(ngModel)]="newDishDescription">
               </td>
               <td>
-                <input type="number" class="input-width" min="0" id="newDessertPrice">
+                <input type="number" class="input-width" min="0" id="newDessertPrice" [(ngModel)]="newDishPrice">
               </td>
               <td>
-                <input type="radio" name="dishSelect" value="-1" (change)="selectedDish = -1">
+                <input type="radio" name="dishSelect" value="-1" (change)="selectedDish = -1; newDishCategory='Dessert'">
               </td>
             </tr>
           </tbody>
@@ -373,16 +373,16 @@
           <tbody>
             <tr>
               <td>
-                <input type="text" class="input-width" id="newSoupTitle">
+                <input type="text" class="input-width" id="newSoupTitle" [(ngModel)]="newDishTitle">
               </td>
               <td>
-                <input type="text" class="input-width" id="newSoupDescription">
+                <input type="text" class="input-width" id="newSoupDescription" [(ngModel)]="newDishDescription">
               </td>
               <td>
-                <input type="number" class="input-width" id="newSoupPrice">
+                <input type="number" class="input-width" min="0" id="newSoupPrice" [(ngModel)]="newDishPrice">
               </td>
               <td>
-                <input type="radio" name="dishSelect" value="-1" (change)="selectedDish = -1">
+                <input type="radio" name="dishSelect" value="-1" (change)="selectedDish = -1; newDishCategory='Soup'">
               </td>
             </tr>
           </tbody>
