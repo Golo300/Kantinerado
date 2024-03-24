@@ -49,12 +49,12 @@ Um Sicherzustellen das die Dod den aktuellen Anforderungen enspricht muss diese 
 Für das Entwickeln sind folgende Tools von nöten:
 
 * ideas-ultimate von JetBrains
+* docker
 * node
 * Angular-cli
 * Java
 * gradle
-
-Eine vollständige Entwicklungsumgebung ist auch über nix mit der beiligender falke möglich (enthält unfreie Software). 
+Eine vollständige Entwicklungsumgebung ist auch über nix mit der beiligenden falke möglich (enthält unfreie Software). 
 
 `nix develop`
 
@@ -89,3 +89,7 @@ Für das Entwickeln sollte `ideas-ultimate` von JetBrains verwendet werden. In d
 Das Backend kann auch aus komfort Gründen über Docker als Kontainer gestartet werden.
 
 `docker-compose up -d spring-boot-app`
+
+Damit die Datenbank Verindung inherlab der Docker Anwendung richtig läuft muss in der `application.properties` folgende Anpassung gemacht werden.
+
+    spring.datasource.url=jdbc:mysql://${MYSQL_HOST:mysql}:3306kantine
