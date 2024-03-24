@@ -1,7 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, map, Observable } from 'rxjs';
 import { FullOrder, Order, sendOrder } from "../Interfaces";
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable'
 
 @Injectable({
   providedIn: 'root'
@@ -51,7 +53,7 @@ export class OrderService {
   }
 
   deleteOrders(deleteOrders: FullOrder[]) {
-    
+
     var deleted: number[] = []
 
     for (var order of deleteOrders) {
@@ -62,5 +64,35 @@ export class OrderService {
       map(response => {
         return response;
       }));
+  }
+  getEveryOrder(): Observable<Order[]> {
+    return this.http.get<Order[]>(this.apiUrl);
+  }
+
+  generatePdf(orders: Order[]) {
+    const doc = new jsPDF();
+    let yPos = 10;
+
+    doc.text('Order Overview', 10, yPos);
+    yPos += 10;
+
+    const headers = [['Date', 'Dish', 'Veggie']];
+    const data = this.prepareDataForPdf(orders);
+
+    autoTable(doc, {
+      head: headers,
+      body: data,
+      startY: yPos
+    });
+
+    doc.save('order_overview.pdf');
+  }
+
+  private prepareDataForPdf(orders: Order[]): any[] {
+    return orders.map(order => [
+      order.date.toString(),
+      order.dish.title,
+      order.veggie ? 'Yes' : 'No'
+    ]);
   }
 }

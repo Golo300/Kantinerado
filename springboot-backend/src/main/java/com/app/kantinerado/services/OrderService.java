@@ -8,11 +8,19 @@ import com.app.kantinerado.models.mealplan.Order;
 import com.app.kantinerado.repository.DayRepository;
 import com.app.kantinerado.repository.DishRepository;
 import com.app.kantinerado.repository.OrderRepository;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.Transient;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -133,5 +141,9 @@ public class OrderService {
         } else {
             return  false;
         }
+    }
+
+    public List<Order> getEveryOrder() {
+        return orderRepository.findAll();
     }
 }
