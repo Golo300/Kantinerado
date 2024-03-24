@@ -194,11 +194,19 @@
           </tbody>
         </table>
 
-        <br>
+        <br *ngIf="dishesMenu1.length">
 
         <h6>Neues Menü 1 anlegen:</h6>
 
         <table class="table table-bordered rounded">
+          <thead *ngIf="!dishesMenu1.length" class="thead-dark">
+            <tr>
+              <th scope="col">Gericht</th>
+              <th scope="col">Beschreibung</th>
+              <th scope="col">Preis</th>
+              <th scope="col">Auswahl</th>
+            </tr>
+          </thead>
           <tbody>
             <tr>
               <td>
@@ -251,11 +259,19 @@
           </tbody>
         </table>
 
-        <br>
+        <br *ngIf="dishesMenu2.length">
 
         <h6>Neues Menü 2 anlegen:</h6>
 
         <table class="table table-bordered rounded">
+          <thead *ngIf="!dishesMenu2.length" class="thead-dark">
+            <tr>
+              <th scope="col">Gericht</th>
+              <th scope="col">Beschreibung</th>
+              <th scope="col">Preis</th>
+              <th scope="col">Auswahl</th>
+            </tr>
+          </thead>
           <tbody>
             <tr>
               <td>
@@ -308,11 +324,19 @@
           </tbody>
         </table>
 
-        <br>
+        <br *ngIf="dishesDessert.length">
 
         <h6>Neue Nachspeise anlegen:</h6>
 
         <table class="table table-bordered rounded">
+          <thead *ngIf="!dishesDessert.length" class="thead-dark">
+            <tr>
+              <th scope="col">Gericht</th>
+              <th scope="col">Beschreibung</th>
+              <th scope="col">Preis</th>
+              <th scope="col">Auswahl</th>
+            </tr>
+          </thead>
           <tbody>
             <tr>
               <td>
@@ -365,11 +389,19 @@
           </tbody>
         </table>
 
-        <br>
+        <br *ngIf="dishesSoup.length">
 
         <h6>Neue Suppe anlegen:</h6>
 
         <table class="table table-bordered rounded">
+          <thead *ngIf="!dishesSoup.length" class="thead-dark">
+            <tr>
+              <th scope="col">Gericht</th>
+              <th scope="col">Beschreibung</th>
+              <th scope="col">Preis</th>
+              <th scope="col">Auswahl</th>
+            </tr>
+          </thead>
           <tbody>
             <tr>
               <td>
@@ -396,5 +428,4 @@
     </div>
     <br>
   </section>
-
 </main>

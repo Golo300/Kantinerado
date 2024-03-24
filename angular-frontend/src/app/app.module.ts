@@ -15,6 +15,7 @@ import { JwtInterceptor } from './helper/jwt.interceptor';
 import { DetailViewComponent } from './detail-view/detail-view.component';
 import { ViewOrderComponent } from './view-order/view-order.component';
 import { MealplanAdministrationComponent } from './mealplan-administration/mealplan-administration.component';
+import { ViewOrderAdministrationComponent } from './view-order-administration/view-order-administration.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { MealplanAdministrationComponent } from './mealplan-administration/mealp
     RegisterComponent,
     DetailViewComponent,
     ViewOrderComponent,
-    MealplanAdministrationComponent
+    MealplanAdministrationComponent,
+    ViewOrderAdministrationComponent
   ],
   imports: [
     BrowserModule,

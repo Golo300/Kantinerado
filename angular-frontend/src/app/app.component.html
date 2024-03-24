@@ -1,109 +1,91 @@
 <!DOCTYPE html>
 <html lang="de">
 
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Kantinerado</title>
-    <link
-      href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css"
-      rel="stylesheet"
-    />
-    <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
-    />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-      crossorigin="anonymous"
-    />
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-      crossorigin="anonymous"
-    ></script>
-    <style>
-      body {
-        display: flex;
-        flex-direction: column;
-        min-height: 100vh;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kantinerado</title>
+  <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet" />
+  <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
 
-      footer {
-        margin-top: auto;
-      }
-    </style>
-  </head>
+    footer {
+      margin-top: auto;
+    }
+  </style>
+</head>
 
-  <body>
-    <header>
-      <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-        <div class="container-fluid">
-          <a class="navbar-brand">Kantinderado</a>
-          <button
-            class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarCollapse"
-            aria-controls="navbarCollapse"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav me-auto mb-2 mb-md-0">
-              
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/">Home</a>
-              </li>
-              
-              <li *ngIf="userAccess" class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/order" >Bestellung</a>
-              </li>
+<body>
+  <header>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand brand-text">KANTINERADO</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+          aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+          <ul class="navbar-nav me-auto mb-2 mb-md-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/">Speiseplan</a>
+            </li>
 
-              <li *ngIf="userAccess" class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/view" >Verlauf</a>
-              </li>
+            <li *ngIf="userAccess" class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/order">Bestellung</a>
+            </li>
 
-              <li *ngIf="kanteenAccess" class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/dashboard/mealplan" >Menü-Verwaltung</a>
-              </li>
-            
-            </ul>
-            
-            <a *ngIf="loggedIn" class="btn btn-outline-light" type="button" href="/checkout" style="margin-right: 10px;">Warenkorb</a>
-            <a *ngIf="!loggedIn" class="btn btn-success" type="button" href="/login">Login</a>
-            <button *ngIf="loggedIn" (click)="logout()" class="btn btn-outline-success" type="button">Logout</button>
-          </div>
+            <li *ngIf="userAccess" class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/view">Verlauf</a>
+            </li>
+
+            <li *ngIf="kanteenAccess" class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/dashboard/mealplan">Menü-Verwaltung</a>
+            </li>
+
+            <li *ngIf="kanteenAccess" class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/dashboard/orders">Bestell-Übersicht</a>
+            </li>
+          </ul>
+
+          <a *ngIf="loggedIn" class="btn btn-outline-light" type="button" href="/checkout"
+            style="margin-right: 10px;">Warenkorb</a>
+          <a *ngIf="!loggedIn" class="btn btn-success" type="button" href="/login">Login</a>
+          <button *ngIf="loggedIn" (click)="logout()" class="btn btn-outline-success" type="button">Logout</button>
         </div>
-      </nav>
-    </header>
-
-    <router-outlet></router-outlet>
-
-    <footer class="navbar navbar-expand-md navbar-dark bg-dark">
-      <div
-        class="container-fluid d-flex justify-content-between align-items-center"
-      >
-        <ul class="navbar-nav me-auto mb-2 mb-md-0">
-          <li class="nav-item">
-            <a href="#" class="nav-link px-2">Speiseplan</a>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link px-2">Features</a>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link px-2">Pricing</a>
-          </li>
-          <li class="nav-item"><a href="#" class="nav-link px-2">FAQs</a></li>
-          <li class="nav-item"><a href="#" class="nav-link px-2">About</a></li>
-        </ul>
-        <p class="text-center text-light m-0">&copy; 2024 Kantinderado</p>
       </div>
-    </footer>
-  </body>
+    </nav>
+  </header>
+
+  <router-outlet></router-outlet>
+
+  <footer class="navbar navbar-expand-md navbar-dark bg-dark">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
+      <ul class="navbar-nav me-auto mb-2 mb-md-0">
+        <li class="nav-item">
+          <a href="#" class="nav-link px-2">Speiseplan</a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link px-2">Features</a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link px-2">About</a>
+        </li>
+      </ul>
+      <p class="text-center text-light m-0">&copy; 2024 Kantinderado</p>
+    </div>
+  </footer>
+</body>
+
 </html>
