@@ -54,6 +54,7 @@ Für das Entwickeln sind folgende Tools von nöten:
 * Angular-cli
 * Java
 * gradle
+
 Eine vollständige Entwicklungsumgebung ist auch über nix mit der beiligenden falke möglich (enthält unfreie Software). 
 
 `nix develop`
