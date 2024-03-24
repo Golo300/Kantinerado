@@ -1,8 +1,8 @@
-import { Component, Input } from '@angular/core';
-import { FullOrder, Order } from '../Interfaces';
-import { OrderService } from '../services/order.service';
-import { catchError, forkJoin, of, tap } from 'rxjs';
-import { Router } from '@angular/router';
+import {Component} from '@angular/core';
+import {FullOrder, Order} from '../Interfaces';
+import {OrderService} from '../services/order.service';
+import {catchError, forkJoin, of} from 'rxjs';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-checkout',
@@ -15,7 +15,8 @@ export class CheckoutComponent {
   public deletedDishes: FullOrder[] = [];
   message: string = "";
 
-  constructor(private orderService: OrderService, private router: Router) { }
+  constructor(private orderService: OrderService, private router: Router) {
+  }
 
   ngOnInit(): void {
     const shoppingCart = this.orderService.getCart();
@@ -30,13 +31,13 @@ export class CheckoutComponent {
         return of(null);
       })
     );
-  
+
     const deleteOrders$ = this.orderService.deleteOrders(this.deletedDishes).pipe(
       catchError(error => {
         return of(null);
       })
     );
-  
+
     forkJoin([createOrder$, deleteOrders$]).subscribe(
       ([createOrderResponse, deleteOrdersResponse]) => {
         // Both requests are successful
@@ -50,7 +51,7 @@ export class CheckoutComponent {
         this.router.navigate(["/order"]);
       }
     );
-
+    this.downloadNewOrderForUsers();
     localStorage.removeItem('shopping_cart');
   }
 
@@ -66,5 +67,15 @@ export class CheckoutComponent {
     });
 
     return parseFloat(totalPrice.toFixed(2));
+  }
+
+  downloadEveryOrderForAdmins() {
+    this.orderService.getEveryOrder().subscribe((orders: Order[]) => {
+      this.orderService.generateAdminPdf(orders);
+    });
+  }
+
+  downloadNewOrderForUsers() {
+    this.orderService.generateUserPdf(this.newSelectedDishes, this.deletedDishes);
   }
 }

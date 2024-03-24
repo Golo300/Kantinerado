@@ -415,10 +415,5 @@ export class MealplanOrderComponent implements OnInit {
     }
   }
 
-  downloadPDF() {
-    this.orderService.getEveryOrder().subscribe((orders: Order[]) => {
-      this.selectedDishes = orders;
-    });
-    this.orderService.generatePdf(this.selectedDishes);
-  }
+
 }

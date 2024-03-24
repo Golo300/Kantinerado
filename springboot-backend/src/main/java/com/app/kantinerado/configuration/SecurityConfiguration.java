@@ -59,7 +59,6 @@ public class SecurityConfiguration {
             .authorizeHttpRequests(auth -> {
                 auth.requestMatchers("/auth/**").permitAll();
                 auth.requestMatchers("/mealplan/**").permitAll();
-                auth.requestMatchers("/order/pdf").permitAll();
                 auth.requestMatchers("/admin/**").hasRole(Roles.ADMIN);
                 auth.requestMatchers("/user/**").hasAnyRole(Roles.ADMIN, Roles.USER);
                 auth.requestMatchers("/order/**").hasAnyRole(Roles.ADMIN, Roles.USER);

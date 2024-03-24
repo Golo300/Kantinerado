@@ -1,7 +1,7 @@
-import {HttpClient, HttpHeaders} from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { catchError, map, Observable } from 'rxjs';
-import { FullOrder, Order, sendOrder } from "../Interfaces";
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {map, Observable} from 'rxjs';
+import {FullOrder, Order, sendOrder} from "../Interfaces";
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable'
 
@@ -22,11 +22,11 @@ export class OrderService {
 
     for (var order of orders) {
       const sendOrder: sendOrder =
-      {
-        date: order.date,
-        dish_id: order.dish.id,
-        veggie: order.veggie
-      }
+        {
+          date: order.date,
+          dish_id: order.dish.id,
+          veggie: order.veggie
+        }
       sendOrders.push(sendOrder);
     }
 
@@ -47,7 +47,7 @@ export class OrderService {
   getCart(): { newSelectedDishes: Order[], deletedDishes: FullOrder[] } {
     const shoppingCartJson = localStorage.getItem('shopping_cart');
     if (shoppingCartJson == null) {
-      return { newSelectedDishes: [], deletedDishes: [] };
+      return {newSelectedDishes: [], deletedDishes: []};
     }
     return JSON.parse(shoppingCartJson);
   }
@@ -65,19 +65,20 @@ export class OrderService {
         return response;
       }));
   }
+
   getEveryOrder(): Observable<Order[]> {
-    return this.http.get<Order[]>(this.apiUrl);
+    return this.http.get<Order[]>(`${this.apiUrl}/order/pdf`);
   }
 
-  generatePdf(orders: Order[]) {
+  generateAdminPdf(orders: Order[]) {
     const doc = new jsPDF();
     let yPos = 10;
 
-    doc.text('Order Overview', 10, yPos);
+    doc.text('Order Overview of all Users', 10, yPos);
     yPos += 10;
 
-    const headers = [['Date', 'Dish', 'Veggie']];
-    const data = this.prepareDataForPdf(orders);
+    const headers = [['Date', 'Dish', 'Veggie', 'Price']];
+    const data = this.prepareDataForPdf(orders,'black');
 
     autoTable(doc, {
       head: headers,
@@ -88,11 +89,53 @@ export class OrderService {
     doc.save('order_overview.pdf');
   }
 
-  private prepareDataForPdf(orders: Order[]): any[] {
+  generateUserPdf(newOrders: Order[], deletedOrders: Order[]) {
+    const doc = new jsPDF();
+    let yPos = 10;
+
+    doc.text('Your Order Overview', 10, yPos);
+    yPos += 10;
+
+    const headers = [['Date', 'Dish', 'Veggie', 'Price']];
+    const newData = this.prepareDataForPdf(newOrders, 'green');
+    const deletedData = this.prepareDataForPdf(deletedOrders, 'red');
+
+    const data = [...newData, ...deletedData];
+
+    const totalPrice = (this.calculateTotalPrice(newOrders) - this.calculateTotalPrice(deletedOrders)).toFixed(2); // Gesamtpreis berechnen und auf zwei Nachkommastellen runden
+
+    const totalPriceFormatted = parseFloat(totalPrice) >= 0 ? totalPrice.toString() : '-' + Math.abs(parseFloat(totalPrice)).toString(); // Preis formatieren
+
+
+    autoTable(doc, {
+      head: headers,
+      body: data,
+      startY: yPos
+    });
+
+    // Hinzufügen der Gesamtsumme
+    yPos += (data.length + 1) * 10; // Anpassung der Y-Position
+    doc.text(`Total Price: ${totalPriceFormatted}`, 10, yPos);
+
+    doc.save('order_overview.pdf');
+  }
+
+  private calculateTotalPrice(orders: Order[]): number {
+    let totalPrice = 0;
+    orders.forEach(order => {
+      totalPrice += order.dish.price;
+    });
+    return totalPrice;
+  }
+
+
+
+  private prepareDataForPdf(orders: Order[], color: string): any[] {
     return orders.map(order => [
-      order.date.toString(),
-      order.dish.title,
-      order.veggie ? 'Yes' : 'No'
+      {content: order.date.toString().slice(0, 10)},
+      {content: order.dish.title},
+      {content: order.veggie ? 'Yes' : 'No'},
+      { content: color === 'red' ? '-' + order.dish.price : order.dish.price.toString(), styles: { textColor: color } }
     ]);
   }
 }
