@@ -3,13 +3,27 @@
     width: 98%;
   }
   
-  td {
+  #tableMealplan td {
     text-align: center;
     height: 5rem;
     width: calc(100% / 7);
   }
   
-  th {
+  #tableMealplan th {
     text-align: center;
     width: calc(100% / 7);
   }
+
+  td,tr { 
+    text-align: center;
+    height: 2rem;
+    width: calc(100% / 4);
+  }
+
+  .input-width {
+    width: 100%;
+  }
+
+  .setMargin {
+    margin-bottom: 1rem;
+}

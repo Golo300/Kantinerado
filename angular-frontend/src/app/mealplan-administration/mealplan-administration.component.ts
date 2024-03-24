@@ -20,9 +20,18 @@ export class MealplanAdministrationComponent implements OnInit {
   endDate!: Date;
   limitNextKW!: number;
 
-  dishesMenu1And2: Dish[] = [];
+  dishesMenu1: Dish[] = [];
+  dishesMenu2: Dish[] = [];
   dishesDessert: Dish[] = [];
   dishesSoup: Dish[] = [];
+
+  showMenu1Selection!: boolean;
+  showMenu2Selection!: boolean;
+  showDessertSelection!: boolean;
+  showSoupSelection!: boolean;
+
+  selectedDish!: number;
+  selectedDay!: String;
 
 
   constructor(private mealService: MealserviceService, private dishService: DishService) { }
@@ -33,6 +42,7 @@ export class MealplanAdministrationComponent implements OnInit {
     this.getMealplan();
     this.calculateWeekRange(this.getDateFromMondayOfKW(this.selectedKW));
     this.getDishLists();
+    this.showMenu1Selection = false;
   }
 
   setCurrentKW() {
@@ -82,6 +92,7 @@ export class MealplanAdministrationComponent implements OnInit {
     this.mealService.getMealplan(this.selectedKW)
       .subscribe((meaplan: Mealplan) => {
         this.mealplan = meaplan;
+        if (this.mealplan.days == undefined) return;
         this.mealplan.days.forEach(day => {
           day.dayofWeek = this.getWeekDayByDate(day.date);
         });
@@ -93,12 +104,13 @@ export class MealplanAdministrationComponent implements OnInit {
   }
 
   getDishes(category: string, day: string) {
-    if (this.mealplan != null) {
+      if (this.mealplan == undefined) return [];
+      if (this.mealplan.days == undefined) return [];
+      
       const selectedDay = this.mealplan.days.find(d => d.dayofWeek === day);
       if (selectedDay) {
         return selectedDay.dishes.filter(dish => dish.dishCategory.name === category);
       }
-    }
     return [];
   }
 
@@ -125,41 +137,32 @@ export class MealplanAdministrationComponent implements OnInit {
   getDishLists(): void {
     this.dishService.getDishesByCategory("Menü1")
       .subscribe((dishes: any[]) => {
-        this.dishesMenu1And2 = dishes;
-        console.log("Dishes Menü1 and Menü2:", this.dishesMenu1And2);
+        this.dishesMenu1 = dishes;
+        console.log("Dishes Menü1:", this.dishesMenu1);
       });
 
     this.dishService.getDishesByCategory("Menü2")
       .subscribe((dishes: any[]) => {
-        this.dishesMenu1And2 = this.dishesMenu1And2.concat(dishes);
-        console.log("Dishes Menü1 and Menü2:", this.dishesMenu1And2);
+        this.dishesMenu2 = this.dishesMenu2.concat(dishes);
+        console.log("Dishes Menü2:", this.dishesMenu2);
       });
 
     this.dishService.getDishesByCategory("Dessert")
       .subscribe((dishes: any[]) => {
-        this.dishesMenu1And2 = dishes;
+        this.dishesDessert = dishes;
         console.log("Dishes Dessert:", this.dishesDessert);
       });
 
     this.dishService.getDishesByCategory("Soup")
       .subscribe((dishes: any[]) => {
-        this.dishesMenu1And2 = dishes;
+        this.dishesSoup = dishes;
         console.log("Dishes Soup:", this.dishesSoup);
       });
   }
 
-  showDropdowns: { [key: string]: boolean } = {};
-
-  toggleDropdown(day: string): void {
-    this.showDropdowns[day] = !this.showDropdowns[day];
-  }
-
-  isDropdownVisible(day: string): boolean {
-    return this.showDropdowns[day];
-  }
-
-  planDish(day: String, category: String): void {
-
+  planDish(): void {
+    console.log(this.selectedDish);
+    console.log(this.selectedDay);
   }
 
   getDateFromDayOfWeekAndKW(dayOfWeek: string, kw: number): Date {

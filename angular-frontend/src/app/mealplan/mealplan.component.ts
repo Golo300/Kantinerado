@@ -104,6 +104,7 @@ export class MealplanComponent implements OnInit {
     this.mealService.getMealplan(this.selectedKW)
       .subscribe((meaplan: Mealplan) => {
         this.mealplan = meaplan;
+        if (this.mealplan.days == undefined) return;
         this.mealplan.days.forEach(day => {
           day.dayofWeek = this.getWeekDayByDate(day.date);
         });
@@ -115,12 +116,13 @@ export class MealplanComponent implements OnInit {
   }
 
   getDishes(category: string, day: string) {
-    if (this.mealplan != null) {
-      const selectedDay = this.mealplan.days.find(d => d.dayofWeek === day);
-      if (selectedDay) {
-        return selectedDay.dishes.filter(dish => dish.dishCategory.name === category);
-      }
+    if (this.mealplan == undefined) return [];
+    if (this.mealplan.days == undefined) return [];
+    
+    const selectedDay = this.mealplan.days.find(d => d.dayofWeek === day);
+    if (selectedDay) {
+      return selectedDay.dishes.filter(dish => dish.dishCategory.name === category);
     }
-    return [];
-  }
+  return [];
+}
 }

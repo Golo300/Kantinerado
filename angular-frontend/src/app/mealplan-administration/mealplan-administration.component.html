@@ -1,156 +1,400 @@
 <main>
 
-    <br>
-  
-    <section id="speiseplan">
-      <div class="divWidth">
-        <h2>Verwaltung der Speisepläne</h2>
+  <br>
+
+  <section id="speiseplan">
+    <div class="divWidth">
+      <h2>Verwaltung der Speisepläne</h2>
+    </div>
+  </section>
+
+  <br>
+
+  <section id="week-selection">
+    <div class="card text-begin divWidth">
+      <div class="card-header">Auswahl der Kalenderwoche</div>
+      <div class="card-body d-flex justify-content-between align-items-center divWidth">
+        <div class="col-auto d-flex justify-content-center align-items-center">
+          <h4 class="m-0 mr-3">
+            {{ startDate | date : "dd.MM.yyyy" }} -
+            {{ endDate | date : "dd.MM.yyyy" }}
+          </h4>
+        </div>
+        <nav aria-label="Page navigation example">
+          <ul class="pagination m-0">
+            <li class="page-item">
+              <a class="page-link"
+                (click)="lastWeek(); showMenu1Selection = false; showMenu2Selection = false; showDessertSelection = false; showSoupSelection = false"
+                [class.disabled]="!isLastKWSwitchPossible()" id="last-week">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            <li class="page-item mx-2 d-flex align-items-center">
+              <h4 class="m-0">KW {{ selectedKW }}</h4>
+            </li>
+            <li class="page-item">
+              <a class="page-link"
+                (click)="nextWeek(); showMenu1Selection = false; showMenu2Selection = false; showSoupSelection = false"
+                [class.disabled]="!isNextKWSwitchPossible()" id="next-week">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
       </div>
-    </section>
-  
-    <br>
-  
-    <section id="week-selection">
-      <div class="card text-begin divWidth">
-        <div class="card-header">Auswahl der Kalenderwoche</div>
-        <div class="card-body d-flex justify-content-between align-items-center divWidth">
-          <div class="col-auto d-flex justify-content-center align-items-center">
-            <h4 class="m-0 mr-3">
-              {{ startDate | date : "dd.MM.yyyy" }} -
-              {{ endDate | date : "dd.MM.yyyy" }}
-            </h4>
-          </div>
-          <nav aria-label="Page navigation example">
-            <ul class="pagination m-0">
-              <li class="page-item">
-                <a class="page-link" (click)="lastWeek()" [class.disabled]="!isLastKWSwitchPossible()" id="last-week">
-                  <span aria-hidden="true">&laquo;</span>
-                </a>
-              </li>
-              <li class="page-item mx-2 d-flex align-items-center">
-                <h4 class="m-0">KW {{ selectedKW }}</h4>
-              </li>
-              <li class="page-item">
-                <a class="page-link" (click)="nextWeek()" [class.disabled]="!isNextKWSwitchPossible()" id="next-week">
-                  <span aria-hidden="true">&raquo;</span>
-                </a>
-              </li>
-            </ul>
-          </nav>
+    </div>
+  </section>
+
+  <br>
+
+  <section id="menu">
+
+    <div class="card text-begin divWidth">
+      <div class="card-header">
+        Mittagessen
+      </div>
+      <div class="card-body d-flex justify-content-between align-items-center divWidth">
+        <div class="table">
+          <table class="table table-bordered rounded" id="tableMealplan">
+            <thead>
+              <tr>
+                <th class="align-middle"> </th>
+                <th class="align-middle">Montag</th>
+                <th class="align-middle">Dienstag</th>
+                <th class="align-middle">Mittwoch</th>
+                <th class="align-middle">Donnerstag</th>
+                <th class="align-middle">Freitag</th>
+                <th class="align-middle">Samstag</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th class="align-middle">Menü 1</th>
+                <td *ngFor="let day of weekDays" class="setMargin align-middle">
+                  <span *ngIf="getDishes('Menü1', day).length">
+                    <span *ngFor="let dish of getDishes('Menü1', day)">
+                      <div>
+                        {{ dish.title }}
+                      </div>
+                      <div>
+                        {{ dish.price }}
+                      </div>
+                    </span>
+                  </span>
+                  <span *ngIf="!getDishes('Menü1', day).length">
+                    <button type="button" class="btn btn-outline-success" id="planMenu1"
+                      (click)="showMenu1Selection = true; showMenu2Selection = false; showDessertSelection = false; showSoupSelection = false; selectedDay = day">
+                      +
+                    </button>
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <th class="align-middle">Menü 2</th>
+                <td *ngFor="let day of weekDays" class="align-middle">
+                  <span *ngIf="getDishes('Menü2', day).length">
+                    <span *ngFor="let dish of getDishes('Menü2', day)">
+                      <div>
+                        {{ dish.title }}
+                      </div>
+                      <div>
+                        {{ dish.price }}
+                      </div>
+                    </span>
+                  </span>
+                  <span *ngIf="!getDishes('Menü2', day).length">
+                    <button type="button" class="btn btn-outline-success" id="planMenu2"
+                      (click)="showMenu1Selection = false; showMenu2Selection = true; showDessertSelection = false; showSoupSelection = false; selectedDay = day">
+                      +
+                    </button>
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <th class="align-middle">Nachspeise</th>
+                <td *ngFor="let day of weekDays" class="align-middle">
+                  <span *ngIf="getDishes('Dessert', day).length">
+                    <span *ngFor="let dish of getDishes('Dessert', day)">
+                      <div>
+                        {{ dish.title }}
+                      </div>
+                      <div>
+                        {{ dish.price }}
+                      </div>
+                    </span>
+                  </span>
+                  <span *ngIf="!getDishes('Dessert', day).length">
+                    <button type="button" class="btn btn-outline-success" id="planDessert"
+                      (click)="showMenu1Selection = false; showMenu2Selection = false; showDessertSelection = true; showSoupSelection = false; selectedDay = day">
+                      +
+                    </button>
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <th class="align-middle">Suppe</th>
+                <td *ngFor="let day of weekDays" class="align-middle">
+                  <span *ngIf="getDishes('Soup', day).length">
+                    <span *ngFor="let dish of getDishes('Soup', day)">
+                      <div>
+                        {{ dish.title }}
+                      </div>
+                      <div>
+                        {{ dish.price }}
+                      </div>
+                    </span>
+                  </span>
+                  <span *ngIf="!getDishes('Soup', day).length">
+                    <button type="button" class="btn btn-outline-success" id="planSoup"
+                      (click)="showMenu1Selection = false; showMenu2Selection = false; showDessertSelection = false; showSoupSelection = true; selectedDay = day">
+                      +
+                    </button>
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
-    </section>
-  
-    <br>
-  
-    <section id="menu">
-  
-      <div class="card text-begin divWidth">
-        <div class="card-header">
-          Mittagessen
-        </div>
-        <div class="card-body d-flex justify-content-between align-items-center divWidth">
-          <div class="table">
-            <table class="table table-bordered rounded">
-              <thead>
-                <tr>
-                  <th class="align-middle"> </th>
-                  <th class="align-middle">Montag</th>
-                  <th class="align-middle">Dienstag</th>
-                  <th class="align-middle">Mittwoch</th>
-                  <th class="align-middle">Donnerstag</th>
-                  <th class="align-middle">Freitag</th>
-                  <th class="align-middle">Samstag</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th class="align-middle">Menü 1</th>
-                  <td *ngFor="let day of weekDays" class="setMargin align-middle">
-                    <span *ngIf="getDishes('Menü1', day).length">
-                        <span *ngFor="let dish of getDishes('Menü1', day)">
-                            <div>
-                                {{ dish.title }}
-                              </div>
-                              <div>
-                                {{ dish.price }}
-                              </div>
-                          </span>
-                    </span>
-                    <span *ngIf="!getDishes('Menü1', day).length">
-                        <button type="button" class="btn btn-outline-success" id="planMenu1">
-                            +
-                          </button>
-                      </span>
-                  </td>
-                </tr>
-                <tr>
-                  <th class="align-middle">Menü 2</th>
-                  <td *ngFor="let day of weekDays" class="align-middle">
-                    <span *ngIf="getDishes('Menü1', day).length">
-                        <span *ngFor="let dish of getDishes('Menü2', day)">
-                            <div>
-                                {{ dish.title }}
-                              </div>
-                              <div>
-                                {{ dish.price }}
-                              </div>
-                          </span>
-                    </span>
-                    <span *ngIf="!getDishes('Menü1', day).length">
-                        <button type="button" class="btn btn-outline-success" id="planMenu2">
-                            +
-                          </button>
-                      </span>
-                  </td>
-                </tr>
-                <tr>
-                  <th class="align-middle">Nachspeise</th>
-                  <td *ngFor="let day of weekDays" class="align-middle">
-                    <span *ngIf="getDishes('Menü1', day).length">
-                        <span *ngFor="let dish of getDishes('Dessert', day)">
-                            <div>
-                                {{ dish.title }}
-                              </div>
-                              <div>
-                                {{ dish.price }}
-                              </div>
-                          </span>
-                    </span>
-                    <span *ngIf="!getDishes('Menü1', day).length">
-                        <button type="button" class="btn btn-outline-success" id="planDessert">
-                            +
-                          </button>
-                      </span>
-                  </td>
-                </tr>
-                <tr>
-                  <th class="align-middle">Suppe</th>
-                  <td *ngFor="let day of weekDays" class="align-middle">
-                    <span *ngIf="getDishes('Menü1', day).length">
-                        <span *ngFor="let dish of getDishes('Soup', day)">
-                            <div>
-                                {{ dish.title }}
-                              </div>
-                              <div>
-                                {{ dish.price }}
-                              </div>
-                          </span>
-                    </span>
-                    <span *ngIf="!getDishes('Menü1', day).length">
-                        <button type="button" class="btn btn-outline-success" id="planSoup">
-                            +
-                          </button>
-                      </span>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+    </div>
+  </section>
+
+  <br>
+
+  <section *ngIf="showMenu1Selection" id="menuSelection">
+    <div class="card text-begin divWidth">
+      <div class="card-header">Menü 1 planen für {{ selectedDay }}</div>
+      <div class="card-body">
+        <table *ngIf="dishesMenu1.length || dishesMenu2.length" class="table table-bordered rounded">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">Gericht</th>
+              <th scope="col">Beschreibung</th>
+              <th scope="col">Preis</th>
+              <th scope="col">Auswahl</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let dish of dishesMenu1">
+              <td>{{ dish.title }}</td>
+              <td>{{ dish.description }}</td>
+              <td>{{ dish.price }}</td>
+              <td>
+                <input type="radio" name="dishSelect" value="dish.id" (change)="selectedDish = dish.id">
+              </td>
+            </tr>
+            <tr *ngFor="let dish of dishesMenu2">
+              <td>{{ dish.title }}</td>
+              <td>{{ dish.description }}</td>
+              <td>{{ dish.price }}</td>
+              <td>
+                <input type="radio" name="dishSelect" value="dish.id" (change)="selectedDish = dish.id">
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <br>
+
+        <h6>Neues Menü 1 anlegen:</h6>
+
+        <table class="table table-bordered rounded">
+          <tbody>
+            <tr>
+              <td>
+                <input type="text" id="newMenuTitle">
+              </td>
+              <td>
+                <input type="text" id="newMenuDescription">
+              </td>
+              <td>
+                <input type="number" id="newMenuPrice">
+              </td>
+              <td>
+                <input type="radio" name="dishSelect" value="-1" (change)="selectedDish = -1">
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-    </section>
-  
+      <div class="d-flex justify-content-end divWidth">
+        <button type="button" class="btn btn-success setMargin" id="btnPlanDishMenu" (click)="planDish()">
+          Planen
+        </button>
+      </div>
+    </div>
     <br>
-  
-  </main>
+  </section>
+
+  <section *ngIf="showMenu2Selection" id="menuSelection">
+    <div class="card text-begin divWidth">
+      <div class="card-header">Menü 2 planen für {{ selectedDay }}</div>
+      <div class="card-body">
+        <table *ngIf="dishesMenu1.length || dishesMenu2.length" class="table table-bordered rounded">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">Gericht</th>
+              <th scope="col">Beschreibung</th>
+              <th scope="col">Preis</th>
+              <th scope="col">Auswahl</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let dish of dishesMenu2">
+              <td>{{ dish.title }}</td>
+              <td>{{ dish.description }}</td>
+              <td>{{ dish.price }}</td>
+              <td>
+                <input type="radio" name="dishSelect" value="dish.id" (change)="selectedDish = dish.id">
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <br>
+
+        <h6>Neues Menü 2 anlegen:</h6>
+
+        <table class="table table-bordered rounded">
+          <tbody>
+            <tr>
+              <td>
+                <input type="text" class="input-width" id="newMenuTitle">
+              </td>
+              <td>
+                <input type="text" class="input-width" id="newMenuDescription">
+              </td>
+              <td>
+                <input type="number" class="input-width" id="newMenuPrice">
+              </td>
+              <td>
+                <input type="radio" name="dishSelect" value="-1" (change)="selectedDish = -1">
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="d-flex justify-content-end divWidth">
+        <button type="button" class="btn btn-success setMargin" id="btnPlanDishMenu" (click)="planDish()">
+          Planen
+        </button>
+      </div>
+    </div>
+    <br>
+  </section>
+
+  <section *ngIf="showDessertSelection" id="dessertSelection">
+    <div class="card text-begin divWidth">
+      <div class="card-header">Nachspeise planen für {{ selectedDay }}</div>
+      <div class="card-body">
+        <table *ngIf="dishesDessert.length" class="table table-bordered rounded">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">Gericht</th>
+              <th scope="col">Beschreibung</th>
+              <th scope="col">Preis</th>
+              <th scope="col">Auswahl</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let dish of dishesDessert">
+              <td>{{ dish.title }}</td>
+              <td>{{ dish.description }}</td>
+              <td>{{ dish.price }}</td>
+              <td>
+                <input type="radio" name="dishSelect" value="dish.id" (change)="selectedDish = dish.id">
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <br>
+
+        <h6>Neue Nachspeise anlegen:</h6>
+
+        <table class="table table-bordered rounded">
+          <tbody>
+            <tr>
+              <td>
+                <input type="text" class="input-width" id="newDessertTitle">
+              </td>
+              <td>
+                <input type="text" class="input-width" id="newDessertDescription">
+              </td>
+              <td>
+                <input type="number" class="input-width" min="0" id="newDessertPrice">
+              </td>
+              <td>
+                <input type="radio" name="dishSelect" value="-1" (change)="selectedDish = -1">
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="d-flex justify-content-end divWidth">
+        <button type="button" class="btn btn-success setMargin" id="btnPlanDishDessert" (click)="planDish()">
+          Planen
+        </button>
+      </div>
+    </div>
+    <br>
+  </section>
+
+  <section *ngIf="showSoupSelection" id="soupSelection">
+    <div class="card text-begin divWidth">
+      <div class="card-header">Suppe planen für {{ selectedDay }}</div>
+      <div class="card-body">
+        <table *ngIf="dishesSoup.length" class="table table-bordered rounded">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">Gericht</th>
+              <th scope="col">Beschreibung</th>
+              <th scope="col">Preis</th>
+              <th scope="col">Auswahl</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let dish of dishesSoup">
+              <td>{{ dish.title }}</td>
+              <td>{{ dish.description }}</td>
+              <td>{{ dish.price }}</td>
+              <td>
+                <input type="radio" name="dishSelect" value="-1" (change)="selectedDish = dish.id">
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <br>
+
+        <h6>Neue Suppe anlegen:</h6>
+
+        <table class="table table-bordered rounded">
+          <tbody>
+            <tr>
+              <td>
+                <input type="text" class="input-width" id="newSoupTitle">
+              </td>
+              <td>
+                <input type="text" class="input-width" id="newSoupDescription">
+              </td>
+              <td>
+                <input type="number" class="input-width" id="newSoupPrice">
+              </td>
+              <td>
+                <input type="radio" name="dishSelect" value="-1" (change)="selectedDish = -1">
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="d-flex justify-content-end divWidth">
+        <button type="button" class="btn btn-success setMargin" id="btnPlanDishSoup" (click)="planDish()">
+          Planen
+        </button>
+      </div>
+    </div>
+    <br>
+  </section>
+
+</main>
