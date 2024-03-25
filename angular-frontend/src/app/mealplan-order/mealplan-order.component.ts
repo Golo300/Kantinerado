@@ -82,6 +82,7 @@ export class MealplanOrderComponent implements OnInit {
     this.limitNextKW++;
 
     this.getMealplan();
+    this.getPreviousOrder();
     this.calculateWeekRange(resultDate);
   }
 
@@ -97,6 +98,7 @@ export class MealplanOrderComponent implements OnInit {
     this.limitNextKW--;
 
     this.getMealplan();
+    this.getPreviousOrder();
     this.calculateWeekRange(resultDate);
   }
 
