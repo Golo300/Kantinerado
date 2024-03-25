@@ -11,9 +11,9 @@ Diese Dokumentation umfasst die gesamte bisherige Entwicklung bis einschließlic
 ## Table of Contents
 
 1. [Stakeholder](#Stakeholder)
-2. [Funktional requirements](#Funktionalrequirements)
+2. [Funktional requirements](#Funktional)
 3. [Non Funktional Requirements](#NonFunktionalRequirements)
-4. [Solution Strategy](#SolutionStrategy)
+4. [Solution Strategy](#Solution)
 5. [Block View](#BlockView)
 6. [Dynamic View](#DynamicView)
 7. [Deployment](#Deployment)
