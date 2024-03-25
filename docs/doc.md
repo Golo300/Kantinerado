@@ -6,7 +6,24 @@ Dieses Projekt ist ein Semesterprojekt, welches das Hauptziel hat, die in der Vo
 
 Hierzu soll eine Applikation erstellt und dokumentiert werden, mit der Mitarbeiter einer fiktiven Firma Essen in der Kantine Einsehen und bestellen können mit einfacher Benutzerverwaltung.
 
-## Stackholder
+Diese Dokumentation umfasst die gesamte bisherige Entwicklung bis einschließlich Sprint 4. Dieses Dokument hält sich stark an die arc42 Vorgaben.
+
+## Table of Contents
+
+1. [Stakeholder](#Stakeholder)
+2. [Funktional requirements](#Stakeholder)
+3. [Non Funktional Requirements](#Stakeholder)
+4. [Solution Strategy](#Stakeholder)
+5. [Block View](#BlockView)
+6. [Dynamic View](#DynamicView)
+7. [Deployment](#Deployment)
+8. [Crosscutting Concepts](#CrosscuttingConcepts)
+9. [Architectural Decisions](#ArchitecturalDecisions)
+10. [Risks and Technical Debt](#RisksandTechnicalDebt)
+
+
+
+## Stakeholder
 
 Um Requirements für ein Projekt zu definiern sollte als erstes eine Stakeholder Analyse durchgefürht werden. Da das *Kantinerado* Projekt nur firmenintern genutzt werden soll, sind folglich auch alle Stakeholder firmenintern. Die nachfolgende Grafik zeigt eine Analyse aller beteiligten Stakeholder. Die Größe gibt dabei jeweils das Interesse der einzelnen Parteien am Gelingen des Projektes an.
 \
