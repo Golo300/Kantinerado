@@ -25,13 +25,6 @@ export interface sendDish {
   id: number;
 }
 
-export interface newDish {
-  dishCategory: DishCategory;
-  title: string;
-  description: string;
-  price: number; 
-}
-
 export interface DishCategory {
   name: string;
   canVeggie: boolean;

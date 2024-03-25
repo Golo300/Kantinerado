@@ -28,4 +28,19 @@ public class DishService {
 
         return dishRepository.findByDishCategory(category);
     }
+
+    public Dish addDish(Dish dish)
+    {
+        DishCategory category = dishCategoryRepository.findByName(dish.getDishCategory().getName()).orElse(null);
+        if(category == null) return null;
+
+        dish.setDishCategory(category);
+        dishRepository.save(dish);
+        return dish;
+    }
+
+    public Dish getDishById(int id)
+    {
+        return dishRepository.getReferenceById(id);
+    }
 }

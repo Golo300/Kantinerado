@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { MealserviceService } from '../services/mealplan.service';
 import { DishService } from '../services/dish.service';
-import { Day, Dish, Mealplan, DishCategory, newDish, sendDish } from '../Interfaces';
+import { Day, Dish, Mealplan, DishCategory, sendDish } from '../Interfaces';
 import { addDays, format, getISOWeek, lastDayOfWeek, setWeek, subDays } from 'date-fns';
 import { de } from 'date-fns/locale';
 import { Title } from '@angular/platform-browser';
+import { OrderService } from '../services/order.service';
 
 @Component({
   selector: 'app-mealplan-administration',
@@ -177,7 +178,7 @@ export class MealplanAdministrationComponent implements OnInit {
 
       console.log(this.selectedDish);
 
-      // TODO: Backend-Aufruf
+      this.mealService.addMealToDay(this.selectedDish, this.selectedKW, dayAsDate.getDay()).subscribe();
     }
     // Neues Gericht
     else {
@@ -186,7 +187,8 @@ export class MealplanAdministrationComponent implements OnInit {
         canVeggie: false
       };
 
-      const dish: newDish = {
+      const dish: Dish = {
+        id: -1,
         dishCategory: category,
         title: this.newDishTitle,
         description: this.newDishDescription,
@@ -203,7 +205,16 @@ export class MealplanAdministrationComponent implements OnInit {
       this.newDishDescription = '';
       this.newDishPrice = 0;
 
-      // TODO: Backend-Aufruf
+      this.mealService.postNewDish(dish).subscribe(
+        (createdDish) => {
+          console.log('New dish created:', createdDish);
+          this.mealService.addMealToDay(createdDish.id, this.selectedKW, dayAsDate.getDay()).subscribe();
+        },
+        (error) => {
+          console.error('Error creating new dish:', error);
+          // Handle error if needed
+        }
+      );
     }
   }
 

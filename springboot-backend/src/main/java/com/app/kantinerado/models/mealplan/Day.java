@@ -52,6 +52,10 @@ public class Day {
         this.dishes = dishes;
     }
 
+    public void addDish(Dish dish) {
+        this.dishes.add(dish);
+    }
+
     public Set<Dish> getDishes() {
         return this.dishes;
     }

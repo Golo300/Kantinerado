@@ -1,18 +1,12 @@
 package com.app.kantinerado.controllers;
 
-import com.app.kantinerado.models.LoginDTO;
-import com.app.kantinerado.models.LoginResponseDTO;
-import com.app.kantinerado.models.RegistrationDTO;
 import com.app.kantinerado.models.mealplan.Dish;
-import com.app.kantinerado.models.mealplan.Mealplan;
-import com.app.kantinerado.services.AuthenticationService;
 import com.app.kantinerado.services.DishService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController
