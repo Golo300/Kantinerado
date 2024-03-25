@@ -11,15 +11,15 @@ Diese Dokumentation umfasst die gesamte bisherige Entwicklung bis einschließlic
 ## Table of Contents
 
 1. [Stakeholder](#Stakeholder)
-2. [Funktional requirements](#Stakeholder)
-3. [Non Funktional Requirements](#Stakeholder)
-4. [Solution Strategy](#Stakeholder)
-5. [Block View](#BlockView)
-6. [Dynamic View](#DynamicView)
+2. [Funktional requirements](#Funktional requirements)
+3. [Non Funktional Requirements](#Non Funktional Requirements)
+4. [Solution Strategy](#Solution Strategy)
+5. [Block View](#Block View)
+6. [Dynamic View](#Dynamic View)
 7. [Deployment](#Deployment)
-8. [Crosscutting Concepts](#CrosscuttingConcepts)
-9. [Architectural Decisions](#ArchitecturalDecisions)
-10. [Risks and Technical Debt](#RisksandTechnicalDebt)
+8. [Crosscutting Concepts](#Crosscutting Concepts)
+9. [Architectural Decisions](#Architectural Decisions)
+10. [Risks and Technical Debt](#Risks and TechnicalDebt)
 
 
 
