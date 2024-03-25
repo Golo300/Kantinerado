@@ -66,8 +66,8 @@ export class OrderService {
       }));
   }
 
-  getEveryOrder(): Observable<Order[]> {
-    return this.http.get<Order[]>(`${this.apiUrl}/order/pdf`);
+  getEveryOrderByKw(kw: number): Observable<Order[]> {
+    return this.http.get<FullOrder[]>(`${this.apiUrl}/order/pdf/${kw}`);
   }
 
   generateAdminPdf(orders: Order[]) {
@@ -77,8 +77,8 @@ export class OrderService {
     doc.text('Order Overview of all Users', 10, yPos);
     yPos += 10;
 
-    const headers = [['Date', 'Dish', 'Veggie', 'Price']];
-    const data = this.prepareDataForPdf(orders,'black');
+    const headers = [['Date','Dish', 'Veggie', 'Price']];
+    const data = this.prepareAdminDataForPdf(orders,'black');
 
     autoTable(doc, {
       head: headers,
@@ -89,7 +89,46 @@ export class OrderService {
     doc.save('order_overview.pdf');
   }
 
-  generateUserPdf(newOrders: Order[], deletedOrders: Order[]) {
+  private prepareAdminDataForPdf(orders: Order[], color: string): any[] {
+    let preparedData: any[] = [];
+    let dishCounts: { [key: string]: { count: number; veggie: boolean; price: number } } = {}; // Typenzuweisung für dishCounts
+
+    // Zähle die Anzahl der Bestellungen für jedes Gericht
+    orders.forEach(order => {
+      const dishName = order.dish.title;
+      const key = order.date.toString().slice(0, 10) + dishName + order.veggie;
+      if (!dishCounts[key]) {
+        dishCounts[key] = { count: 0, veggie: order.veggie, price: order.dish.price };
+      }
+      dishCounts[key].count++;
+    });
+
+    // Erstelle die Daten für das PDF
+    orders.forEach(order => {
+      const dishName = order.dish.title;
+      const key = order.date.toString().slice(0, 10) + dishName + order.veggie;
+      const dishCount = dishCounts[key].count;
+      const veggie = dishCounts[key].veggie ? 'Yes' : 'No';
+      const price = dishCounts[key].price;
+      const totalPrice = price * dishCount;
+
+      // Füge die Daten für jede Bestellung hinzu
+      preparedData.push([
+        order.date.toString().slice(0, 10),
+        `${dishName} (${dishCount}x)`,
+        veggie,
+        price,
+        totalPrice
+      ]);
+    });
+
+    return preparedData;
+  }
+
+
+
+
+  generateUserPdf(newOrders:Order[], deletedOrders: Order[]) {
     const doc = new jsPDF();
     let yPos = 10;
 
@@ -97,8 +136,8 @@ export class OrderService {
     yPos += 10;
 
     const headers = [['Date', 'Dish', 'Veggie', 'Price']];
-    const newData = this.prepareDataForPdf(newOrders, 'green');
-    const deletedData = this.prepareDataForPdf(deletedOrders, 'red');
+    const newData = this.prepareUserDataForPdf(newOrders, 'green');
+    const deletedData = this.prepareUserDataForPdf(deletedOrders, 'red');
 
     const data = [...newData, ...deletedData];
 
@@ -128,9 +167,7 @@ export class OrderService {
     return totalPrice;
   }
 
-
-
-  private prepareDataForPdf(orders: Order[], color: string): any[] {
+  private prepareUserDataForPdf(orders: Order[], color: string): any[] {
     return orders.map(order => [
       {content: order.date.toString().slice(0, 10)},
       {content: order.dish.title},

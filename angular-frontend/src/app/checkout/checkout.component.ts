@@ -69,8 +69,8 @@ export class CheckoutComponent {
     return parseFloat(totalPrice.toFixed(2));
   }
 
-  downloadEveryOrderForAdmins() {
-    this.orderService.getEveryOrder().subscribe((orders: Order[]) => {
+  downloadEveryOrderForAdmins(kw: number) {
+    this.orderService.getEveryOrderByKw(kw).subscribe((orders: Order[]) => {
       this.orderService.generateAdminPdf(orders);
     });
   }

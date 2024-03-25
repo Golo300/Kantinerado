@@ -2,25 +2,16 @@ package com.app.kantinerado.services;
 
 import com.app.kantinerado.models.ApplicationUser;
 import com.app.kantinerado.models.OrderDTO;
-import com.app.kantinerado.models.mealplan.Day;
 import com.app.kantinerado.models.mealplan.Dish;
 import com.app.kantinerado.models.mealplan.Order;
 import com.app.kantinerado.repository.DayRepository;
 import com.app.kantinerado.repository.DishRepository;
 import com.app.kantinerado.repository.OrderRepository;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.PageSize;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfWriter;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.Transient;
 import org.springframework.stereotype.Service;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -41,7 +32,7 @@ public class OrderService {
 
     public List<Order> findOrderBy(int kw, ApplicationUser user)
     {
-        return orderRepository.findByWeekNumber(kw, user.getUserId());
+        return orderRepository.findByWeekNumberAndUser(kw, user.getUserId());
     }
 
     public List<Order> getAllOders(ApplicationUser user)
@@ -143,7 +134,7 @@ public class OrderService {
         }
     }
 
-    public List<Order> getEveryOrder() {
-        return orderRepository.findAll();
+    public List<Order> getEveryOrderByKw(int kw) {
+        return orderRepository.findOrderByWeekNumber(kw);
     }
 }
