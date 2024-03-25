@@ -101,7 +101,7 @@ Zu beginn muss auf den voher definierten Anforderungen ein Tech-Stack erarbeitet
 - Backend
 - Datenbank
 
-Als ein eher experimenteller Ansatz wurde zuerst eine erste Meinung zu den Technologien über eine KI eingeholt. Dadurch wird versucht, sich eine Durchschnittsmeinung zu erarbeiten. Die Angaben der KI wurden natürlich noch mit weiteren unabhängigen Quellen validiert. Der Ansatz stellte sich damit als erfolgreich heraus.
+Als ein eher experimenteller Ansatz wurde zuerst eine erste Meinung zu den Technologien über eine KI eingeholt. Dadurch wird versucht, sich eine Durchschnittsmeinung zu erarbeiten und den jeweiligen Verbreitungsgrad der einzelnen Technologien. Die Angaben der KI wurden natürlich noch mit weiteren unabhängigen Quellen validiert. Der Ansatz stellte sich aber als erfolgreich heraus.
 
 #### Frontend
 
