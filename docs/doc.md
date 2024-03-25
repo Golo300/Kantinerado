@@ -20,7 +20,7 @@ Diese Dokumentation umfasst die gesamte bisherige Entwicklung bis einschließlic
 8. [Crosscutting Concepts](#Crosscutting-Concepts)
 9. [Architectural Decisions](#Architectural-Decisions)
 10. [Quality Requirements](#Quality-Requirements)
-11. [Risks and Technical Debt](#Risks-and-TechnicalDebt)
+11. [Risks and Technical Debt](#Risks-and-Technical-Debt)
 
 
 
