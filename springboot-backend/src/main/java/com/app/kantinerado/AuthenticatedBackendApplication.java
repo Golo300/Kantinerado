@@ -27,6 +27,7 @@ public class AuthenticatedBackendApplication {
     @Autowired
     MealplanService mealplanService;
 
+
     @Bean
     CommandLineRunner run(RoleRepository roleRepository, UserRepository userRepository, MealplanRepository mealplanRepository,
                           DayRepository dayRepository, DishRepository dishRepository, DishCategoryRepository dishCategoryRepository,

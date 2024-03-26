@@ -2,7 +2,29 @@
 
 ## Einführung und Ziele
 
-## Stackholder
+Dieses Projekt ist ein Semesterprojekt, welches das Hauptziel hat, die in der Vorlesung gelernten Konzepte zur Software-Planung und Dokumentation umsetzen.
+
+Hierzu soll eine Applikation erstellt und dokumentiert werden, mit der Mitarbeiter einer fiktiven Firma Essen in der Kantine Einsehen und bestellen können mit einfacher Benutzerverwaltung.
+
+Diese Dokumentation umfasst die gesamte bisherige Entwicklung bis einschließlich Sprint 4. Dieses Dokument hält sich stark an die arc42 Vorgaben.
+
+## Table of Contents
+
+1. [Stakeholder](#Stakeholder)
+2. [Funktional requirements](#Funktional-requirements)
+3. [Non Funktional Requirements](#NonFunktional-Requirements)
+4. [Solution Strategy](#Solution-Strategy)
+5. [Block View](#Block-View)
+6. [Dynamic View](#Dynamic-View)
+7. [Deployment](#Deployment)
+8. [Crosscutting Concepts](#Crosscutting-Concepts)
+9. [Architectural Decisions](#Architectural-Decisions)
+10. [Quality Requirements](#Quality-Requirements)
+11. [Risks and Technical Debt](#Risks-and-Technical-Debt)
+
+
+
+## Stakeholder
 
 Um Requirements für ein Projekt zu definiern sollte als erstes eine Stakeholder Analyse durchgefürht werden. Da das *Kantinerado* Projekt nur firmenintern genutzt werden soll, sind folglich auch alle Stakeholder firmenintern. Die nachfolgende Grafik zeigt eine Analyse aller beteiligten Stakeholder. Die Größe gibt dabei jeweils das Interesse der einzelnen Parteien am Gelingen des Projektes an.
 \
@@ -20,7 +42,7 @@ Um Requirements für ein Projekt zu definiern sollte als erstes eine Stakeholder
    - Die App sollte eine übersichtliche Darstellung des verfügbaren Speiseangebots mit Preisen, Beschreibungen und ggf. Bildern anzeigen.
 
 3. **Bestellungen aufgeben:**
-   - Mitarbeiter sollten in der Lage sein, ihre Bestellungen aus dem Produktkatalog auszuwählen und hinzuzufügen, die Anzahl der Artikel anzugeben und die Bestellung abzuschließen.
+   - Mitarbeiter sollten in der Lage sein, ihre Bestellungen aus dem Produktkatalog auszuwählen und hinzuzufügen, die Anzahl der Artikel anzugeben und die Bestellung abzuschließen. Bestellungen können als PDF ausgegben werden.
 
 4. **Zahlungsoptionen (optional):**
    - Die App sollte verschiedene Zahlungsoptionen unterstützen, z. B. Kreditkarten, Debitkarten oder interne Abrechnungssysteme.
@@ -35,6 +57,9 @@ Um Requirements für ein Projekt zu definiern sollte als erstes eine Stakeholder
     - Ein Admin Account kann Mitarbeiter und Kantinenpersonal Verwaltung. Dabei können Mitarbeiter auch zu Kantinenpersonal befördert/degradiert werden.
 8. **Webanwendung:**
     - Das gesamte Projekt soll als Webanwendung umgesetzt werden.
+
+9. **Historie**
+    - Benutzer können eine History ihrer Bestellungen angezeigt bekommen. Sowohl für Veragende als auch Zukünftige.
 
 ## Non Funktional Requirements:
 
@@ -76,7 +101,7 @@ Zu beginn muss auf den voher definierten Anforderungen ein Tech-Stack erarbeitet
 - Backend
 - Datenbank
 
-Als ein eher experimenteller Ansatz wurde zuerst eine erste Meinung zu den Technologien über eine KI eingeholt. Dadurch wird versucht, sich eine Durchschnittsmeinung zu erarbeiten. Die Angaben der KI wurden natürlich noch mit weiteren unabhängigen Quellen validiert. Der Ansatz stellte sich damit als erfolgreich heraus.
+Als ein eher experimenteller Ansatz wurde zuerst eine erste Meinung zu den Technologien über eine KI eingeholt. Dadurch wird versucht, sich eine Durchschnittsmeinung zu erarbeiten und den jeweiligen Verbreitungsgrad der einzelnen Technologien. Die Angaben der KI wurden natürlich noch mit weiteren unabhängigen Quellen validiert. Der Ansatz stellte sich aber als erfolgreich heraus.
 
 #### Frontend
 
@@ -141,112 +166,108 @@ MongoDB: 6.8/10
 MySQL: 8.4/10  
 
 **Entscheidung:** Aufgrund der gewichteten Gesamtbewertung und der vorhandenen Erfahrung der Entwickler wird sich für **MySQL** entschieden.
- 
-### Architecture Overview
 
-Für das Deployen und Hosten der Software soll Docker verwendet werden. Dadurch ist es möglich, die vorher beschriebenen Komponenten in einzelne Container zu packen. Das Managen der Container soll über eine Docker-compose erfolgen. Dies vereinfacht auch das Verwalten der Container untereinander, da diese somit gleich in einem Network verwaltet werden.
+### Security
+
+Für die Authentifikation und Autorisierung werden JWT-Token verwendet. Dabei soll es drei Rollen geben, welche unterschiedliche Berechtigungen haben sollen. Dabei sollen höhere Rollen auch auf Funktionen niedrieger Rollen zugreifen können (z.B. Admin kann auch normal Bestellen).
+
+* Mitarbeiter: Normaler Mitarbeiter, welcher nur Gerichte bestellen kann
+* Kantinenmitarbeiter: Nutzer mit dieser Rolle können Speisepläne verwalten und Bestellungen auswerten
+* Admin: Kann alle Benutzer verwalten
+
+Die Implementierung dieser Rollen sind in den nächsten Abschnitten näher beschrieben.
+
+## Block View 
+
+Zur Übersicht ist hier die statische Ansicht der einzelnen Komponenten im Frontend abgebildet.
+
+<p align="center">
+  <img src="resources/BlockView.png" alt="Block View"/>
+</p>
+
+Für das Backend werden drei Verarbeitungslevel definiert, welche beim Entwicklen eingehalten werden müssen.
+
+- Controller: Nehmen die Http anfragen entgegen und und senden am Ende richtige Inhlate und Statuscodes zurück.
+
+- Services: Bekommen alle wichtigen Daten von einem Controller. Sind für die logische Verarbeitung einer Anfrage. hierunter fällt z.B. Die Validierung der Daten (Datum, ...). 
+
+- Repositories: Bilden die von Springboot vorgegebene Schnittstelle zur Datenbank. Nur hier werden SQL Anfragen angelegt, wie von Springboot vorgegeben.
+
+Diese Schichten sind durch Ordner getrennt, in denen die jeweiligen Java-Klassen liegen. Die Absicherung der einzelnen Routen findet mithilfe einer von Spring-Boot bereits vorgegebenen Security-cain statt. Diese unterstützt auch das beschriebene Rollensystem.
+
+<p align="center">
+  <img src="resources/BackendView.png" alt="Block View"/>
+</p>
+
+
+## Dynamic View
+
+Diese Abildung zeigt die einzelnen Komponenten wie sie zur Laufzeit Interagieren. Die Grafik umfasst dabei nicht jede einzelne Komponente sondern nur die Bestellkomonente mit Servicen. Dies ist aber eqvivalent für alle andern Komonenten und Servicen zu betracheten.
+
+Dieses Diagramm soll vorallem denn Ablauf des Login und der Registrieung zeigen und an welchem Punkt das Token angehängt wird. Dieses wird unabhänig von der Anfrage angehängt. Dies macht die Entwicklung einzelner Komponenten und Services einfacher, da sie sich nicht einzeln um das anhängen des Token kümmern müssen.
+
+<p align="center">
+  <img src="resources/RuntimeView.png" alt="Runtime View"/>
+</p>
+
+
+## Deployment
+
+Für das Deployen und Hosten der Software soll Docker verwendet werden. Dadurch ist es möglich, die vorher beschriebenen Komponenten in einzelne Container zu packen. Das Managen der Container erfolgt über eine Docker-compose. Dies vereinfacht auch das Verwalten der Container untereinander, da diese somit gleich in einem Network verwaltet werden. Auch ein zusätzlicher Sicherheitsaspekt wird dadurch hinzugefügt, da die Datenbank keine Verbindung nach außerhalb des Dockernetzwerkes hat. Damit alle Daten der Application einfach gesichert werden können, läuft die Datenbank mit einem extra Volume. Diese Hosting Solution macht es einfach die Anwendung auf beliebige Container-Infrastruktur zu deployen. Somit kann die Anwendung einfach in ein bestehendes Firmennetzwerk eingebunden werden.
 
 
 <p align="center">
   <img src="resources/SystemOverview.png" alt="Architecture-Overview"/>
 </p>
 
-### Entity Overview
+## Crosscutting Concepts
 
-Entwurf für die Modellierung der Datenstruktur im Backend. Dieser beachtet, dass es tägliche Menüs und Zusatzspeisen gibt sowie Frühstücksangebote, welche jeden Tag angeboten werden. Die Schwäche dieses Modells ist zurzeit noch, das eine Bestellung eines Menüs aus dem Speiseplan mit dem Tag übereinstimmen muss. Logischerweise kann es nicht möglich sein, eine Bestellung für einen Tag aufzugeben, an dem das Gericht nicht angeboten wird. Daher muss hier eine Validierung in der Geschäftslogik geschehen, bzw. das Frontend sollte natürlich solche Anfragen auch nicht zulassen, aber durch die REST Full Architektur ist eine Validierung im Backend unumgänglich (die gestrichelte Linie stellt diese Validierung dar). Die Stärke dieses Modells soll sich später in der einfachen Auswertungen der Bestellungen und der zugeordneten Gerichte zeigen. Auch die Mealplan Entity vereinfacht das Abfragen des Speiseplans für eine bestimmte Woche.
+### Domain Model
 
-Das System ist so gedacht das für die einzelnen Kategorien "Menü1", "Menü2", ... sowie für "Frühstück" eine "DishCategoray" erstellt wird. Dieses dynamische System erlaubt auch das einfache Erweitern das System. Denkbar ist z.b. auch das neue Menü, Special Deals oder weitere feste Produkte eingebaut werden können, ohne dass die Datenstruktur erweitert werden muss. Zu besseren Versändis wurde auch auch noch gezeigt welche Entitäten für die Darstellung der Besstellansicht wichtig sind.
+Im folgenden ist das Domain Model beschrieben, welches aus den Anforderung hervorgeht. Es bildet alle notwendigen Verbindung und Entitäten ab. Die Schwäche dieses Modells ist zurzeit noch, das eine Bestellung eines Menüs aus dem Speiseplan mit dem Tag übereinstimmen muss. Logischerweise kann es nicht möglich sein, eine Bestellung für einen Tag aufzugeben, an dem das Gericht nicht angeboten wird. Daher muss hier eine Validierung in der Geschäftslogik geschehen, bzw. das Frontend sollte natürlich solche Anfragen auch nicht zulassen, aber durch die REST Full Architektur ist eine Validierung im Backend unumgänglich. Die Stärke dieses Modells soll sich später in der einfachen Auswertungen der Bestellungen und der zugeordneten Gerichte zeigen. Auch die Mealplan Entity vereinfacht das Abfragen des Speiseplans für eine bestimmte Woche im Jahr.
+
+Das System ist so gedacht das für die einzelnen Kategorien "Menü1", "Menü2", ... sowie für "Frühstück" eine "DishCategoray" erstellt wird. Dieses dynamische System erlaubt auch das einfache Erweitern das System. Denkbar ist z.b. auch das neue Menü, Specialdeals oder weitere feste Produkte eingebaut werden können, ohne dass die Datenstruktur erweitert werden muss. Zu besseren Versändis wurde auch auch noch gezeigt welche Entitäten für die Darstellung der Besstellansicht wichtig sind.
 
 
 <p align="center">
   <img src="resources/Database.png" alt="Architecture-Overview"/>
 </p>
 
-### API
+### Security
 
-**Authentifizierung:**
+Das JWT-Token garantiert im Backend, dass nur autorisierte Nutzer auch auf bestimmte Funktionen zugreifen können. Dies entlastet das Frontend. Hier sind zwar natürlich auch die einzelnen Rollen eingebaut. Ein mutwilliges Umgehen der Frontendmaßnahmen hätte denoch nur geringe Auswirkungen, da durch das Token, welches nicht manipuliert werden kann, eine maximale Sicherheit garantiert wird. Zwar könnte ein Angreifer im schlimmsten Fall sich die Ansichten (Routen) für höher privilegierte Nutzer anzeigen lassen, jedoch ohne Zugriff auf kritische Daten zu bekommen (falsches Token). Daher und da es hier sich um eine einfache Kantinen-App handelt, wird diese geringe Schwachstelle in Kauf genommen.
 
-Einige Endpunkte erfordern Authentifizierung. Verwenden Sie die `/auth`-Endpunkte für Registrierung und Anmeldung.
+### User Interface 
 
-**Endpunkte:**
-
-**Admin:**
-
-- `GET /admin/`
-    - Gibt "Admin-Zugriffsebene" zurück
-- `POST /admin/promote`
-    - Befördert einen Benutzer zum Kanntienenmitarbeiter
-    - Anforderungstext:
-        ```json
-        {
-            "username": "String"
-        }
-        ```
-    - Antwort:
-        - `200 OK`: "Benutzername wurde befördert"
-        - `404 NOT FOUND`: Benutzer nicht gefunden
-
-**Authentifizierung:**
-
-- `POST /auth/register`
-    - Registriert einen neuen Benutzer
-    - Anforderungstext:
-        ```json
-        RegistrationDTO
-        ```
-    - Antwort:
-        - `201 CREATED`: "Benutzername des Benutzers"
-        - `400 BAD REQUEST`: Registrierung fehlgeschlagen
-- `POST /auth/login`
-    - Meldet einen Benutzer an
-    - Anforderungstext:
-        ```json
-        LoginDTO
-        ```
-    - Antwort:
-        ```json
-        LoginResponseDTO
-        ```
-
-**Speiseplan:**
-
-- `GET /mealplan/{kw}`
-    - Ruft einen Speiseplan anhand seiner Kalenderwoche ab
-    - Pfadvariable:
-        - `kw`: Integer (Kalenderwoche)
-    - Antwort:
-        - `200 OK`: Mealplan-Objekt
-        - `404 NOT FOUND`: Speiseplan nicht gefunden
-
-**Bestellung:**
-
-- `POST /order/`
-    - Erstellt eine neue Bestellung
-    - Anforderungstext:
-        ```json
-        OrderDTO
-        ```
-    - Antwort:
-        - `200 OK`: Bestellung erfolgreich erstellt
-        - `400 BAD REQUEST`: Fehler beim Erstellen der Bestellung
-- `POST /order/batch`
-    - Erstellt mehrere Bestellungen in einem Batch
-    - Anforderungstext:
-        - Liste von OrderDTO-Objekten
-    - Antwort:
-        - `200 OK`: "Alle Bestellungen erfolgreich aufgegeben"
-        - `400 BAD REQUEST`: Einige Bestellungen konnten nicht aufgegeben werden
-
-**Benutzer:**
-
-- `GET /user/`
-    - Gibt "Benutzerzugriffsebene" zurück
-
-**Zusätzliche Hinweise:**
-
-- Alle Controller sind mit `@CrossOrigin("*")` annotiert, was bedeutet, dass sie Anfragen von jedem Ursprung akzeptieren.
-- Der `tokenService` wird für die Authentifizierung und das Abrufen von Benutzerinformationen verwendet.
-- Die Fehlerbehandlung ist für einige Endpunkte implementiert und gibt hauptsächlich die entsprechenden HTTP-Statuscodes zurück.
+Das User-Interface soll wie vorgegeben über eine Web-App zur Verfügung gestellt werden. Der Auswahl der Bestellung und das Bearbeiten des Speiseplan (auch Frühstück) soll tabellarisch erfolgen. Das generelle Design soll sich an "common practices" orientieren (Warenkorb oben rechts, etc.).
 
 
- 
+<p align="center">
+  <img src="resources/UI.png" alt="UI"/>
+</p>
+
+### Testability/CI
+
+Da im Backend die kritischen Funktionalitäten enthalten sind, sind für diese Unit-Tests anzulegen. Jeder Test muss dabei seine eigenen Testdaten anlegen. Das garantiert eine maximale Isolation der einzelnen Tests. Deshalb müssen Tests immer auf einer leeren Datenbank ausgeführt werden. Dem erfolgreichen Erstellen von Unit-Tests sind leider nicht alle Entwickler nachgekommen. Daher sollte ein Fokus in naher Zukunft auf die Testabdeckung gelegt werden.
+Im Frontend sollte das Testen über Karmatests geschehen.
+
+Die im Backend vorhanden Unit-Tests sowie ein Smoke-Test werden bei jedem Durchlauf der Pipeline ausgeführt.
+
+
+## Architectural Decisions
+
+Der groben Architektur der einzelnen Komponenten wird teilweise stark durch die einzelnen Technologien vorgegeben. So ist die Schichtenarchitektur im Backend von Springboot mit vorgegebenen Annotationen bestens unterstützt. Trotzdem eignet sich dies Architecture für dieses Projekt bestens, da viele Daten (Datum, etc.) im Backend aufwendiger validiert werden müssen. Dies kann mit der gewählten Architektur isoliert im Service Schicht  stattfinden. Auch wurden DTO Klassen eingeführt, welche genutzt werden, um den Datentyp der API Schnittstelle zu definieren. DTO Objekte bieten damit im Backend das Protokoll zwischen Controller und Service.
+
+In Angular ist durch die Services und Komponenten eine grobe Struktur für den Aufbau vorgegeben. Hier wurde die Entscheidung getroffen, das API-Calls nur innerhalb von Services getätigt werden sollen. Dies vereinfacht das Debuggen und sorgt für eine bessere Codequalität. Interfaces werden genutzt, um zwischen den einzelnen Komponenten/Services zu kommunizieren.
+
+## Quality Requirements
+
+TODO
+
+## Risks and Technical Debt
+
+Zum Schluss noch die unschöne Seite. Zuerst ist hier auf die hohe Anzahl an offenen Bugs hinzudeuten. Diese sind vor allem durch Nichteinhalten der Dod entstanden. Durch zu spätes Anfangen und demnach das zu späte Abschließen von Userstories konnte die Qualität nicht immer auf dem erwünschten Stand gehalten werden.
+
+Zudem sind auch nicht alle erwünschten Features implementiert worden, welche für die 4 Sprints geplant wurden. Es fehlen entscheiden Funktionen wie das Anpassen seines Profils und die gesamte Benutzerverwaltung. Die App bietet zwar gewisse Grundfunktionen ist aber lange nicht fertig.
+
+Trotz dieser Feststellungen ist zu sagen, dass das Projekt bei Weiterführung eine gute und realistische Chance hat, vollständig und fertig zu werden.

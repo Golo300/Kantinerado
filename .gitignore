@@ -44,9 +44,11 @@ out/
 angular-frontend/dist
 angular-frontend/tmp
 angular-frontend/out-tsc
+angular-frontend/documentation
 .angular
 # Only exists if Bazel was run
 angular-frontend/bazel-out
+.$*
 
 # Dependencies
 angular-frontend/node_modules
@@ -62,3 +64,4 @@ angular-frontend/node_modules
 # System Files
 .DS_Store
 Thumbs.db
+springboot-backend/src/main/resources/application.properties

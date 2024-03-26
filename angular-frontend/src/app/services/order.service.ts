@@ -18,15 +18,16 @@ export class OrderService {
 
   createOrder(orders: Order[]): Observable<any> {
 
-    var sendOrders: sendOrder[] = []
+    var sendOrders: SendOrder[] = []
 
     for (var order of orders) {
-      const sendOrder: sendOrder =
-        {
-          date: order.date,
-          dish_id: order.dish.id,
-          veggie: order.veggie
-        }
+      
+      const sendOrder: SendOrder =
+      {
+        date: order.date,
+        dish_id: order.dish.id,
+        veggie: order.veggie
+      }
       sendOrders.push(sendOrder);
     }
 

@@ -1,5 +1,6 @@
 package com.app.kantinerado.services;
 
+import com.app.kantinerado.models.ApplicationUser;
 import com.app.kantinerado.models.mealplan.Day;
 import com.app.kantinerado.models.mealplan.Dish;
 import com.app.kantinerado.models.mealplan.Mealplan;
@@ -22,6 +23,9 @@ public class MealplanService {
     private MealplanRepository mealplanRepository;
     @Autowired
     private DayRepository dayRepository;
+
+    @Autowired
+    private DishService dishService;
 
     public Mealplan findMealPlanbyKw(Integer kw) {
         Optional<Mealplan> mealplanOptional = mealplanRepository.findByCalendarWeek(kw);
@@ -59,6 +63,51 @@ public class MealplanService {
     }
 
 
-}
+    public Dish addNewDish(Dish newDish, ApplicationUser user) {
 
+        return dishService.addDish(newDish);
+    }
+
+    public boolean addDishToDay(int dishId, int kw, int dayNumber, ApplicationUser user) {
+
+        if (mealplanRepository.findByCalendarWeek(kw).isEmpty()) {
+            Mealplan mealplan = new Mealplan();
+            mealplan.setPlanned(true);
+            mealplan.setCalendarWeek(kw);
+            mealplanRepository.save(mealplan);
+
+        }
+
+            Mealplan mp = mealplanRepository.findByCalendarWeek(kw).orElse(null);
+            Dish dish = dishService.getDishById(dishId);
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.clear();
+            calendar.set(Calendar.YEAR, 2024);
+            calendar.set(Calendar.WEEK_OF_YEAR, kw);
+            calendar.set(Calendar.DAY_OF_WEEK, dayNumber + 1); // Start der Woche auf Montag setzen
+
+            Set<Day> days = mp.getDays();
+
+            for (Day day : days) {
+                if (day.getDate().getDate() == calendar.getTime().getDate()) {
+                    day.addDish(dish);
+                    dayRepository.save(day);
+                    return true;
+                }
+            }
+
+            Day day = new Day();
+            day.setDate(calendar.getTime());
+            day.setNoFood(false);
+
+            day.addDish(dish);
+            days.add(day);
+            mp.setDays(days);
+            dayRepository.save(day);
+            mealplanRepository.save(mp);
+
+        return true;
+    }
+}
 

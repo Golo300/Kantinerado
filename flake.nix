@@ -40,6 +40,8 @@
             export NODE_OPTIONS=--openssl-legacy-provider
             echo ../outputs/out/bin/ng serve
             cd ..
+
+            ideas-ultimate > /dev/null 2>&1 &
             '';
         };
    };

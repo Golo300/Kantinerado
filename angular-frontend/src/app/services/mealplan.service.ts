@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, catchError, of } from 'rxjs';
-import { Mealplan } from '../Interfaces';
+import { Dish, Mealplan } from '../Interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +24,17 @@ export class MealserviceService {
     );
   }
 
-  // Weitere Methoden hinzufügen, um mit deinem Backend zu interagieren
+  postNewDish(dish: Dish): Observable<Dish> {
+    return this.http.post<Dish>(`${this.apiUrl}/mealplan/addMeal`, dish);
+  }
+
+  addMealToDay(dishId: number, kw: number, day: number): Observable<any> {
+    const url = `${this.apiUrl}/mealplan/addMealDay/${dishId}/${kw}/${day}`;
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.post<any>(url, headers);
+  }
 }
 
