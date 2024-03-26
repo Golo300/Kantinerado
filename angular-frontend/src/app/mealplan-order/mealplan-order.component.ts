@@ -187,18 +187,6 @@ export class MealplanOrderComponent implements OnInit {
     return [];
   }
 
-
-  calculateWeekRange(): void {
-    const currentYear = new Date().getFullYear();
-
-    const monday = setWeek(new Date(currentYear, 0, 1), this.kw, {weekStartsOn: 1});
-    const sunday = lastDayOfWeek(monday, {weekStartsOn: 1});
-    const saturday = subDays(sunday, 1);
-
-    this.startDate = monday;
-    this.endDate = saturday;
-  }
-
   toggleCollapse(collapseId: string): void {
     if (collapseId === 'collapseBreakfast') {
       this.isBreakfastOpen = !this.isBreakfastOpen; // Toggle breakfast collapse

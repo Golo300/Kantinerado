@@ -1,7 +1,7 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {map, Observable} from 'rxjs';
-import {FullOrder, Order, sendOrder} from "../Interfaces";
+import {FullOrder, Order, SendOrder} from "../Interfaces";
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable'
 
