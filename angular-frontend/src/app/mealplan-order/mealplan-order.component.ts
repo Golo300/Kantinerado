@@ -149,12 +149,12 @@ export class MealplanOrderComponent implements OnInit {
   getDateFromDayOfWeekAndKW(dayOfWeek: string, kw: number): Date {
     // Mapping der Wochentage auf entsprechende Zahlen
     const dayIndexMap: { [key: string]: number } = {
-      'Montag': 1,
-      'Dienstag': 2,
-      'Mittwoch': 3,
-      'Donnerstag': 4,
-      'Freitag': 5,
-      'Samstag': 6,
+        'Montag': 1,
+        'Dienstag': 2,
+        'Mittwoch': 3,
+        'Donnerstag': 4,
+        'Freitag': 5,
+        'Samstag': 6,
     };
 
     // Berechnung des Datums basierend auf der Kalenderwoche und dem Wochentag
@@ -170,8 +170,12 @@ export class MealplanOrderComponent implements OnInit {
     const resultDate = new Date(monday);
     resultDate.setDate(monday.getDate() + dayDifference);
 
+    // Setze die Stundenkomponente auf 12 Uhr mittags
+    resultDate.setHours(12, 0, 0, 0);
+
     return resultDate;
-  }
+}
+
 
   getDishes(category: string, day: string) {
     if (this.mealplan == undefined) return [];
