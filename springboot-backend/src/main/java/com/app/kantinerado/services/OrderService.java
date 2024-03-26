@@ -58,6 +58,8 @@ public class OrderService {
         // Das Bestelldatum muss mindestens in der nächsten Kalenderwoche liegen
         Calendar nextWeek = Calendar.getInstance();
         nextWeek.setTime(currentDate);
+        nextWeek.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        nextWeek.add(Calendar.DAY_OF_WEEK, -1);
         nextWeek.add(Calendar.WEEK_OF_YEAR, 1); // eine Woche hinzufügen
 
         Calendar nextThursday = Calendar.getInstance();

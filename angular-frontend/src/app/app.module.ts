@@ -14,6 +14,8 @@ import { RegisterComponent } from './register/register.component';
 import { JwtInterceptor } from './helper/jwt.interceptor';
 import { DetailViewComponent } from './detail-view/detail-view.component';
 import { ViewOrderComponent } from './view-order/view-order.component';
+import { MealplanAdministrationComponent } from './mealplan-administration/mealplan-administration.component';
+import { ViewOrderAdministrationComponent } from './view-order-administration/view-order-administration.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,9 @@ import { ViewOrderComponent } from './view-order/view-order.component';
     LoginComponent,
     RegisterComponent,
     DetailViewComponent,
-    ViewOrderComponent
+    ViewOrderComponent,
+    MealplanAdministrationComponent,
+    ViewOrderAdministrationComponent
   ],
   imports: [
     BrowserModule,
