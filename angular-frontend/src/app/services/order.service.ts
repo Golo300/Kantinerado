@@ -67,7 +67,7 @@ export class OrderService {
   }
 
   getEveryOrderByKw(kw: number): Observable<Order[]> {
-    return this.http.get<FullOrder[]>(`${this.apiUrl}/order/pdf/${kw}`);
+    return this.http.get<FullOrder[]>(`${this.apiUrl}/order/admin/${kw}`);
   }
 
   generateAdminPdf(orders: Order[]) {

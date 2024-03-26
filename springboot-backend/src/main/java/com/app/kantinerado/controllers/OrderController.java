@@ -98,7 +98,7 @@ public class OrderController {
             return new ResponseEntity<>("Some orders failed to place", HttpStatus.BAD_REQUEST);
         }
     }
-    @GetMapping("/pdf/{kw}")
+    @GetMapping("/admin/{kw}")
     public ResponseEntity<List<Order>> getPdfContentByKw(@PathVariable("kw") Integer kw, @RequestParam(required = false) Integer optionalParameter) {
         List<Order> orders = orderService.getEveryOrderByKw(kw);
         return new ResponseEntity<>(orders, HttpStatus.OK);
