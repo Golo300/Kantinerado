@@ -91,41 +91,45 @@ export class OrderService {
 
   private prepareAdminDataForPdf(orders: Order[], color: string): any[] {
     let preparedData: any[] = [];
-    let dishCounts: { [key: string]: { count: number; veggie: boolean; price: number } } = {}; // Typenzuweisung für dishCounts
+    let dishCounts: { [key: string]: { count: number; veggie: boolean; price: number } } = {};
 
     // Zähle die Anzahl der Bestellungen für jedes Gericht
     orders.forEach(order => {
       const dishName = order.dish.title;
-      const key = order.date.toString().slice(0, 10) + dishName + order.veggie;
+      const key = order.date.toString().slice(0, 10) + dishName; // Eindeutiger Schlüssel mit Datum für jedes Gericht
       if (!dishCounts[key]) {
         dishCounts[key] = { count: 0, veggie: order.veggie, price: order.dish.price };
       }
       dishCounts[key].count++;
     });
 
-    // Erstelle die Daten für das PDF
-    orders.forEach(order => {
-      const dishName = order.dish.title;
-      const key = order.date.toString().slice(0, 10) + dishName + order.veggie;
-      const dishCount = dishCounts[key].count;
-      const veggie = dishCounts[key].veggie ? 'Yes' : 'No';
-      const price = dishCounts[key].price;
-      const totalPrice = price * dishCount;
+    // Durchlaufe die gezählten Gerichte und füge sie nur einmal in die vorbereiteten Daten ein
+    for (const key in dishCounts) {
+      if (dishCounts.hasOwnProperty(key)) {
+        const dishName = key.substring(10); // Entferne das Datum aus dem Schlüssel
+        const dishCount = dishCounts[key].count;
+        const veggie = dishCounts[key].veggie ? 'Yes' : 'No';
+        const price = dishCounts[key].price;
+        const totalPrice = price * dishCount;
+        const date = key.substring(0, 10); // Extrahiere das Datum aus dem Schlüssel
 
-      // Füge die Daten für jede Bestellung hinzu
-      preparedData.push([
-        order.date.toString().slice(0, 10),
-        `${dishName} (${dishCount}x)`,
-        veggie,
-        price,
-        totalPrice
-      ]);
-    });
+        // Füge das Gericht nur einmal in die Liste ein
+        preparedData.push([
+          date, // Datum
+          dishName,
+          `${dishName} (${dishCount}x)`,
+          veggie,
+          price,
+          totalPrice
+        ]);
+      }
+    }
+
+    // Sortiere die vorbereiteten Daten nach dem Datum (erstes Element in jedem Array)
+    preparedData.sort((a, b) => new Date(a[0]).getTime() - new Date(b[0]).getTime());
 
     return preparedData;
   }
-
-
 
 
   generateUserPdf(newOrders:Order[], deletedOrders: Order[]) {
