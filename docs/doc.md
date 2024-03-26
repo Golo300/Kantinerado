@@ -6,7 +6,25 @@ Dieses Projekt ist ein Semesterprojekt, welches das Hauptziel hat, die in der Vo
 
 Hierzu soll eine Applikation erstellt und dokumentiert werden, mit der Mitarbeiter einer fiktiven Firma Essen in der Kantine Einsehen und bestellen können mit einfacher Benutzerverwaltung.
 
-## Stackholder
+Diese Dokumentation umfasst die gesamte bisherige Entwicklung bis einschließlich Sprint 4. Dieses Dokument hält sich stark an die arc42 Vorgaben.
+
+## Table of Contents
+
+1. [Stakeholder](#Stakeholder)
+2. [Funktional requirements](#Funktional-requirements)
+3. [Non Funktional Requirements](#NonFunktional-Requirements)
+4. [Solution Strategy](#Solution-Strategy)
+5. [Block View](#Block-View)
+6. [Dynamic View](#Dynamic-View)
+7. [Deployment](#Deployment)
+8. [Crosscutting Concepts](#Crosscutting-Concepts)
+9. [Architectural Decisions](#Architectural-Decisions)
+10. [Quality Requirements](#Quality-Requirements)
+11. [Risks and Technical Debt](#Risks-and-Technical-Debt)
+
+
+
+## Stakeholder
 
 Um Requirements für ein Projekt zu definiern sollte als erstes eine Stakeholder Analyse durchgefürht werden. Da das *Kantinerado* Projekt nur firmenintern genutzt werden soll, sind folglich auch alle Stakeholder firmenintern. Die nachfolgende Grafik zeigt eine Analyse aller beteiligten Stakeholder. Die Größe gibt dabei jeweils das Interesse der einzelnen Parteien am Gelingen des Projektes an.
 \
@@ -83,7 +101,7 @@ Zu beginn muss auf den voher definierten Anforderungen ein Tech-Stack erarbeitet
 - Backend
 - Datenbank
 
-Als ein eher experimenteller Ansatz wurde zuerst eine erste Meinung zu den Technologien über eine KI eingeholt. Dadurch wird versucht, sich eine Durchschnittsmeinung zu erarbeiten. Die Angaben der KI wurden natürlich noch mit weiteren unabhängigen Quellen validiert. Der Ansatz stellte sich damit als erfolgreich heraus.
+Als ein eher experimenteller Ansatz wurde zuerst eine erste Meinung zu den Technologien über eine KI eingeholt. Dadurch wird versucht, sich eine Durchschnittsmeinung zu erarbeiten und den jeweiligen Verbreitungsgrad der einzelnen Technologien. Die Angaben der KI wurden natürlich noch mit weiteren unabhängigen Quellen validiert. Der Ansatz stellte sich aber als erfolgreich heraus.
 
 #### Frontend
 
@@ -177,6 +195,11 @@ Für das Backend werden drei Verarbeitungslevel definiert, welche beim Entwickle
 
 Diese Schichten sind durch Ordner getrennt, in denen die jeweiligen Java-Klassen liegen. Die Absicherung der einzelnen Routen findet mithilfe einer von Spring-Boot bereits vorgegebenen Security-cain statt. Diese unterstützt auch das beschriebene Rollensystem.
 
+<p align="center">
+  <img src="resources/BackendView.png" alt="Block View"/>
+</p>
+
+
 ## Dynamic View
 
 Diese Abildung zeigt die einzelnen Komponenten wie sie zur Laufzeit Interagieren. Die Grafik umfasst dabei nicht jede einzelne Komponente sondern nur die Bestellkomonente mit Servicen. Dies ist aber eqvivalent für alle andern Komonenten und Servicen zu betracheten.
@@ -233,7 +256,9 @@ Die im Backend vorhanden Unit-Tests sowie ein Smoke-Test werden bei jedem Durchl
 
 ## Architectural Decisions
 
-TODO
+Der groben Architektur der einzelnen Komponenten wird teilweise stark durch die einzelnen Technologien vorgegeben. So ist die Schichtenarchitektur im Backend von Springboot mit vorgegebenen Annotationen bestens unterstützt. Trotzdem eignet sich dies Architecture für dieses Projekt bestens, da viele Daten (Datum, etc.) im Backend aufwendiger validiert werden müssen. Dies kann mit der gewählten Architektur isoliert im Service Schicht  stattfinden. Auch wurden DTO Klassen eingeführt, welche genutzt werden, um den Datentyp der API Schnittstelle zu definieren. DTO Objekte bieten damit im Backend das Protokoll zwischen Controller und Service.
+
+In Angular ist durch die Services und Komponenten eine grobe Struktur für den Aufbau vorgegeben. Hier wurde die Entscheidung getroffen, das API-Calls nur innerhalb von Services getätigt werden sollen. Dies vereinfacht das Debuggen und sorgt für eine bessere Codequalität. Interfaces werden genutzt, um zwischen den einzelnen Komponenten/Services zu kommunizieren.
 
 ## Quality Requirements
 
