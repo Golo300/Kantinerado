@@ -23,15 +23,15 @@
         <nav aria-label="Page navigation example">
           <ul class="pagination m-0">
             <li class="page-item">
-              <a class="page-link" (click)="lastWeek()" id="last-week">
+              <a class="page-link" (click)="lastWeek()" [class.disabled]="!isLastKWSwitchPossible()" id="last-week">
                 <span aria-hidden="true">&laquo;</span>
               </a>
             </li>
             <li class="page-item mx-2 d-flex align-items-center">
-              <h4 class="m-0">KW {{ kw }}</h4>
+              <h4 class="m-0">KW {{ selectedKW }}</h4>
             </li>
             <li class="page-item">
-              <a class="page-link" (click)="nextWeek()" id="next-week">
+              <a class="page-link" (click)="nextWeek()" [class.disabled]="!isNextKWSwitchPossible()" id="next-week">
                 <span aria-hidden="true">&raquo;</span>
               </a>
             </li>
@@ -68,9 +68,11 @@
                 <th class="align-middle">Menü 1</th>
                 <td *ngFor="let day of weekDays" class="setMargin align-middle">
                   <span *ngFor="let dish of getDishes('Menü1', day)">
-
                     <div>
                       {{ dish.title }}
+                    </div>
+                    <div>
+                      {{ dish.price }}
                     </div>
                   </span>
                 </td>
@@ -82,6 +84,9 @@
                     <div>
                       {{ dish.title }}
                     </div>
+                    <div>
+                      {{ dish.price }}
+                    </div>
                   </span>
                 </td>
               </tr>
@@ -92,6 +97,9 @@
                     <div>
                       {{ dish.title }}
                     </div>
+                    <div>
+                      {{ dish.price }}
+                    </div>
                   </span>
                 </td>
               </tr>
@@ -101,6 +109,9 @@
                   <span *ngFor="let dish of getDishes('Soup', day)">
                     <div>
                       {{ dish.title }}
+                    </div>
+                    <div>
+                      {{ dish.price }}
                     </div>
                   </span>
                 </td>

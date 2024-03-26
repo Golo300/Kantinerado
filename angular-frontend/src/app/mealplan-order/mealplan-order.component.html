@@ -22,15 +22,15 @@
         <nav aria-label="Page navigation example">
           <ul class="pagination m-0">
             <li class="page-item">
-              <a class="page-link" (click)="lastWeek()" id="last-week">
+              <a class="page-link" (click)="lastWeek()" [class.disabled]="!isLastKWSwitchPossible()" id="last-week">
                 <span aria-hidden="true">&laquo;</span>
               </a>
             </li>
             <li class="page-item mx-2 d-flex align-items-center">
-              <h4 class="m-0">KW {{ kw }}</h4>
+              <h4 class="m-0">KW {{ selectedKW }}</h4>
             </li>
             <li class="page-item">
-              <a class="page-link" (click)="nextWeek()" id="next-week">
+              <a class="page-link" (click)="nextWeek()" [class.disabled]="!isNextKWSwitchPossible()" id="next-week">
                 <span aria-hidden="true">&raquo;</span>
               </a>
             </li>
@@ -136,12 +136,12 @@
                 <thead>
                   <tr>
                     <th class="align-middle"></th>
-                    <th class="align-middle"><a class="text-decoration-none" href="/detailview/{{kw}}/1">Montag</a></th>
-                    <th class="align-middle"><a class="text-decoration-none" href="/detailview/{{kw}}/2">Dienstag</a></th>
-                    <th class="align-middle"><a class="text-decoration-none" href="/detailview/{{kw}}/3">Mittwoch</a></th>
-                    <th class="align-middle"><a class="text-decoration-none" href="/detailview/{{kw}}/4">Donnerstag</a></th>
-                    <th class="align-middle"><a class="text-decoration-none" href="/detailview/{{kw}}/5">Freitag</a></th>
-                    <th class="align-middle"><a class="text-decoration-none" href="/detailview/{{kw}}/6">Samstag</a></th>
+                    <th class="align-middle"><a class="text-decoration-none" href="/detailview/{{selectedKW}}/1">Montag</a></th>
+                    <th class="align-middle"><a class="text-decoration-none" href="/detailview/{{selectedKW}}/2">Dienstag</a></th>
+                    <th class="align-middle"><a class="text-decoration-none" href="/detailview/{{selectedKW}}/3">Mittwoch</a></th>
+                    <th class="align-middle"><a class="text-decoration-none" href="/detailview/{{selectedKW}}/4">Donnerstag</a></th>
+                    <th class="align-middle"><a class="text-decoration-none" href="/detailview/{{selectedKW}}/5">Freitag</a></th>
+                    <th class="align-middle"><a class="text-decoration-none" href="/detailview/{{selectedKW}}/6">Samstag</a></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -152,8 +152,11 @@
                         <div [ngClass]="setSelectionType(dish, day)">
                           {{ dish.title }}
                         </div>
+                        <div [ngClass]="setSelectionType(dish, day)">
+                          {{ dish.price }}
+                        </div>
                         <div>
-                          <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="checkBoxMenu1" [checked]="checkIfOrdered(dish, day)" [disabled]="!isKWValid(kw)" (change)="checkboxChanged($event, dish, day)"/>
+                          <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="checkBoxMenu1" [checked]="checkIfOrdered(dish, day)" [disabled]="!isKWValid(selectedKW)" (change)="checkboxChanged($event, dish, day)"/>
                         </div>                   
                       </span>
                     </td>
@@ -165,8 +168,11 @@
                         <div [ngClass]="setSelectionType(dish, day)">
                           {{ dish.title }}
                         </div>
+                        <div [ngClass]="setSelectionType(dish, day)">
+                          {{ dish.price }}
+                        </div>
                         <div>
-                          <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="checkBoxMenu2" [checked]="checkIfOrdered(dish, day)" [disabled]="!isKWValid(kw)" (change)="checkboxChanged($event, dish, day)"/>
+                          <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="checkBoxMenu2" [checked]="checkIfOrdered(dish, day)" [disabled]="!isKWValid(selectedKW)" (change)="checkboxChanged($event, dish, day)"/>
                         </div>
                         <!-- <div class="form-check form-switch d-flex justify-content-center align-items-center">
                           <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckMenu2Veggie">
@@ -182,8 +188,11 @@
                         <div [ngClass]="setSelectionType(dish, day)">
                           {{ dish.title }}
                         </div>
+                        <div [ngClass]="setSelectionType(dish, day)">
+                          {{ dish.price }}
+                        </div>
                         <div>
-                          <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="checkBoxDessert" [checked]="checkIfOrdered(dish, day)" [disabled]="!isKWValid(kw)" (change)="checkboxChanged($event, dish, day)"/>
+                          <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="checkBoxDessert" [checked]="checkIfOrdered(dish, day)" [disabled]="!isKWValid(selectedKW)" (change)="checkboxChanged($event, dish, day)"/>
                         </div>
                       </span>
                     </td>
@@ -195,8 +204,11 @@
                         <div [ngClass]="setSelectionType(dish, day)">
                           {{ dish.title }}
                         </div>
+                        <div [ngClass]="setSelectionType(dish, day)">
+                          {{ dish.price }}
+                        </div>
                         <div>
-                          <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="checkBoxSoup" [checked]="checkIfOrdered(dish, day)" [disabled]="!isKWValid(kw)" (change)="checkboxChanged($event, dish, day)"/>
+                          <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="checkBoxSoup" [checked]="checkIfOrdered(dish, day)" [disabled]="!isKWValid(selectedKW)" (change)="checkboxChanged($event, dish, day)"/>
                         </div>
                       </span>
                     </td>
@@ -205,7 +217,7 @@
               </table>
             </div>
             <div class="d-flex justify-content-end divWidth">
-              <button type="button" (click)="addToCart()" class="btn btn-outline-success" id="btnAddToCartLunch" >
+              <button type="button" (click)="addToCart()" class="btn btn-outline-success" id="btnAddToCartLunch">
                 Zum Warenkorb hinzufügen
               </button>
             </div>
@@ -222,7 +234,7 @@
       <div class="card-header">Täglicher Gesamtpreis</div>
       <div class="card-body">
         <div class="table divWidth">
-          <table class="table table-bordered rounded" id="tableMealPlanBreakfast">
+          <table class="table table-bordered rounded" id="tablePrices">
             <thead>
               <tr>
                 <th class="align-middle"></th>

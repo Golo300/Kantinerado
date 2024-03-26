@@ -48,6 +48,10 @@ export interface Dish {
   price: number;
 }
 
+export interface sendDish {
+  id: number;
+}
+
 /**
 * Data structure for dish category.
 */

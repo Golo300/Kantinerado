@@ -8,6 +8,8 @@ import { AuthGuardService } from './services/auth.guard.service';
 import { RegisterComponent } from './register/register.component';
 import { DetailViewComponent } from './detail-view/detail-view.component';
 import { ViewOrderComponent } from './view-order/view-order.component';
+import { MealplanAdministrationComponent } from './mealplan-administration/mealplan-administration.component';
+import { ViewOrderAdministrationComponent } from './view-order-administration/view-order-administration.component';
 
 const routes: Routes = [
   { path: '', component: MealplanComponent },
@@ -18,6 +20,8 @@ const routes: Routes = [
   { path: 'checkout', component: CheckoutComponent, canActivate: [AuthGuardService], data: { allowedRoles: ['ADMIN', 'USER', 'KANTEEN'] }},
   { path: 'mealplan', component: MealplanComponent },
   { path: 'view', component: ViewOrderComponent, canActivate: [AuthGuardService], data: { allowedRoles: ['ADMIN', 'USER', 'KANTEEN'] } },
+  { path: 'dashboard/mealplan', component: MealplanAdministrationComponent, canActivate: [AuthGuardService], data: { allowedRoles: ['ADMIN', 'KANTEEN'] } },
+  { path: 'dashboard/orders', component: ViewOrderAdministrationComponent, canActivate: [AuthGuardService], data: { allowedRoles: ['ADMIN', 'KANTEEN'] } },
   { path: 'detailview/:kw/:day', component: DetailViewComponent },
   { path: '**', component: LoginComponent },
   // Weitere Routen können hier hinzugefügt werden
