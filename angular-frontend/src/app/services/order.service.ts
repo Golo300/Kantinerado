@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, map, Observable } from 'rxjs';
-import { FullOrder, Order, sendOrder } from "../Interfaces";
+import { FullOrder, Order, SendOrder } from "../Interfaces";
 
 @Injectable({
   providedIn: 'root'
@@ -16,10 +16,10 @@ export class OrderService {
 
   createOrder(orders: Order[]): Observable<any> {
 
-    var sendOrders: sendOrder[] = []
+    var sendOrders: SendOrder[] = []
 
     for (var order of orders) {
-      const sendOrder: sendOrder =
+      const sendOrder: SendOrder =
       {
         date: order.date,
         dish_id: order.dish.id,
