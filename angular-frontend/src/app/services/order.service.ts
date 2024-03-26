@@ -1,7 +1,9 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { catchError, map, Observable } from 'rxjs';
-import { FullOrder, Order, SendOrder } from "../Interfaces";
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {map, Observable} from 'rxjs';
+import {FullOrder, Order, SendOrder} from "../Interfaces";
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable'
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +21,7 @@ export class OrderService {
     var sendOrders: SendOrder[] = []
 
     for (var order of orders) {
+      
       const sendOrder: SendOrder =
       {
         date: order.date,
@@ -45,13 +48,13 @@ export class OrderService {
   getCart(): { newSelectedDishes: Order[], deletedDishes: FullOrder[] } {
     const shoppingCartJson = localStorage.getItem('shopping_cart');
     if (shoppingCartJson == null) {
-      return { newSelectedDishes: [], deletedDishes: [] };
+      return {newSelectedDishes: [], deletedDishes: []};
     }
     return JSON.parse(shoppingCartJson);
   }
 
   deleteOrders(deleteOrders: FullOrder[]) {
-    
+
     var deleted: number[] = []
 
     for (var order of deleteOrders) {
@@ -62,5 +65,119 @@ export class OrderService {
       map(response => {
         return response;
       }));
+  }
+
+  getEveryOrderByKw(kw: number): Observable<Order[]> {
+    return this.http.get<FullOrder[]>(`${this.apiUrl}/order/admin/${kw}`);
+  }
+
+  generateAdminPdf(orders: Order[]) {
+    const doc = new jsPDF();
+    let yPos = 10;
+
+    doc.text('Order Overview of all Users', 10, yPos);
+    yPos += 10;
+
+    const headers = [['Date','Dish', 'Veggie', 'Price']];
+    const data = this.prepareAdminDataForPdf(orders,'black');
+
+    autoTable(doc, {
+      head: headers,
+      body: data,
+      startY: yPos
+    });
+
+    doc.save('order_overview.pdf');
+  }
+
+  private prepareAdminDataForPdf(orders: Order[], color: string): any[] {
+    let preparedData: any[] = [];
+    let dishCounts: { [key: string]: { count: number; veggie: boolean; price: number } } = {};
+
+    // Zähle die Anzahl der Bestellungen für jedes Gericht
+    orders.forEach(order => {
+      const dishName = order.dish.title;
+      const key = order.date.toString().slice(0, 10) + dishName; // Eindeutiger Schlüssel mit Datum für jedes Gericht
+      if (!dishCounts[key]) {
+        dishCounts[key] = { count: 0, veggie: order.veggie, price: order.dish.price };
+      }
+      dishCounts[key].count++;
+    });
+
+    // Durchlaufe die gezählten Gerichte und füge sie nur einmal in die vorbereiteten Daten ein
+    for (const key in dishCounts) {
+      if (dishCounts.hasOwnProperty(key)) {
+        const dishName = key.substring(10); // Entferne das Datum aus dem Schlüssel
+        const dishCount = dishCounts[key].count;
+        const veggie = dishCounts[key].veggie ? 'Yes' : 'No';
+        const price = dishCounts[key].price;
+        const totalPrice = price * dishCount;
+        const date = key.substring(0, 10); // Extrahiere das Datum aus dem Schlüssel
+
+        // Füge das Gericht nur einmal in die Liste ein
+        preparedData.push([
+          date, // Datum
+          dishName,
+          `${dishName} (${dishCount}x)`,
+          veggie,
+          price,
+          totalPrice
+        ]);
+      }
+    }
+
+    // Sortiere die vorbereiteten Daten nach dem Datum (erstes Element in jedem Array)
+    preparedData.sort((a, b) => new Date(a[0]).getTime() - new Date(b[0]).getTime());
+
+    return preparedData;
+  }
+
+
+  generateUserPdf(newOrders:Order[], deletedOrders: Order[]) {
+    const doc = new jsPDF();
+    let yPos = 10;
+
+    doc.text('Your Order Overview', 10, yPos);
+    yPos += 10;
+
+    const headers = [['Date', 'Dish', 'Veggie', 'Price']];
+    const newData = this.prepareUserDataForPdf(newOrders, 'green');
+    const deletedData = this.prepareUserDataForPdf(deletedOrders, 'red');
+
+    const data = [...newData, ...deletedData];
+
+    const totalPrice = (this.calculateTotalPrice(newOrders) - this.calculateTotalPrice(deletedOrders)).toFixed(2); // Gesamtpreis berechnen und auf zwei Nachkommastellen runden
+
+    const totalPriceFormatted = parseFloat(totalPrice) >= 0 ? totalPrice.toString() : '-' + Math.abs(parseFloat(totalPrice)).toString(); // Preis formatieren
+
+
+    autoTable(doc, {
+      head: headers,
+      body: data,
+      startY: yPos
+    });
+
+    // Hinzufügen der Gesamtsumme
+    yPos += (data.length + 1) * 10; // Anpassung der Y-Position
+    doc.text(`Total Price: ${totalPriceFormatted}`, 10, yPos);
+
+    doc.save('order_overview.pdf');
+  }
+
+  private calculateTotalPrice(orders: Order[]): number {
+    let totalPrice = 0;
+    orders.forEach(order => {
+      totalPrice += order.dish.price;
+    });
+    return totalPrice;
+  }
+
+  private prepareUserDataForPdf(orders: Order[], color: string): any[] {
+    return orders.map(order => [
+      {content: order.date.toString().slice(0, 10)},
+      {content: order.dish.title},
+      {content: order.veggie ? 'Yes' : 'No'},
+      { content: color === 'red' ? '-' + order.dish.price : order.dish.price.toString(), styles: { textColor: color } }
+    ]);
   }
 }

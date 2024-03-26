@@ -2,7 +2,6 @@ package com.app.kantinerado.services;
 
 import com.app.kantinerado.models.ApplicationUser;
 import com.app.kantinerado.models.OrderDTO;
-import com.app.kantinerado.models.mealplan.Day;
 import com.app.kantinerado.models.mealplan.Dish;
 import com.app.kantinerado.models.mealplan.Order;
 import com.app.kantinerado.repository.DayRepository;
@@ -33,7 +32,7 @@ public class OrderService {
 
     public List<Order> findOrderBy(int kw, ApplicationUser user)
     {
-        return orderRepository.findByWeekNumber(kw, user.getUserId());
+        return orderRepository.findByWeekNumberAndUser(kw, user.getUserId());
     }
 
     public List<Order> getAllOders(ApplicationUser user)
@@ -135,5 +134,9 @@ public class OrderService {
         } else {
             return  false;
         }
+    }
+
+    public List<Order> getEveryOrderByKw(int kw) {
+        return orderRepository.findOrderByWeekNumber(kw);
     }
 }

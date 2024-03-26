@@ -2,9 +2,7 @@ package com.app.kantinerado.controllers;
 
 import com.app.kantinerado.models.ApplicationUser;
 import com.app.kantinerado.models.OrderDTO;
-import com.app.kantinerado.models.mealplan.Mealplan;
 import com.app.kantinerado.models.mealplan.Order;
-import com.app.kantinerado.repository.OrderRepository;
 import com.app.kantinerado.services.OrderService;
 import com.app.kantinerado.services.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +26,7 @@ public class OrderController {
     private TokenService tokenService;
 
     @GetMapping("/{kw}")
-    public ResponseEntity<List<Order>> getOrderByKw(@PathVariable("kw") Integer kw, @RequestParam(required = false) Integer optionalParameter)
-    {
+    public ResponseEntity<List<Order>> getOrderByKw(@PathVariable("kw") Integer kw, @RequestParam(required = false) Integer optionalParameter) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         ApplicationUser user = tokenService.getUserFromAuthentication(authentication);
 
@@ -38,8 +35,7 @@ public class OrderController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<Order>> getAllOrders()
-    {
+    public ResponseEntity<List<Order>> getAllOrders() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         ApplicationUser user = tokenService.getUserFromAuthentication(authentication);
 
@@ -56,8 +52,7 @@ public class OrderController {
 
         boolean response = orderService.placeOrder(order, user);
 
-        if(response)
-        {
+        if (response) {
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -102,5 +97,10 @@ public class OrderController {
         } else {
             return new ResponseEntity<>("Some orders failed to place", HttpStatus.BAD_REQUEST);
         }
+    }
+    @GetMapping("/admin/{kw}")
+    public ResponseEntity<List<Order>> getPdfContentByKw(@PathVariable("kw") Integer kw, @RequestParam(required = false) Integer optionalParameter) {
+        List<Order> orders = orderService.getEveryOrderByKw(kw);
+        return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 }

@@ -6,8 +6,10 @@ import { de } from 'date-fns/locale';
 import { Order } from "../Interfaces";
 import { OrderService } from '../services/order.service';
 import { HttpErrorResponse } from "@angular/common/http";
-import { catchError, firstValueFrom, of, tap } from 'rxjs';
+import {catchError, firstValueFrom, Observable, of, tap} from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
+import {saveAs} from "file-saver";
+import jsPDF from 'jspdf';
 
 @Component({
   selector: 'app-mealplan-order',
@@ -39,13 +41,14 @@ export class MealplanOrderComponent implements OnInit {
   // Alle bereits bestellten Dishes aus dem Backend
   orderedDishes: FullOrder[] = [];
 
-  // Alle NEU im Frontend ausgewählten Dishes 
+  // Alle NEU im Frontend ausgewählten Dishes
   newSelectedDishes: Order[] = [];
 
-  // Alle im Backend bestellten oder im Frontend wieder abgewählten Dishes 
+  // Alle im Backend bestellten oder im Frontend wieder abgewählten Dishes
   deletedDishes: FullOrder[] = [];
 
-  constructor(private mealService: MealserviceService, private orderService: OrderService, private router: Router) { }
+  constructor(private mealService: MealserviceService, private orderService: OrderService, private router: Router) {
+  }
 
   ngOnInit(): void {
     const kw = this.route.snapshot.paramMap.get('kw');
@@ -143,7 +146,7 @@ export class MealplanOrderComponent implements OnInit {
   }
 
   getWeekDayByDate(date: Date): string {
-    return format(date, 'EEEE', { locale: de });
+    return format(date, 'EEEE', {locale: de});
   }
 
   getDateFromDayOfWeekAndKW(dayOfWeek: string, kw: number): Date {
@@ -160,7 +163,7 @@ export class MealplanOrderComponent implements OnInit {
     // Berechnung des Datums basierend auf der Kalenderwoche und dem Wochentag
     const currentDate = new Date();
     const currentYear = currentDate.getFullYear();
-    const monday = setWeek(new Date(currentYear, 0, 1), kw, { weekStartsOn: 1 }); // Erster Tag der Kalenderwoche
+    const monday = setWeek(new Date(currentYear, 0, 1), kw, {weekStartsOn: 1}); // Erster Tag der Kalenderwoche
     const mondayDayOfWeek = monday.getDay(); // Wochentag des ersten Tages der Kalenderwoche
 
     // Differenz zwischen dem Montag der Kalenderwoche und dem gewünschten Wochentag
@@ -200,7 +203,9 @@ export class MealplanOrderComponent implements OnInit {
     console.log(dish.title);
 
     let kw = -1;
-    if (this.mealplan) { kw = this.mealplan.calendarWeek; }
+    if (this.mealplan) {
+      kw = this.mealplan.calendarWeek;
+    }
 
     if (this.isKWValid(kw)) {
       if (event.target.checked) {
@@ -226,9 +231,7 @@ export class MealplanOrderComponent implements OnInit {
             return !(dish.id === element.dish.id && orderedDay === dayOfWeek);
           });
         }
-      }
-
-      else {
+      } else {
         // Entfernen aus selectedDishes
         this.selectedDishes = this.selectedDishes.filter(order => {
           return order.dish.id !== dish.id || this.getWeekDayByDate(order.date) !== dayOfWeek;
@@ -279,8 +282,7 @@ export class MealplanOrderComponent implements OnInit {
       if (selected_kw >= nextKW) {
         valid = isBefore(currentDate, thursday);
       }
-    }
-    else if (nextYear === currentYear + 1) {
+    } else if (nextYear === currentYear + 1) {
       if (selected_kw - 52 >= nextKW) {
         valid = isBefore(currentDate, thursday);
       }
@@ -337,8 +339,10 @@ export class MealplanOrderComponent implements OnInit {
             veggie: order.veggie
           }));
 
+
         this.selectedDishes = this.selectedDishes.filter(order => { console.log(this.getWeekNumber(order.date), this.selectedKW); return this.getWeekNumber(order.date) === this.selectedKW; });
         this.orderedDishes = this.orderedDishes.filter(order => { console.log(this.getWeekNumber(order.date), this.selectedKW); return this.getWeekNumber(order.date) === this.selectedKW; });
+
         this.orderReady = true;
         console.log("Ordered Dishes:", this.orderedDishes); // Debugging-Information
       });
@@ -355,7 +359,8 @@ export class MealplanOrderComponent implements OnInit {
 
   checkIfOrdered(dish: Dish, day: string): boolean {
 
-    while (!this.orderReady) { }
+    while (!this.orderReady) {
+    }
 
     let isOrdered: boolean = false;
 
@@ -370,7 +375,8 @@ export class MealplanOrderComponent implements OnInit {
 
   checkIfNewSelected(dish: Dish): boolean {
 
-    while (!this.orderReady) { }
+    while (!this.orderReady) {
+    }
 
     let isNewSelected: boolean = false;
 
@@ -384,7 +390,8 @@ export class MealplanOrderComponent implements OnInit {
 
   checkIfDeleted(dish: Dish, day: string): boolean {
 
-    while (!this.orderReady) { }
+    while (!this.orderReady) {
+    }
 
     let isDeleted: boolean = false;
 
@@ -399,7 +406,8 @@ export class MealplanOrderComponent implements OnInit {
 
   checkIfSelected(dish: Dish): boolean {
 
-    while (!this.orderReady) { }
+    while (!this.orderReady) {
+    }
 
     let isSelected: boolean = false;
 
@@ -441,17 +449,14 @@ export class MealplanOrderComponent implements OnInit {
   setSelectionType(dish: Dish, day: string): string {
     if (this.checkIfNewSelected(dish)) {
       return 'blue-text';
-    }
-    else if (this.checkIfDeleted(dish, day)) {
+    } else if (this.checkIfDeleted(dish, day)) {
       return 'red-text';
-    }
-    else if (this.checkIfOrdered(dish, day)) {
+    } else if (this.checkIfOrdered(dish, day)) {
       return 'green-text';
-    }
-    else {
+    } else {
       return 'black-text';
     }
   }
+
+
 }
-
-

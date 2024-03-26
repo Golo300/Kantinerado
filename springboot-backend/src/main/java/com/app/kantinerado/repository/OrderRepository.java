@@ -14,7 +14,7 @@ import java.util.List;
 public interface OrderRepository extends JpaRepository<Order, Integer> {
 
     @Query("SELECT o FROM Order o WHERE YEAR(o.date) = YEAR(CURRENT_DATE()) AND WEEK(o.date) = :weekNumber AND o.user.userId = :userId")
-    List<Order> findByWeekNumber(int weekNumber, Integer userId);
+    List<Order> findByWeekNumberAndUser(int weekNumber, Integer userId);
 
     @Modifying
     @Transactional
@@ -22,4 +22,7 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     List<Boolean> deleteById(int orderId);
 
     List<Order> findByUser(ApplicationUser user);
+
+    @Query("SELECT o FROM Order o WHERE YEAR(o.date) = YEAR(CURRENT_DATE()) AND WEEK(o.date) = :weekNumber")
+    List<Order> findOrderByWeekNumber(int weekNumber);
 }
