@@ -21,6 +21,7 @@ const routes: Routes = [
   { path: 'mealplan', component: MealplanComponent },
   { path: 'view', component: ViewOrderComponent, canActivate: [AuthGuardService], data: { allowedRoles: ['ADMIN', 'USER', 'KANTEEN'] } },
   { path: 'dashboard/mealplan', component: MealplanAdministrationComponent, canActivate: [AuthGuardService], data: { allowedRoles: ['ADMIN', 'KANTEEN'] } },
+  { path: 'dashboard/mealplan/:kw', component: MealplanAdministrationComponent, canActivate: [AuthGuardService], data: { allowedRoles: ['ADMIN', 'KANTEEN'] } },
   { path: 'dashboard/orders', component: ViewOrderAdministrationComponent, canActivate: [AuthGuardService], data: { allowedRoles: ['ADMIN', 'KANTEEN'] } },
   { path: 'detailview/:kw/:day', component: DetailViewComponent },
   { path: '**', component: LoginComponent },

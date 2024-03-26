@@ -56,7 +56,7 @@ public class MealplanController {
         boolean createdDish = mealplanService.addDishToDay(dishId, kw, day, user);
 
         if (createdDish) {
-            return new ResponseEntity<>("createdDish", HttpStatus.OK);
+            return new ResponseEntity<>("", HttpStatus.OK);
         } else {
             return new ResponseEntity<>("", HttpStatus.BAD_REQUEST);
         }

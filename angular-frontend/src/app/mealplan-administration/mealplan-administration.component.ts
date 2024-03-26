@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { MealserviceService } from '../services/mealplan.service';
 import { DishService } from '../services/dish.service';
 import { Day, Dish, Mealplan, DishCategory, sendDish } from '../Interfaces';
@@ -6,6 +6,7 @@ import { addDays, format, getISOWeek, lastDayOfWeek, setWeek, subDays } from 'da
 import { de } from 'date-fns/locale';
 import { Title } from '@angular/platform-browser';
 import { OrderService } from '../services/order.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-mealplan-administration',
@@ -40,10 +41,20 @@ export class MealplanAdministrationComponent implements OnInit {
   newDishDescription!: string;
   newDishPrice!: number;
 
-  constructor(private mealService: MealserviceService, private dishService: DishService) { }
+  private route = inject(ActivatedRoute);
+
+  constructor(private mealService: MealserviceService, private dishService: DishService, private router: Router) { }
 
   ngOnInit(): void {
-    this.setCurrentKW();
+
+    const kw = this.route.snapshot.paramMap.get('kw');
+
+    if (kw) {
+      this.selectedKW = +kw;
+    } else {
+      this.setCurrentKW();
+    }
+   
     this.limitNextKW = 0;
     this.getMealplan();
     this.calculateWeekRange(this.getDateFromMondayOfKW(this.selectedKW));
@@ -178,7 +189,9 @@ export class MealplanAdministrationComponent implements OnInit {
 
       console.log(this.selectedDish);
 
-      this.mealService.addMealToDay(this.selectedDish, this.selectedKW, dayAsDate.getDay()).subscribe();
+      this.mealService.addMealToDay(this.selectedDish, this.selectedKW, dayAsDate.getDay()).subscribe(() => {
+        this.neuLaden();
+      });
     }
     // Neues Gericht
     else {
@@ -208,7 +221,9 @@ export class MealplanAdministrationComponent implements OnInit {
       this.mealService.postNewDish(dish).subscribe(
         (createdDish) => {
           console.log('New dish created:', createdDish);
-          this.mealService.addMealToDay(createdDish.id, this.selectedKW, dayAsDate.getDay()).subscribe();
+          this.mealService.addMealToDay(createdDish.id, this.selectedKW, dayAsDate.getDay()).subscribe(() => {
+            this.neuLaden();
+          });
         },
         (error) => {
           console.error('Error creating new dish:', error);
@@ -216,6 +231,12 @@ export class MealplanAdministrationComponent implements OnInit {
         }
       );
     }
+  }
+
+  neuLaden(): void {
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+      this.router.navigate([this.router.url + '/dashboard/mealplan/' + this.selectedKW]);
+    });
   }
 
   getDateFromDayOfWeekAndKW(dayOfWeek: string, kw: number): Date {
