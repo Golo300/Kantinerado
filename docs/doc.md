@@ -195,6 +195,11 @@ Für das Backend werden drei Verarbeitungslevel definiert, welche beim Entwickle
 
 Diese Schichten sind durch Ordner getrennt, in denen die jeweiligen Java-Klassen liegen. Die Absicherung der einzelnen Routen findet mithilfe einer von Spring-Boot bereits vorgegebenen Security-cain statt. Diese unterstützt auch das beschriebene Rollensystem.
 
+<p align="center">
+  <img src="resources/BackendView.png" alt="Block View"/>
+</p>
+
+
 ## Dynamic View
 
 Diese Abildung zeigt die einzelnen Komponenten wie sie zur Laufzeit Interagieren. Die Grafik umfasst dabei nicht jede einzelne Komponente sondern nur die Bestellkomonente mit Servicen. Dies ist aber eqvivalent für alle andern Komonenten und Servicen zu betracheten.
@@ -251,7 +256,9 @@ Die im Backend vorhanden Unit-Tests sowie ein Smoke-Test werden bei jedem Durchl
 
 ## Architectural Decisions
 
-TODO
+Der groben Architektur der einzelnen Komponenten wird teilweise stark durch die einzelnen Technologien vorgegeben. So ist die Schichtenarchitektur im Backend von Springboot mit vorgegebenen Annotationen bestens unterstützt. Trotzdem eignet sich dies Architecture für dieses Projekt bestens, da viele Daten (Datum, etc.) im Backend aufwendiger validiert werden müssen. Dies kann mit der gewählten Architektur isoliert im Service Schicht  stattfinden. Auch wurden DTO Klassen eingeführt, welche genutzt werden, um den Datentyp der API Schnittstelle zu definieren. DTO Objekte bieten damit im Backend das Protokoll zwischen Controller und Service.
+
+In Angular ist durch die Services und Komponenten eine grobe Struktur für den Aufbau vorgegeben. Hier wurde die Entscheidung getroffen, das API-Calls nur innerhalb von Services getätigt werden sollen. Dies vereinfacht das Debuggen und sorgt für eine bessere Codequalität. Interfaces werden genutzt, um zwischen den einzelnen Komponenten/Services zu kommunizieren.
 
 ## Quality Requirements
 
