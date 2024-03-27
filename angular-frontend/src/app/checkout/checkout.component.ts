@@ -69,11 +69,11 @@ export class CheckoutComponent {
     return parseFloat(totalPrice.toFixed(2));
   }
 
-  downloadEveryOrderForAdmins(kw: number) {
-    this.orderService.getEveryOrderByKw(kw).subscribe((orders: Order[]) => {
-      this.orderService.generateAdminPdf(orders);
-    });
-  }
+  // downloadEveryOrderForAdmins(kw: number) {
+  //   this.orderService.getEveryOrderByKw(kw).subscribe((orders: Order[]) => {
+  //     this.orderService.generateAdminPdf(orders);
+  //   });
+  // }
 
   downloadNewOrderForUsers() {
     this.orderService.generateUserPdf(this.newSelectedDishes, this.deletedDishes);
