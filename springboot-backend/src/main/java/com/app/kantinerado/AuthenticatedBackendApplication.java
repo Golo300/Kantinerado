@@ -101,7 +101,7 @@ public class AuthenticatedBackendApplication {
             mealplanService.createMealplanByKw(2024, currentKw + 1, dishes);
 
             // Next to next week
-            mealplanService.createMealplanByKw(2024, currentKw + 2, dishes);
+            // mealplanService.createMealplanByKw(2024, currentKw + 2, dishes);
         };
     }
 }
