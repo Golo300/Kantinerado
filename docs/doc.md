@@ -4,9 +4,9 @@
 
 Dieses Projekt ist ein Semesterprojekt, welches das Hauptziel hat, die in der Vorlesung gelernten Konzepte zur Software-Planung und Dokumentation umsetzen.
 
-Hierzu soll eine Applikation erstellt und dokumentiert werden, mit der Mitarbeiter einer fiktiven Firma Essen in der Kantine Einsehen und bestellen können mit einfacher Benutzerverwaltung.
+Hierzu soll eine Applikation erstellt und dokumentiert werden, mit der Mitarbeiter einer fiktiven Firma Essen in der Kantine Einsehen und bestellen können mit einfacher Benutzerverwaltung. Dieses Dokument ist eine Architecture Dokumentation der gesamten Anwendung.
 
-Diese Dokumentation umfasst die gesamte bisherige Entwicklung bis einschließlich Sprint 4. Dieses Dokument hält sich stark an die arc42 Vorgaben.
+Diese Dokumentation umfasst die gesamte bisherige Entwicklung bis einschließlich Sprint 4 und hält sich stark an die arc42 Vorgaben.
 
 ## Table of Contents
 
@@ -19,7 +19,6 @@ Diese Dokumentation umfasst die gesamte bisherige Entwicklung bis einschließlic
 7. [Deployment](#Deployment)
 8. [Crosscutting Concepts](#Crosscutting-Concepts)
 9. [Architectural Decisions](#Architectural-Decisions)
-10. [Quality Requirements](#Quality-Requirements)
 11. [Risks and Technical Debt](#Risks-and-Technical-Debt)
 
 
@@ -86,11 +85,18 @@ Um Requirements für ein Projekt zu definiern sollte als erstes eine Stakeholder
 
 ## Context und Scope
 
+Hier abgebildet ist der Business Context. Dabei sind die drei Nutzergruppen und ihre Funktionen abgebildet. Welche Technischen Funktionen die einzelnen Rollen haben wird in der [Solution Strategy](#Solution-Strategy) ausführlich beschrieben.
+
+<p align="center">
+  <img src="resources/BusinessContext.png" alt="Business Context"/>
+</p>
+
 In der nachfolgenden Grafik ist der Systemkontext des Projekts dargestellt. Dieser hat bis auf die optionale Einbindung von externen Zahlungsanbieter keine direkten Abhängigkeiten zu anderen externen Systemen. Dies folgt vor allem daraus, dass diese Anwendung eigenständig innerhalb des Firmennetzes laufen soll. Die gesamte Bedienung des System erfolgt über einen beliebigen Browser und sommit dem *http*-Protokoll
-\
-\
-\
-![Systemcontext](resources/Context.png)
+
+<p align="center">
+  <img src="resources/Context.png" alt="Tecnical Context"/>
+</p>
+
 ## Solution Strategy
 
 ### Technology
@@ -179,11 +185,15 @@ Die Implementierung dieser Rollen sind in den nächsten Abschnitten näher besch
 
 ## Block View 
 
-Zur Übersicht ist hier die statische Ansicht der einzelnen Komponenten im Frontend abgebildet.
+### Frontend
+
+Zur Übersicht ist hier die statische Ansicht der einzelnen Komponenten im Frontend abgebildet. Da **Dependency injection** in Angular ein Kernkonzept ist, wird dieses verwendet, um Services einzubinden.
 
 <p align="center">
   <img src="resources/BlockView.png" alt="Block View"/>
 </p>
+
+### Backend
 
 Für das Backend werden drei Verarbeitungslevel definiert, welche beim Entwicklen eingehalten werden müssen.
 
@@ -193,11 +203,13 @@ Für das Backend werden drei Verarbeitungslevel definiert, welche beim Entwickle
 
 - Repositories: Bilden die von Springboot vorgegebene Schnittstelle zur Datenbank. Nur hier werden SQL Anfragen angelegt, wie von Springboot vorgegeben.
 
-Diese Schichten sind durch Ordner getrennt, in denen die jeweiligen Java-Klassen liegen. Die Absicherung der einzelnen Routen findet mithilfe einer von Spring-Boot bereits vorgegebenen Security-cain statt. Diese unterstützt auch das beschriebene Rollensystem.
+Diese Schichten sind durch Ordner getrennt, in denen die jeweiligen Java-Klassen liegen. Die Absicherung der einzelnen Routen findet mithilfe einer von Spring-Boot bereits vorgegebenen Security-chain statt. Diese unterstützt auch das beschriebene Rollensystem. Innerhalb der einzelnen Komponenten werden die Spring-Boot Annotation verwendet. Somit ist eine automatische **Dependency injection** der einzelnen Services- und Repositoryskomponenten möglich.
 
 <p align="center">
   <img src="resources/BackendView.png" alt="Block View"/>
 </p>
+
+In der Abbildung ist zur Vereinfachung nur die Order Komponente in den jeweiligen Schichten implementiert.
 
 
 ## Dynamic View
@@ -214,6 +226,15 @@ Dieses Diagramm soll vorallem denn Ablauf des Login und der Registrieung zeigen 
 ## Deployment
 
 Für das Deployen und Hosten der Software soll Docker verwendet werden. Dadurch ist es möglich, die vorher beschriebenen Komponenten in einzelne Container zu packen. Das Managen der Container erfolgt über eine Docker-compose. Dies vereinfacht auch das Verwalten der Container untereinander, da diese somit gleich in einem Network verwaltet werden. Auch ein zusätzlicher Sicherheitsaspekt wird dadurch hinzugefügt, da die Datenbank keine Verbindung nach außerhalb des Dockernetzwerkes hat. Damit alle Daten der Application einfach gesichert werden können, läuft die Datenbank mit einem extra Volume. Diese Hosting Solution macht es einfach die Anwendung auf beliebige Container-Infrastruktur zu deployen. Somit kann die Anwendung einfach in ein bestehendes Firmennetzwerk eingebunden werden.
+
+Das bauen und Starten der Anwendung ist mit dem Docker-compose wrapper möglich
+
+```
+docker-compose build 
+docker-compose up -d
+```
+
+Dabei wird auch ein autmoatische überprüft ob die Datenbank korrekt hochfährt bevor das Backend Zugriff erhält
 
 
 <p align="center">
@@ -256,18 +277,14 @@ Die im Backend vorhanden Unit-Tests sowie ein Smoke-Test werden bei jedem Durchl
 
 ## Architectural Decisions
 
-Der groben Architektur der einzelnen Komponenten wird teilweise stark durch die einzelnen Technologien vorgegeben. So ist die Schichtenarchitektur im Backend von Springboot mit vorgegebenen Annotationen bestens unterstützt. Trotzdem eignet sich dies Architecture für dieses Projekt bestens, da viele Daten (Datum, etc.) im Backend aufwendiger validiert werden müssen. Dies kann mit der gewählten Architektur isoliert im Service Schicht  stattfinden. Auch wurden DTO Klassen eingeführt, welche genutzt werden, um den Datentyp der API Schnittstelle zu definieren. DTO Objekte bieten damit im Backend das Protokoll zwischen Controller und Service.
+Der groben Architektur der einzelnen Softwareteile wird teilweise stark durch die einzelnen Technologien vorgegeben. Das Backend ist als REST-API umgesetzt. Dies bietet vorallem den Vorteil das die Anwendung nicht zu komplex wird und sich besser Skalieren lässt. Aber auch das Testen wird somit einfacher. Die Schichtenarchitektur wird im Backend von Springboot mit vorgegebenen Annotationen bestens unterstützt. Desweitern eignet sich diese Architecture für das Projekt bestens, da viele Daten (Datum, etc.) im Backend aufwendiger validiert werden müssen. Dies kann mit der gewählten Architektur isoliert in der Serviceschicht  stattfinden. Auch wurden DTO Klassen eingeführt, welche genutzt werden, um den Datentyp der API Schnittstelle zu definieren. DTO Objekte bieten damit im Backend das Protokoll zwischen Controller und Service.
 
 In Angular ist durch die Services und Komponenten eine grobe Struktur für den Aufbau vorgegeben. Hier wurde die Entscheidung getroffen, das API-Calls nur innerhalb von Services getätigt werden sollen. Dies vereinfacht das Debuggen und sorgt für eine bessere Codequalität. Interfaces werden genutzt, um zwischen den einzelnen Komponenten/Services zu kommunizieren.
 
-## Quality Requirements
-
-TODO
-
 ## Risks and Technical Debt
 
-Zum Schluss noch die unschöne Seite. Zuerst ist hier auf die hohe Anzahl an offenen Bugs hinzudeuten. Diese sind vor allem durch Nichteinhalten der Dod entstanden. Durch zu spätes Anfangen und demnach das zu späte Abschließen von Userstories konnte die Qualität nicht immer auf dem erwünschten Stand gehalten werden.
+Zum Schluss noch die unschöne Seite. Zuerst ist hier auf die hohe Anzahl an offenen Bugs hinzudeuten. Diese sind vor allem durch Nichteinhalten der DoD entstanden. Durch zu spätes Anfangen und demnach das zu späte Abschließen von Userstories konnte die Qualität nicht immer auf dem erwünschten Stand gehalten werden.
 
-Zudem sind auch nicht alle erwünschten Features implementiert worden, welche für die 4 Sprints geplant wurden. Es fehlen entscheiden Funktionen wie das Anpassen seines Profils und die gesamte Benutzerverwaltung. Die App bietet zwar gewisse Grundfunktionen ist aber lange nicht fertig.
+Zudem sind auch nicht alle erwünschten Features implementiert worden, welche für die 4 Sprints geplant wurden. Es fehlen entscheiden Funktionen wie das Anpassen seines Profils und die gesamte Benutzerverwaltung. Die App bietet zwar gewisse Grundfunktionen ist aber lange nicht fertig. Vor allem muss aber hervorgehoben werden, dass durch die Domain Modellierung und die Implementierungen der Grundfunktionen eine sehr gute Grundlage geschaffen wurde auf welcher weitere Entwickeltung gut aufbauen kann.
 
-Trotz dieser Feststellungen ist zu sagen, dass das Projekt bei Weiterführung eine gute und realistische Chance hat, vollständig und fertig zu werden.
+Nach dieser Analyse ist zu sagen, dass das Projekt bei Weiterführung eine gute und realistische Chance hat, vollständig und fertig zu werden.
