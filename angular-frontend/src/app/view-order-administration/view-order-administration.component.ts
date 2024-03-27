@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { DishService } from '../services/dish.service';
+import { OrderService } from '../services/order.service';
 import { addDays, getISOWeek, setWeek } from 'date-fns';
+import { Order } from '../Interfaces';
 
 @Component({
   selector: 'app-view-order-administration',
@@ -13,13 +15,13 @@ export class ViewOrderAdministrationComponent {
   currentYear!: number;
   kwBegin!: number;
   kwEnd!: number;
-  
-  constructor(private dishService: DishService) { 
+
+  constructor(private dishService: DishService, private orderService: OrderService) {
 
   }
 
   ngOnInit(): void {
-    this.getKWs();  
+    this.getKWs();
   }
 
   currentKW(): number {
@@ -54,6 +56,8 @@ export class ViewOrderAdministrationComponent {
   }
 
   downloadPDF(kw: number): void {
-    // TODO: Methodenaufruf zum Herunterladen der PDF, abhängig von der übergebenen KW
+    this.orderService.getEveryOrderByKw(kw).subscribe((orders: Order[]) => {
+      this.orderService.generateAdminPdf(orders, kw);
+    });
   }
 }
