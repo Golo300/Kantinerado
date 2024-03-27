@@ -85,7 +85,7 @@ Um Requirements für ein Projekt zu definiern sollte als erstes eine Stakeholder
 
 ## Context und Scope
 
-Hier abgebildet ist der Business Context. Dabei sind die drei Nutzergruppen und ihre Funktionen abgebildet.
+Hier abgebildet ist der Business Context. Dabei sind die drei Nutzergruppen und ihre Funktionen abgebildet. Welche Technischen Funktionen die einzelnen Rollen haben wird in der [Solution Strategy](#Solution-Strategy) ausführlich beschrieben.
 
 <p align="center">
   <img src="resources/BusinessContext.png" alt="Business Context"/>
