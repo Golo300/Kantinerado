@@ -21,13 +21,13 @@ export class OrderService {
     var sendOrders: SendOrder[] = []
 
     for (var order of orders) {
-      
+
       const sendOrder: SendOrder =
-      {
-        date: order.date,
-        dish_id: order.dish.id,
-        veggie: order.veggie
-      }
+        {
+          date: order.date,
+          dish_id: order.dish.id,
+          veggie: order.veggie
+        }
       sendOrders.push(sendOrder);
     }
 
@@ -71,15 +71,15 @@ export class OrderService {
     return this.http.get<FullOrder[]>(`${this.apiUrl}/order/admin/${kw}`);
   }
 
-  generateAdminPdf(orders: Order[]) {
+  generateAdminPdf(orders: Order[], kw: number) {
     const doc = new jsPDF();
     let yPos = 10;
 
-    doc.text('Order Overview of all Users', 10, yPos);
+    doc.text('Alle Bestellungen der KW: ' + kw, 10, yPos);
     yPos += 10;
 
-    const headers = [['Date','Dish', 'Veggie', 'Price']];
-    const data = this.prepareAdminDataForPdf(orders,'black');
+    const headers = [['Date', 'Dish', 'Veggie', 'Price']];
+    const data = this.prepareAdminDataForPdf(orders);
 
     autoTable(doc, {
       head: headers,
@@ -87,10 +87,10 @@ export class OrderService {
       startY: yPos
     });
 
-    doc.save('order_overview.pdf');
+    doc.save('Bestellübersicht_kw' + kw + ".pdf");
   }
 
-  private prepareAdminDataForPdf(orders: Order[], color: string): any[] {
+  private prepareAdminDataForPdf(orders: Order[]): any[] {
     let preparedData: any[] = [];
     let dishCounts: { [key: string]: { count: number; veggie: boolean; price: number } } = {};
 
@@ -99,7 +99,7 @@ export class OrderService {
       const dishName = order.dish.title;
       const key = order.date.toString().slice(0, 10) + dishName; // Eindeutiger Schlüssel mit Datum für jedes Gericht
       if (!dishCounts[key]) {
-        dishCounts[key] = { count: 0, veggie: order.veggie, price: order.dish.price };
+        dishCounts[key] = {count: 0, veggie: order.veggie, price: order.dish.price};
       }
       dishCounts[key].count++;
     });
@@ -117,11 +117,9 @@ export class OrderService {
         // Füge das Gericht nur einmal in die Liste ein
         preparedData.push([
           date, // Datum
-          dishName,
           `${dishName} (${dishCount}x)`,
           veggie,
-          price,
-          totalPrice
+          price
         ]);
       }
     }
@@ -133,11 +131,11 @@ export class OrderService {
   }
 
 
-  generateUserPdf(newOrders:Order[], deletedOrders: Order[]) {
+  generateUserPdf(newOrders: Order[], deletedOrders: Order[]) {
     const doc = new jsPDF();
     let yPos = 10;
-
-    doc.text('Your Order Overview', 10, yPos);
+    let uniqueOrderNumber = this.generateUniqueOrderNumber(this.existingOrderNumbers);
+    doc.text('Ihre Bestellübersicht mit der Nummer: ' + uniqueOrderNumber, 10, yPos);
     yPos += 10;
 
     const headers = [['Date', 'Dish', 'Veggie', 'Price']];
@@ -161,7 +159,7 @@ export class OrderService {
     yPos += (data.length + 1) * 10; // Anpassung der Y-Position
     doc.text(`Total Price: ${totalPriceFormatted}`, 10, yPos);
 
-    doc.save('order_overview.pdf');
+    doc.save('Ihre Bestellung_' + uniqueOrderNumber + '.pdf');
   }
 
   private calculateTotalPrice(orders: Order[]): number {
@@ -177,7 +175,18 @@ export class OrderService {
       {content: order.date.toString().slice(0, 10)},
       {content: order.dish.title},
       {content: order.veggie ? 'Yes' : 'No'},
-      { content: color === 'red' ? '-' + order.dish.price : order.dish.price.toString(), styles: { textColor: color } }
+      {content: color === 'red' ? '-' + order.dish.price : order.dish.price.toString(), styles: {textColor: color}}
     ]);
+  }
+
+  existingOrderNumbers = new Set<number>();
+
+  generateUniqueOrderNumber(existingOrderNumbers: Set<number>): number {
+    let orderNumber = Math.floor(Math.random() * 90000) + 10000;
+    while (existingOrderNumbers.has(orderNumber)) {
+      orderNumber = Math.floor(Math.random() * 90000) + 10000;
+    }
+    existingOrderNumbers.add(orderNumber);
+    return orderNumber;
   }
 }

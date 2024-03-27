@@ -15,13 +15,13 @@ export class ViewOrderAdministrationComponent {
   currentYear!: number;
   kwBegin!: number;
   kwEnd!: number;
- 
-  constructor(private dishService: DishService, private orderService: OrderService) { 
+
+  constructor(private dishService: DishService, private orderService: OrderService) {
 
   }
 
   ngOnInit(): void {
-    this.getKWs();  
+    this.getKWs();
   }
 
   currentKW(): number {
@@ -57,7 +57,7 @@ export class ViewOrderAdministrationComponent {
 
   downloadPDF(kw: number): void {
     this.orderService.getEveryOrderByKw(kw).subscribe((orders: Order[]) => {
-      this.orderService.generateAdminPdf(orders);
+      this.orderService.generateAdminPdf(orders, kw);
     });
   }
 }
