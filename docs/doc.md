@@ -268,6 +268,6 @@ TODO
 
 Zum Schluss noch die unschöne Seite. Zuerst ist hier auf die hohe Anzahl an offenen Bugs hinzudeuten. Diese sind vor allem durch Nichteinhalten der Dod entstanden. Durch zu spätes Anfangen und demnach das zu späte Abschließen von Userstories konnte die Qualität nicht immer auf dem erwünschten Stand gehalten werden.
 
-Zudem sind auch nicht alle erwünschten Features implementiert worden, welche für die 4 Sprints geplant wurden. Es fehlen entscheiden Funktionen wie das Anpassen seines Profils und die gesamte Benutzerverwaltung. Die App bietet zwar gewisse Grundfunktionen ist aber lange nicht fertig.
+Zudem sind auch nicht alle erwünschten Features implementiert worden, welche für die 4 Sprints geplant wurden. Es fehlen entscheiden Funktionen wie das Anpassen seines Profils und die gesamte Benutzerverwaltung. Die App bietet zwar gewisse Grundfunktionen ist aber lange nicht fertig. Vor allem muss aber hervorgehoben werden, dass durch die Domain Modellierung und die Implementierungen der Grundfunktionen eine sehr gute Grundlage geschaffen wurde auf welcher weiter Entwickelt werden kann.
 
-Trotz dieser Feststellungen ist zu sagen, dass das Projekt bei Weiterführung eine gute und realistische Chance hat, vollständig und fertig zu werden.
+Nach dieser Analyse ist zu sagen, dass das Projekt bei Weiterführung eine gute und realistische Chance hat, vollständig und fertig zu werden.
