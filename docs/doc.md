@@ -85,11 +85,18 @@ Um Requirements für ein Projekt zu definiern sollte als erstes eine Stakeholder
 
 ## Context und Scope
 
+Hier abgebildet ist der Business Context. Dabei sind die drei Nutzergruppen und ihre Funktionen abgebildet.
+
+<p align="center">
+  <img src="resources/BusinessContext.png" alt="Business Context"/>
+</p>
+
 In der nachfolgenden Grafik ist der Systemkontext des Projekts dargestellt. Dieser hat bis auf die optionale Einbindung von externen Zahlungsanbieter keine direkten Abhängigkeiten zu anderen externen Systemen. Dies folgt vor allem daraus, dass diese Anwendung eigenständig innerhalb des Firmennetzes laufen soll. Die gesamte Bedienung des System erfolgt über einen beliebigen Browser und sommit dem *http*-Protokoll
-\
-\
-\
-![Systemcontext](resources/Context.png)
+
+<p align="center">
+  <img src="resources/Context.png" alt="Tecnical Context"/>
+</p>
+
 ## Solution Strategy
 
 ### Technology
