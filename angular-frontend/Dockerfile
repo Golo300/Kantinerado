@@ -1,11 +1,9 @@
-FROM node:alpine
-
+FROM node:alpine AS build
 WORKDIR /usr/src/app
-
 COPY . /usr/src/app
+RUN npm ci
+RUN npx ng build
 
-RUN npm install -g @angular/cli
+FROM nginx:latest
+COPY --from=build /usr/src/app/dist/angular-frontend/browser /usr/share/nginx/html
 
-RUN npm install
-
-CMD ["ng", "serve", "--host", "0.0.0.0"]
