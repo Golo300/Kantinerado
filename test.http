@@ -9,24 +9,29 @@ content-type: application/json
 
 ###
 
-POST http://localhost:8080/auth/login HTTP/1.1
+POST http://localhost:8080/auth/register HTTP/1.1
 content-type: application/json
 
 {
-    "username": "admin",
-    "password": "password"
+    "username": "test",
+    "password": "test"
 }
+
+GET http://localhost:8080/mealplan
 
 ###
 
-POST http://localhost:8080/order/ HTTP/1.1
+GET http://localhost:8080/mealplan?start_date=2024-08-01&end_date=2024-08-31 HTTP/1.1
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzZWxmIiwic3ViIjoiYWRtaW4iLCJpYXQiOjE3MDkyNTAyMTIsInJvbGVzIjoiQURNSU4ifQ.iVCFO3AcxZSGxX0-f5FQD2JXUoO-JW1AxPr6h8imftmM-zPnEa2heCgx04dcz9w4-G33r6qoO9MntKXAw9cbt7YqGa4eE59lMprf8dsSdYJPjjrxfn_jSGjbCx-1nfD1_GMjrzE0Ly8czE0peg543pfXOyI5Fp9jtL0nu5ZRkPail02_InB4ycUjXqiLiIkaD_qmramFkm3kxPu47ZwNFk_xwtNY_5_rnnztXTGw4GELZ_sfChu08bQtfxlMGn-nMJHtaRscel1VTDb8S32oBzYuA9Dt_gtggf4fuPWRCvUFp4aVeE9UMxCTIDXwsLDicptqD6xEyVI8HuMIXTTFww
+
+###
+
+POST http://localhost:8080/mealplan HTTP/1.1
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzZWxmIiwic3ViIjoiYWRtaW4iLCJpYXQiOjE3MjMxMjY3NjksInJvbGVzIjoiQURNSU4ifQ.bW0Knu-IgOq0YV1Z3Wf9cukJtxd9YZ9VHT4COtuZkWOHg4byNyQziPb2lbK6rPNxRFceYYj73cxreet8ZhHK39wJa_ucHyYQusgCFFUvgWMBrPYpyE7KMSjKcBEwxnf9MNSVg9DJDTLKFjntaQY9iVE9vEadvvGK1BlLp72wOw48jMAAszqPzCfa0kOQ4VhFV80cETFqm8szB9gOVyvHvRxo3g8ZCWlzWnrGMeoevi0nq1TRcQ5QgWq5kQbGsJ6HMFUw379z3GTnMfHs5q9qNOp_jtAmyzNMZjvBSoZnPe7vWBRyErQRE-VFMoxxPpOvvYDSDFa0ouLAhq5L3Ld9DA
 
 {
-        "dish_id": 33,
-        "veggie": false,
-        "date": "2024-03-01"
-       
+    "dishId": 1,
+    "date": "2024-08-02"
 }
 
