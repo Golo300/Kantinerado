@@ -28,14 +28,15 @@ public class MealplanService {
         return dayRepository.findByDateBetween(startDate, endDate);
     }
 
-    public Dish addNewDish(Dish newDish, ApplicationUser user) {
-
-        return dishService.addDish(newDish);
-    }
-
-    public boolean addDishToDay(int dishId, Date date, ApplicationUser user) {
+    public boolean addDishToDay(int dishId, Date date) {
         Dish dish = dishService.getDishById(dishId);
 
+        if(dish == null)
+        {
+            System.out.println("1");
+            return false;
+        }
+        
         Day day = dayRepository.findDayByDate(date).orElse(null);
         
         // day not exits
@@ -49,6 +50,7 @@ public class MealplanService {
             try {
                 dayRepository.save(newDay);
             } catch (DataAccessException e) {
+            System.out.println("2");
                 return false;
             }
         }
@@ -63,6 +65,7 @@ public class MealplanService {
             try {
                 dayRepository.save(day);
             } catch (DataAccessException e) {
+            System.out.println("3");
                 return false;
             }
         }

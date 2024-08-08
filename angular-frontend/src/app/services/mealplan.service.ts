@@ -1,40 +1,46 @@
+import { HttpClient, HttpParams, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, catchError, of } from 'rxjs';
-import { Dish, Mealplan } from '../Interfaces';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { Day, DayDishDTO, Dish } from '../Interfaces';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MealserviceService {
 
-  private apiUrl = 'http://localhost:8080'; // Deine Backend-URL hier anpassen
+  private apiUrl = 'http://localhost:8080/mealplan';
 
   constructor(private http: HttpClient) { }
 
-  getMealplan(kw: number): Observable<Mealplan> {
-    return this.http.get<Mealplan>(`${this.apiUrl}/mealplan/${kw}`).pipe(
-      catchError(error => {
-        if (error.status === 404) {
-          console.error('Mealplan not found');
-          return of({} as Mealplan); // Leeres Mealplan-Objekt zurückgeben
-        }
-        throw error; // Andere Fehler weiterwerfen
-      })
+  getMealplan(startDate: Date, endDate: Date): Observable<Day[]> {
+    let params = new HttpParams()
+      .set('start_date', startDate.toISOString().slice(0, 10))
+      .set('end_date', endDate.toISOString().slice(0, 10));
+
+    return this.http.get<Day[]>(this.apiUrl, { params }).pipe(
+      catchError(this.handleError)
     );
   }
 
-  postNewDish(dish: Dish): Observable<Dish> {
-    return this.http.post<Dish>(`${this.apiUrl}/mealplan/addMeal`, dish);
+  addDish(dayDishDTO: DayDishDTO): Observable<void> {
+    console.log(dayDishDTO);
+    return this.http.post<void>(this.apiUrl, dayDishDTO).pipe(
+      catchError(this.handleError)
+    );
   }
 
-  addMealToDay(dishId: number, kw: number, day: number): Observable<any> {
-    const url = `${this.apiUrl}/mealplan/addMealDay/${dishId}/${kw}/${day}`;
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
-
-    return this.http.post<any>(url, headers);
+  private handleError(error: HttpErrorResponse) {
+    if (error.status === 0) {
+      // A client-side or network error occurred. Handle it accordingly.
+      console.error('An error occurred:', error.error);
+    } else {
+      // The backend returned an unsuccessful response code.
+      // The response body may contain clues as to what went wrong.
+      console.error(
+        `Backend returned code ${error.status}, body was: `, error.error);
+    }
+    // Return an observable with a user-facing error message.
+    return throwError(() => new Error('Something bad happened; please try again later.'));
   }
 }
-

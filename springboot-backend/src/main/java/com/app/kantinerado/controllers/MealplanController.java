@@ -13,8 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 // Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -48,11 +46,7 @@ public class MealplanController {
     @PostMapping
     public ResponseEntity<String> addDish(@RequestBody DayDishDTO dayDishDTO) {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        ApplicationUser user = tokenService.getUserFromAuthentication(authentication);
-
-        boolean response = mealplanService.addDishToDay(dayDishDTO.getDishId(), dayDishDTO.getDate(), user);
+        boolean response = mealplanService.addDishToDay(dayDishDTO.getDishId(), dayDishDTO.getDate());
 
         if (response) {
             return new ResponseEntity<>(HttpStatus.OK);

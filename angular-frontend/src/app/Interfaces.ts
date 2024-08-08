@@ -1,7 +1,7 @@
 /**
  * Provides interfaces for the application.
  */
- 
+
 /**
  * Data structure for a meal plan.
  */
@@ -30,6 +30,12 @@ export interface Day {
   noFood: boolean;
   /** Array of dishes planned for the day. */
   dishes: Dish[];
+}
+
+export interface DayDishDTO
+{
+    dishId: number;
+    date: Date;
 }
 
 /**
@@ -88,7 +94,7 @@ export interface SendOrder {
 
 /**
 * Order received from the backend.
-*/ 
+*/
 export interface FullOrder {
   /** Unique identifier of the order. */
   id: number;
