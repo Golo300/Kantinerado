@@ -3,6 +3,7 @@ package com.app.kantinerado.configuration;
 import com.app.kantinerado.utils.Roles;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
@@ -27,8 +28,6 @@ import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import com.app.kantinerado.utils.RSAKeyProperties;
-
-import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 public class SecurityConfiguration {
@@ -58,9 +57,10 @@ public class SecurityConfiguration {
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> {
                 auth.requestMatchers("/auth/**").permitAll();
-                auth.requestMatchers("/mealplan/**").permitAll();
+                auth.requestMatchers(HttpMethod.GET, "/mealplan").permitAll();
                 auth.requestMatchers("/dish/**").permitAll();
                 auth.requestMatchers("/admin/**").hasRole(Roles.ADMIN);
+                auth.requestMatchers(HttpMethod.POST, "/mealplan").hasAnyRole(Roles.ADMIN, Roles.KANTEEN);
                 auth.requestMatchers("/user/**").hasAnyRole(Roles.ADMIN, Roles.USER);
                 auth.requestMatchers("/order/**").hasAnyRole(Roles.ADMIN, Roles.USER);
                 auth.anyRequest().authenticated();

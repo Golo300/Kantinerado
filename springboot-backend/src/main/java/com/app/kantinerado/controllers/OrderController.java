@@ -36,8 +36,7 @@ public class OrderController {
 
     @GetMapping("/")
     public ResponseEntity<List<Order>> getAllOrders() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        ApplicationUser user = tokenService.getUserFromAuthentication(authentication);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); ApplicationUser user = tokenService.getUserFromAuthentication(authentication);
 
         List<Order> orders = orderService.getAllOders(user);
         return new ResponseEntity<>(orders, HttpStatus.OK);

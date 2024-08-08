@@ -1,5 +1,4 @@
 package com.app.kantinerado.models.mealplan;
-
 import jakarta.persistence.*;
 
 import jakarta.persistence.Id;

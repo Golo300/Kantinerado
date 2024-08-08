@@ -2,6 +2,7 @@ package com.app.kantinerado;
 
 import com.app.kantinerado.models.ApplicationUser;
 import com.app.kantinerado.models.Role;
+import com.app.kantinerado.models.mealplan.Day;
 import com.app.kantinerado.models.mealplan.Dish;
 import com.app.kantinerado.models.mealplan.DishCategory;
 import com.app.kantinerado.repository.*;
@@ -15,6 +16,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,7 +31,7 @@ public class AuthenticatedBackendApplication {
 
 
     @Bean
-    CommandLineRunner run(RoleRepository roleRepository, UserRepository userRepository, MealplanRepository mealplanRepository,
+    CommandLineRunner run(RoleRepository roleRepository, UserRepository userRepository,
                           DayRepository dayRepository, DishRepository dishRepository, DishCategoryRepository dishCategoryRepository,
                           OrderRepository orderRepository, PasswordEncoder passwordEncoder) {
         return args -> {
@@ -89,19 +91,11 @@ public class AuthenticatedBackendApplication {
             dish2.setPrice(4.99);
             dishRepository.save(dish2);
             dishes.add(dish2);
+            
+            Date date = new Date();
+            Day day = new Day(date, false, dishes);
 
-            // Sample Mealplans for current and next two weeks
-            Calendar calendar = Calendar.getInstance();
-            int currentKw = calendar.get(Calendar.WEEK_OF_YEAR);
-
-            // Current week
-            mealplanService.createMealplanByKw(2024, currentKw, dishes);
-
-            // Next week
-            mealplanService.createMealplanByKw(2024, currentKw + 1, dishes);
-
-            // Next to next week
-            // mealplanService.createMealplanByKw(2024, currentKw + 2, dishes);
+            dayRepository.save(day);
         };
     }
 }
