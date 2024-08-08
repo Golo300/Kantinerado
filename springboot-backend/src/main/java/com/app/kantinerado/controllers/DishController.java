@@ -1,5 +1,6 @@
 package com.app.kantinerado.controllers;
 
+import com.app.kantinerado.models.ApplicationUser;
 import com.app.kantinerado.models.mealplan.Dish;
 import com.app.kantinerado.services.DishService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,5 +27,16 @@ public class DishController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(dishes, HttpStatus.OK);
+    }
+
+    @PostMapping
+    public ResponseEntity<String> creatDish(@RequestBody Dish dish) {
+
+        boolean response = dishService.creatDish(dish);
+
+        if (response) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 }

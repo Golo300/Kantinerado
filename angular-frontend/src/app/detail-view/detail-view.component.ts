@@ -15,7 +15,7 @@ export class DetailViewComponent implements OnInit {
   dishes!: Dish[];
 
   private route = inject(ActivatedRoute);
-  constructor(private mealService: MealserviceService, private router: Router) 
+  constructor(private mealService: MealserviceService, private router: Router)
   {
 
   }
@@ -33,15 +33,7 @@ export class DetailViewComponent implements OnInit {
   }
 
   getMealplan(): void {
-    this.mealService.getMealplan(this.kw)
-      .subscribe((meaplan: Mealplan) => {this.mealplan = meaplan;
-                            console.log(this.mealplan);
-                            const detailDay = this.mealplan.days.find(d => this.istWochentag(new Date(d.date), this.day));
-                            console.log(detailDay);
-                            if (detailDay) {
-                              this.dishes = detailDay.dishes;
-                            }});
-      console.log(this.mealplan);
+
   }
 
   istWochentag(date: Date, wochentag: number): boolean {
