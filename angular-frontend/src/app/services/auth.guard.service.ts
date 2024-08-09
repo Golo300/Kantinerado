@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import {AuthService} from "./auth.service"
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { AuthService } from "./auth.service";
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -12,66 +12,73 @@ export class AuthGuardService implements CanActivate {
   private KANTEEN: string = "KANTEEN";
   private ADMIN: string = "ADMIN";
 
-  hasUserAcces(): boolean
-  {
+  constructor(private authService: AuthService, private router: Router) {}
 
-    if(!this.authService.isLoggedIn()) {return false;}
-
-      const roles = this.authService.getRoles();
-
-      return (roles.includes(this.USER) || roles.includes(this.KANTEEN) || roles.includes(this.ADMIN));
+  private handleError(message: string): boolean {
+    console.error(message);
+    this.router.navigate(['/login']);
+    return false;
   }
 
-  hasKanteenAcces(): boolean
-  {
-    if(!this.authService.isLoggedIn()) {return false;}
+  hasUserAcces(): boolean {
+    if (!this.authService.isLoggedIn()) {
+      return this.handleError('User is not logged in.');
+    }
 
-      const roles = this.authService.getRoles();
-      return (roles.includes(this.KANTEEN) || roles.includes(this.ADMIN));
+    const roles = this.authService.getRoles();
+    if (!roles || roles.length === 0) {
+      return this.handleError('No roles found for user.');
+    }
+
+    return roles.includes(this.USER) || roles.includes(this.KANTEEN) || roles.includes(this.ADMIN);
   }
 
-  hasAdminAcces(): boolean
-  {
-    if(!this.authService.isLoggedIn()) {return false;}
+  hasKanteenAcces(): boolean {
+    if (!this.authService.isLoggedIn()) {
+      return this.handleError('User is not logged in.');
+    }
 
-      const roles = this.authService.getRoles();
-      return (roles.includes(this.ADMIN));
+    const roles = this.authService.getRoles();
+    if (!roles || roles.length === 0) {
+      return this.handleError('No roles found for user.');
+    }
+
+    return roles.includes(this.KANTEEN) || roles.includes(this.ADMIN);
   }
-  
-  constructor( private authService: AuthService, private router: Router)
-   { 
 
+  hasAdminAcces(): boolean {
+    if (!this.authService.isLoggedIn()) {
+      return this.handleError('User is not logged in.');
+    }
 
+    const roles = this.authService.getRoles();
+    if (!roles || roles.length === 0) {
+      return this.handleError('No roles found for user.');
+    }
 
-   }
-   canActivate(
+    return roles.includes(this.ADMIN);
+  }
+
+  canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
-    ): Observable<boolean> | Promise<boolean> | boolean {
-    // Überprüfen, ob der Benutzer authentifiziert ist
-    
+  ): Observable<boolean> | Promise<boolean> | boolean {
     if (!this.authService.isLoggedIn()) {
-      // Benutzer ist nicht authentifiziert, Weiterleitung zur Anmeldeseite
       this.router.navigate(['/login']);
       return false;
     }
 
-    // Überprüfen der Benutzerrollen
     const allowedRoles = next.data['allowedRoles'] as string[];
     if (allowedRoles && allowedRoles.length > 0) {
-      const userRoles = this.authService.getRoles(); // Nehmen Sie an, dass diese Methode die Rollen des Benutzers zurückgibt
-      for (const role of userRoles) {
-        if (allowedRoles.includes(role)) {
-          // Benutzer hat eine erlaubte Rolle, Zugriff erlauben
-          return true;
-        }
+      const userRoles = this.authService.getRoles();
+      if (userRoles.some(role => allowedRoles.includes(role))) {
+        return true;
+      } else {
+        this.router.navigate(['/login']);
+        return false;
       }
-      // Benutzer hat keine erlaubte Rolle, Zugriff verweigern
-      this.router.navigate(['/login']); // Weiterleitung zu einer Seite mit einer "Unbefugt"-Nachricht
-      return false;
     }
 
-    // Standardmäßig den Zugriff erlauben, wenn keine Rollen überprüft werden müssen
     return true;
   }
 }

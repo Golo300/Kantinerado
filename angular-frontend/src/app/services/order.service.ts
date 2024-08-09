@@ -1,9 +1,9 @@
-import {HttpClient} from '@angular/common/http';
-import {Injectable} from '@angular/core';
-import {map, Observable} from 'rxjs';
-import {FullOrder, Order, SendOrder} from "../Interfaces";
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { map, Observable, catchError, throwError, of } from 'rxjs';
+import { FullOrder, Order, SendOrder } from "../Interfaces";
 import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable'
+import autoTable from 'jspdf-autotable';
 
 @Injectable({
   providedIn: 'root'
@@ -11,71 +11,88 @@ import autoTable from 'jspdf-autotable'
 export class OrderService {
 
   private apiUrl = 'http://localhost:8080';
+  private existingOrderNumbers = new Set<number>();
 
-
-  constructor(private http: HttpClient) {
-  }
+  constructor(private http: HttpClient) {}
 
   createOrder(orders: Order[]): Observable<any> {
-
-    var sendOrders: SendOrder[] = []
-
-    for (var order of orders) {
-
-      const sendOrder: SendOrder =
-        {
-          date: order.date,
-          dish_id: order.dish.id,
-          veggie: order.veggie
-        }
-      sendOrders.push(sendOrder);
-    }
+    const sendOrders: SendOrder[] = orders.map(order => ({
+      date: order.date,
+      dish_id: order.dish.id,
+      veggie: order.veggie
+    }));
 
     return this.http.post<any>(`${this.apiUrl}/order/batch`, sendOrders).pipe(
-      map(response => {
-        return response;
-      }));
+      map(response => response),
+      catchError(error => {
+        console.error('Error creating orders:', error);
+        return throwError(() => new Error('Failed to create orders.'));
+      })
+    );
   }
 
   getOrderByKw(kw: number): Observable<FullOrder[]> {
-    return this.http.get<FullOrder[]>(`${this.apiUrl}/order/${kw}`);
+    return this.http.get<FullOrder[]>(`${this.apiUrl}/order/${kw}`).pipe(
+      catchError(error => {
+        console.error(`Error fetching orders for KW ${kw}:`, error);
+        return throwError(() => new Error('Failed to load orders.'));
+      })
+    );
   }
 
   getAllOrders(): Observable<FullOrder[]> {
-    return this.http.get<FullOrder[]>(`${this.apiUrl}/order/`);
+    return this.http.get<FullOrder[]>(`${this.apiUrl}/order/`).pipe(
+      catchError(error => {
+        console.error('Error fetching all orders:', error);
+        return throwError(() => new Error('Failed to load all orders.'));
+      })
+    );
   }
 
   getCart(): { newSelectedDishes: Order[], deletedDishes: FullOrder[] } {
     const shoppingCartJson = localStorage.getItem('shopping_cart');
-    if (shoppingCartJson == null) {
-      return {newSelectedDishes: [], deletedDishes: []};
+    if (!shoppingCartJson) {
+      console.warn('No items found in shopping cart.');
+      return { newSelectedDishes: [], deletedDishes: [] };
     }
+
     return JSON.parse(shoppingCartJson);
   }
 
-  deleteOrders(deleteOrders: FullOrder[]) {
+  saveCart(cart: { newSelectedDishes: Order[], deletedDishes: FullOrder[] }): void {
+    localStorage.setItem('shopping_cart', JSON.stringify(cart));
+  }
 
-    var deleted: number[] = []
+  clearCart(): void {
+    localStorage.removeItem('shopping_cart');
+  }
 
-    for (var order of deleteOrders) {
-      deleted.push(order.id);
-    }
+  deleteOrders(deleteOrders: FullOrder[]): Observable<any> {
+    const deletedIds: number[] = deleteOrders.map(order => order.id);
 
-    return this.http.post<any>(`${this.apiUrl}/order/batchRemove`, deleted).pipe(
-      map(response => {
-        return response;
-      }));
+    return this.http.post<any>(`${this.apiUrl}/order/batchRemove`, deletedIds).pipe(
+      map(response => response),
+      catchError(error => {
+        console.error('Error deleting orders:', error);
+        return throwError(() => new Error('Failed to delete orders.'));
+      })
+    );
   }
 
   getEveryOrderByKw(kw: number): Observable<Order[]> {
-    return this.http.get<FullOrder[]>(`${this.apiUrl}/order/admin/${kw}`);
+    return this.http.get<FullOrder[]>(`${this.apiUrl}/order/admin/${kw}`).pipe(
+      catchError(error => {
+        console.error(`Error fetching admin orders for KW ${kw}:`, error);
+        return throwError(() => new Error('Failed to load admin orders.'));
+      })
+    );
   }
 
-  generateAdminPdf(orders: Order[], kw: number) {
+  generateAdminPdf(orders: Order[], kw: number): void {
     const doc = new jsPDF();
     let yPos = 10;
 
-    doc.text('Alle Bestellungen der KW: ' + kw, 10, yPos);
+    doc.text(`Alle Bestellungen der KW: ${kw}`, 10, yPos);
     yPos += 10;
 
     const headers = [['Date', 'Dish', 'Veggie', 'Price']];
@@ -87,55 +104,49 @@ export class OrderService {
       startY: yPos
     });
 
-    doc.save('Bestellübersicht_kw' + kw + ".pdf");
+    doc.save(`Bestellübersicht_kw${kw}.pdf`);
   }
 
   private prepareAdminDataForPdf(orders: Order[]): any[] {
-    let preparedData: any[] = [];
-    let dishCounts: { [key: string]: { count: number; veggie: boolean; price: number } } = {};
+    const preparedData: any[] = [];
+    const dishCounts: { [key: string]: { count: number; veggie: boolean; price: number } } = {};
 
-    // Zähle die Anzahl der Bestellungen für jedes Gericht
     orders.forEach(order => {
       const dishName = order.dish.title;
-      const key = order.date.toString().slice(0, 10) + dishName; // Eindeutiger Schlüssel mit Datum für jedes Gericht
+      const dateKey = new Date(order.date).toISOString().slice(0, 10);
+      const key = `${dateKey}_${dishName}_${order.veggie}`;
       if (!dishCounts[key]) {
-        dishCounts[key] = {count: 0, veggie: order.veggie, price: order.dish.price};
+        dishCounts[key] = { count: 0, veggie: order.veggie, price: order.dish.price };
       }
       dishCounts[key].count++;
     });
 
-    // Durchlaufe die gezählten Gerichte und füge sie nur einmal in die vorbereiteten Daten ein
     for (const key in dishCounts) {
       if (dishCounts.hasOwnProperty(key)) {
-        const dishName = key.substring(10); // Entferne das Datum aus dem Schlüssel
+        const [date, dishName, veggie] = key.split('_');
         const dishCount = dishCounts[key].count;
-        const veggie = dishCounts[key].veggie ? 'Yes' : 'No';
         const price = dishCounts[key].price;
-        const totalPrice = price * dishCount;
-        const date = key.substring(0, 10); // Extrahiere das Datum aus dem Schlüssel
 
-        // Füge das Gericht nur einmal in die Liste ein
         preparedData.push([
-          date, // Datum
+          date,
           `${dishName} (${dishCount}x)`,
-          veggie,
-          price
+          veggie === 'true' ? 'Yes' : 'No',
+          (price * dishCount).toFixed(2)
         ]);
       }
     }
 
-    // Sortiere die vorbereiteten Daten nach dem Datum (erstes Element in jedem Array)
     preparedData.sort((a, b) => new Date(a[0]).getTime() - new Date(b[0]).getTime());
 
     return preparedData;
   }
 
-
-  generateUserPdf(newOrders: Order[], deletedOrders: Order[]) {
+  generateUserPdf(newOrders: Order[], deletedOrders: Order[]): void {
     const doc = new jsPDF();
     let yPos = 10;
-    let uniqueOrderNumber = this.generateUniqueOrderNumber(this.existingOrderNumbers);
-    doc.text('Ihre Bestellübersicht mit der Nummer: ' + uniqueOrderNumber, 10, yPos);
+    const uniqueOrderNumber = this.generateUniqueOrderNumber();
+
+    doc.text(`Ihre Bestellübersicht mit der Nummer: ${uniqueOrderNumber}`, 10, yPos);
     yPos += 10;
 
     const headers = [['Date', 'Dish', 'Veggie', 'Price']];
@@ -144,10 +155,8 @@ export class OrderService {
 
     const data = [...newData, ...deletedData];
 
-    const totalPrice = (this.calculateTotalPrice(newOrders) - this.calculateTotalPrice(deletedOrders)).toFixed(2); // Gesamtpreis berechnen und auf zwei Nachkommastellen runden
-
-    const totalPriceFormatted = parseFloat(totalPrice) >= 0 ? totalPrice.toString() : '-' + Math.abs(parseFloat(totalPrice)).toString(); // Preis formatieren
-
+    const totalPrice = (this.calculateTotalPrice(newOrders) - this.calculateTotalPrice(deletedOrders)).toFixed(2);
+    const totalPriceFormatted = parseFloat(totalPrice) >= 0 ? totalPrice : `-${Math.abs(parseFloat(totalPrice)).toFixed(2)}`;
 
     autoTable(doc, {
       head: headers,
@@ -155,38 +164,31 @@ export class OrderService {
       startY: yPos
     });
 
-    // Hinzufügen der Gesamtsumme
-    yPos += (data.length + 1) * 10; // Anpassung der Y-Position
+    yPos += (data.length + 1) * 10;
     doc.text(`Total Price: ${totalPriceFormatted}`, 10, yPos);
 
-    doc.save('Ihre Bestellung_' + uniqueOrderNumber + '.pdf');
+    doc.save(`Ihre_Bestellung_${uniqueOrderNumber}.pdf`);
   }
 
   private calculateTotalPrice(orders: Order[]): number {
-    let totalPrice = 0;
-    orders.forEach(order => {
-      totalPrice += order.dish.price;
-    });
-    return totalPrice;
+    return orders.reduce((total, order) => total + order.dish.price, 0);
   }
 
   private prepareUserDataForPdf(orders: Order[], color: string): any[] {
     return orders.map(order => [
-      {content: order.date.toString().slice(0, 10)},
-      {content: order.dish.title},
-      {content: order.veggie ? 'Yes' : 'No'},
-      {content: color === 'red' ? '-' + order.dish.price : order.dish.price.toString(), styles: {textColor: color}}
+      { content: new Date(order.date).toISOString().slice(0, 10) },
+      { content: order.dish.title },
+      { content: order.veggie ? 'Yes' : 'No' },
+      { content: color === 'red' ? `-${order.dish.price.toFixed(2)}` : order.dish.price.toFixed(2), styles: { textColor: color } }
     ]);
   }
 
-  existingOrderNumbers = new Set<number>();
-
-  generateUniqueOrderNumber(existingOrderNumbers: Set<number>): number {
+  private generateUniqueOrderNumber(): number {
     let orderNumber = Math.floor(Math.random() * 90000) + 10000;
-    while (existingOrderNumbers.has(orderNumber)) {
+    while (this.existingOrderNumbers.has(orderNumber)) {
       orderNumber = Math.floor(Math.random() * 90000) + 10000;
     }
-    existingOrderNumbers.add(orderNumber);
+    this.existingOrderNumbers.add(orderNumber);
     return orderNumber;
   }
 }
