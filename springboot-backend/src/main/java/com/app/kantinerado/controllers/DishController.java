@@ -30,13 +30,13 @@ public class DishController {
     }
 
     @PostMapping
-    public ResponseEntity<String> creatDish(@RequestBody Dish dish) {
+    public ResponseEntity<Integer> creatDish(@RequestBody Dish dish) {
 
-        boolean response = dishService.creatDish(dish);
+        int dishId = dishService.creatDish(dish);
 
-        if (response) {
-            return new ResponseEntity<>(HttpStatus.OK);
+        if (dishId == -1) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(dishId, HttpStatus.OK);
     }
 }

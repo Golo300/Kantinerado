@@ -200,9 +200,6 @@ export class MealplanOrderComponent extends MealplanComponent implements OnInit 
   }
 
   addToCart(): void {
-    console.log("New selected Dishes: ", this.newSelectedDishes);
-    console.log("Deleted Dishes: ", this.deletedDishes);
-
     const shoppingCart = {
       newSelectedDishes: this.newSelectedDishes,
       deletedDishes: this.deletedDishes
