@@ -63,25 +63,21 @@ export class MealplanAdministrationComponent extends MealplanComponent implement
     this.dishService.getDishesByCategory("Menü1")
       .subscribe((dishes: any[]) => {
         this.dishesMenu1 = dishes;
-        console.log("Dishes Menü1:", this.dishesMenu1);
       });
 
     this.dishService.getDishesByCategory("Menü2")
       .subscribe((dishes: any[]) => {
         this.dishesMenu2 = this.dishesMenu2.concat(dishes);
-        console.log("Dishes Menü2:", this.dishesMenu2);
       });
 
     this.dishService.getDishesByCategory("Dessert")
       .subscribe((dishes: any[]) => {
         this.dishesDessert = dishes;
-        console.log("Dishes Dessert:", this.dishesDessert);
       });
 
     this.dishService.getDishesByCategory("Soup")
       .subscribe((dishes: any[]) => {
         this.dishesSoup = dishes;
-        console.log("Dishes Soup:", this.dishesSoup);
       });
   }
 
@@ -97,7 +93,7 @@ export class MealplanAdministrationComponent extends MealplanComponent implement
     if (this.selectedDish > 0) {
 
       this.mealServiceLocal.addDish(ddDTO).subscribe(() => {
-        this.neuLaden();
+            this.getMealplan();
       });
     }
     // Neues Gericht
@@ -115,22 +111,32 @@ export class MealplanAdministrationComponent extends MealplanComponent implement
         price: this.newDishPrice
       };
 
+      this.dishService.createDish(dish).subscribe(
+        (dishId) => {
+          ddDTO.dishId = dishId;
+          this.mealServiceLocal.addDish(ddDTO).subscribe(() => {
+              this.dishesMenu1 = [];
+              this.dishesMenu2 = [];
+              this.dishesSoup = [];
+              this.dishesDessert = [];
+              this.getDishLists();
+              this.getMealplan();
+      });
+        },
+        (error) => {
+          this.getMealplan();
+          this.dishesMenu1 = [];
+          this.dishesMenu2 = [];
+          this.dishesSoup = [];
+          this.dishesDessert = [];
+          this.getDishLists();
+        }
+      );
       this.newDishCategory = '';
       this.newDishTitle = '';
       this.newDishDescription = '';
       this.newDishPrice = 0;
 
-      this.dishService.createDish(dish).subscribe(
-        (response) => {
-          this.mealServiceLocal.addDish(ddDTO).subscribe(() => {
-              this.neuLaden();
-      });
-        },
-        (error) => {
-          console.error('Error creating new dish:', error);
-          // Handle error if needed
-        }
-      );
     }
   }
 
@@ -140,9 +146,6 @@ export class MealplanAdministrationComponent extends MealplanComponent implement
 
   override isNextKWSwitchPossible(): boolean {
     return true;
-  }
-
-  neuLaden(): void {
   }
 
   getDateFromDayOfWeekAndKW(dayOfWeek: string): Date {

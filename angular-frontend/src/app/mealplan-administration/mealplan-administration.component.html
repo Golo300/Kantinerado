@@ -165,7 +165,7 @@
     <div class="card text-begin divWidth">
       <div class="card-header">Menü 1 planen für {{ selectedDay }}</div>
       <div class="card-body">
-        <table *ngIf="dishesMenu1.length || dishesMenu2.length" class="table table-bordered rounded">
+        <table *ngIf="dishesMenu1.length" class="table table-bordered rounded">
           <thead class="thead-dark">
             <tr>
               <th scope="col">Gericht</th>
@@ -182,15 +182,6 @@
               <td>
                 <input type="radio" name="dishSelect" value="dish.id" (change)="selectedDish = dish.id">
               </td>
-            </tr>
-            <tr *ngFor="let dish of dishesMenu2">
-              <td>{{ dish.title }}</td>
-              <td>{{ dish.description }}</td>
-              <td>{{ dish.price }}</td>
-              <td>
-                <input type="radio" name="dishSelect" value="dish.id" (change)="selectedDish = dish.id">
-              </td>
-            </tr>
           </tbody>
         </table>
 

@@ -17,8 +17,8 @@ export class DishService {
     return this.http.get<Dish[]>(`${this.apiUrl}/dish/${category}`);
   }
 
-  createDish(dish: Dish): Observable<boolean> {
-    return this.http.post<boolean>(`${this.apiUrl}/dish`, dish).pipe(
+  createDish(dish: Dish): Observable<number> {
+    return this.http.post<number>(`${this.apiUrl}/dish`, dish).pipe(
       catchError(this.handleError)
     );
   }

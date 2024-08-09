@@ -30,18 +30,18 @@ public class DishService {
         return dishRepository.findByDishCategory(category);
     }
 
-    public boolean creatDish(Dish dish)
+    public int creatDish(Dish dish)
     {
         DishCategory category = dishCategoryRepository.findByName(dish.getDishCategory().getName()).orElse(null);
-        if(category == null) return false;
+        if(category == null) return -1;
 
         try {
             dish.setDishCategory(category);
         } catch (DataAccessException e) {
-            return false;
+            return -1;
         }
         dishRepository.save(dish);
-        return true;
+        return dish.getId();
     }
 
     public Dish getDishById(int id)
