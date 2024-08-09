@@ -1,1 +1,90 @@
-/* You can add global styles to this file, and also import other style files */
+/* Common margin and width settings */
+.setMargin {
+    margin: 10px;
+}
+
+.setMarginBottom {
+    margin-bottom: 1rem;
+}
+
+.divWidth {
+    margin: auto;
+    width: 98%;
+}
+
+/* Card width settings */
+.cardWidth {
+    width: calc(100% / 4);
+}
+
+.cardWidthLarge {
+    width: calc(100% / 3); /* Used in view-order-administration */
+}
+
+/* Button margin */
+.btn-margin {
+    margin-bottom: 10px;
+}
+
+/* Text colors */
+.green-text {
+    color: green;
+}
+
+.red-text {
+    color: red;
+}
+
+.blue-text {
+    color: blue;
+}
+
+.black-text {
+    color: black;
+}
+
+/* Text decoration */
+.text-decoration-none {
+    color: black;
+}
+
+/* Form check input customization */
+.form-check-input {
+    width: 30px;
+    height: 20px;
+    border-color: lightslategray;
+}
+
+.form-check-input:checked {
+    background-color: lightgray;
+    opacity: 50%;
+}
+
+/* Table styling */
+.table-cell-center {
+    text-align: center;
+}
+
+.table-cell-large {
+    height: 5rem;
+    width: calc(100% / 7);
+}
+
+.table-cell-medium {
+    height: 2rem;
+    width: calc(100% / 4);
+}
+
+.input-width {
+    width: 100%;
+}
+
+/* Custom styles for brand and navbar */
+.brand-text {
+    text-decoration: none;
+    color: green;
+}
+
+.navbar-brand.brand-text {
+    pointer-events: none;
+}
