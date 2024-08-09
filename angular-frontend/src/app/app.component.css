@@ -1,8 +1,0 @@
-.brand-text {
-    text-decoration: none;
-    color: green;
-}
-
-.navbar-brand.brand-text {
-    pointer-events: none;
-}
