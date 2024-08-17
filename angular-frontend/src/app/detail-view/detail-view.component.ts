@@ -33,6 +33,7 @@ export class DetailViewComponent implements OnInit {
   }
 
   getMealplan(): void {
+    // TODO implement
 
   }
 
