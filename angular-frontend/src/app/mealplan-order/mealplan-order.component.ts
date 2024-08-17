@@ -1,8 +1,7 @@
-import { Component, EventEmitter, OnInit, Output, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { MealserviceService } from '../services/mealplan.service';
-import { Day, Dish, FullOrder, Mealplan } from '../Interfaces';
-import { addDays, addWeeks, format, getISOWeek, getYear, isBefore, lastDayOfWeek, setDay, setHours, setMinutes, setWeek, subDays } from 'date-fns';
-import { de } from 'date-fns/locale';
+import { Dish, FullOrder} from '../Interfaces';
+import { addDays, addWeeks, getISOWeek, getYear, isBefore, subDays } from 'date-fns';
 import { Order } from "../Interfaces";
 import { OrderService } from '../services/order.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -297,6 +296,14 @@ export class MealplanOrderComponent extends MealplanComponent implements OnInit 
 
   calculateTotalPricePerDay(currentDay: string): number {
     let totalPrice = 0;
+
+    this.selectedDishes.forEach(order => {
+      var date = new Date(order.date)
+        if (this.weekDays[date.getDay() - 1] == currentDay)
+          {
+            totalPrice += order.dish.price
+          }
+    });
 
     return parseFloat(totalPrice.toFixed(2));
   }
