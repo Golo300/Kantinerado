@@ -15,7 +15,7 @@ const routes: Routes = [
   { path: '', component: MealplanComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'order/:kw', component: MealplanOrderComponent, canActivate: [AuthGuardService], data: { allowedRoles: ['ADMIN', 'USER', 'KANTEEN'] }},
+  { path: 'order/:kw/:year', component: MealplanOrderComponent, canActivate: [AuthGuardService], data: { allowedRoles: ['ADMIN', 'USER', 'KANTEEN'] }},
   { path: 'order', component: MealplanOrderComponent, canActivate: [AuthGuardService], data: { allowedRoles: ['ADMIN', 'USER', 'KANTEEN'] }},
   { path: 'checkout', component: CheckoutComponent, canActivate: [AuthGuardService], data: { allowedRoles: ['ADMIN', 'USER', 'KANTEEN'] }},
   { path: 'mealplan', component: MealplanComponent },
@@ -23,7 +23,7 @@ const routes: Routes = [
   { path: 'dashboard/mealplan', component: MealplanAdministrationComponent, canActivate: [AuthGuardService], data: { allowedRoles: ['ADMIN', 'KANTEEN'] } },
   { path: 'dashboard/mealplan/:kw', component: MealplanAdministrationComponent, canActivate: [AuthGuardService], data: { allowedRoles: ['ADMIN', 'KANTEEN'] } },
   { path: 'dashboard/orders', component: ViewOrderAdministrationComponent, canActivate: [AuthGuardService], data: { allowedRoles: ['ADMIN', 'KANTEEN'] } },
-  { path: 'detailview/:kw/:day', component: DetailViewComponent },
+  { path: 'detailview/:day', component: DetailViewComponent },
   { path: '**', component: LoginComponent },
   // Weitere Routen können hier hinzugefügt werden
 ];
