@@ -41,9 +41,11 @@ export class MealplanOrderComponent extends MealplanComponent implements OnInit 
 
   override ngOnInit(): void {
     const kw = this.route.snapshot.paramMap.get('kw');
+    const year = this.route.snapshot.paramMap.get('year');
 
-    if (kw) {
+    if (kw && year) {
       this.selectedKW = +kw;
+      this.selectedYear = +year;
     } else {
       this.setCurrentKW();
     }
@@ -320,5 +322,9 @@ export class MealplanOrderComponent extends MealplanComponent implements OnInit 
     }
   }
 
-
+  addToDate(i: number): Date {
+    const result = new Date(this.startDate);
+    result.setDate(result.getDate() + i);
+    return result ;
+  }
 }
