@@ -57,16 +57,12 @@ public class AuthenticatedBackendApplication {
             DishCategory suppe = dishCategoryRepository.save(new DishCategory("Soup", false));
             DishCategory dessert = dishCategoryRepository.save(new DishCategory("Dessert", false));
 
-            // Sample Dishes
-            Set<Dish> dishes = new HashSet<>();
-
             Dish dish1 = new Dish();
             dish1.setDishCategory(menu_1);
             dish1.setTitle("Schnitzel");
             dish1.setDescription("Schnitzel mit Pommes");
             dish1.setPrice(9.99);
             dishRepository.save(dish1);
-            dishes.add(dish1);
 
             Dish dish3 = new Dish();
             dish3.setDishCategory(menu_2);
@@ -74,7 +70,6 @@ public class AuthenticatedBackendApplication {
             dish3.setDescription("Maultaschen Schwäbischer Art");
             dish3.setPrice(6.99);
             dishRepository.save(dish3);
-            dishes.add(dish3);
 
             Dish dish4 = new Dish();
             dish4.setDishCategory(suppe);
@@ -82,7 +77,6 @@ public class AuthenticatedBackendApplication {
             dish4.setDescription("Peking Suppe");
             dish4.setPrice(3.99);
             dishRepository.save(dish4);
-            dishes.add(dish4);
 
             Dish dish2 = new Dish();
             dish2.setDishCategory(dessert);
@@ -90,12 +84,6 @@ public class AuthenticatedBackendApplication {
             dish2.setDescription("Bannanenkuchen");
             dish2.setPrice(4.99);
             dishRepository.save(dish2);
-            dishes.add(dish2);
-            
-            Date date = new Date();
-            Day day = new Day(date, false, dishes);
-
-            dayRepository.save(day);
         };
     }
 }
