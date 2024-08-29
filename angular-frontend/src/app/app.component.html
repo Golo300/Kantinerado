@@ -57,6 +57,10 @@
             <li *ngIf="kanteenAccess" class="nav-item">
               <a class="nav-link active" aria-current="page" href="/dashboard/orders">Bestell-Übersicht</a>
             </li>
+
+            <li *ngIf="adminAccess" class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/dashboard/accounts">Account-Verwaltung</a>
+            </li>
           </ul>
 
           <a *ngIf="loggedIn" class="btn btn-outline-light" type="button" href="/checkout"

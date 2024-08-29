@@ -14,7 +14,7 @@ export class AppComponent {
 
   public userAccess: boolean = false;
   public kanteenAccess: boolean = false;
-  public adminAcess: boolean = false;
+  public adminAccess: boolean = false;
 
   constructor(private authGuardService: AuthGuardService, 
               private authService: AuthService,) 
@@ -23,7 +23,7 @@ export class AppComponent {
 
     this.userAccess = this.authGuardService.hasUserAcces();
     this.kanteenAccess = this.authGuardService.hasKanteenAcces();
-    this.adminAcess = this.authGuardService.hasUserAcces();
+    this.adminAccess = this.authGuardService.hasUserAcces();
     console.log("is logged in: " + this.authService.isLoggedIn());
   }
 
