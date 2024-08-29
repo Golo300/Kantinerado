@@ -33,4 +33,18 @@ public class AdminController {
         }
     }
 
+    @DeleteMapping("/{employeeId}")
+    public ResponseEntity<String> deleteAccount(@PathVariable String employeeId) {
+
+        Boolean succes = adminService.deleteAccount(employeeId);
+
+        if(succes)
+        {
+            return ResponseEntity.ok(employeeId + " got deleted");
+        }
+        else
+        {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }
