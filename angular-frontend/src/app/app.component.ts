@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthGuardService } from './services/auth.guard.service';
 import { AuthService } from './services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -16,11 +17,9 @@ export class AppComponent {
   public kanteenAccess: boolean = false;
   public adminAccess: boolean = false;
 
-  constructor(private authGuardService: AuthGuardService, 
-              private authService: AuthService) 
+  constructor(private authGuardService: AuthGuardService, private authService: AuthService, private router: Router) 
   {
     this.loggedIn = this.authService.isLoggedIn();
-
     this.userAccess = this.authGuardService.hasUserAcces();
     this.kanteenAccess = this.authGuardService.hasKanteenAcces();
     this.adminAccess = this.authGuardService.hasAdminAcces();
@@ -33,8 +32,7 @@ export class AppComponent {
     window.location.reload();
   }
 
-  ngOnInit()
-  {
-    // Hier kann zusätzliche Initialisierungslogik platziert werden
+  shouldShowNav(): boolean {
+    return !(this.router.url === '/login' || this.router.url === '/register');
   }
 }

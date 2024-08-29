@@ -32,4 +32,12 @@ export class RegisterComponent {
       .subscribe(response => {
       });
   }
+
+  routeLogin() {
+    this.router.navigate(['/login']);
+  }
+
+  isFormValid(): boolean {
+    return !!this.username && !!this.email && !!this.employeeId && !!this.password;
+  }   
 }

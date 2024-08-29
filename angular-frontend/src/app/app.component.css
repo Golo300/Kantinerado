@@ -1,5 +1,15 @@
 .nav-link.active {
-    color: green !important;
+    color: white !important;
     font-weight: bold;
     border-bottom: 2px solid green;
   }
+
+  .divider {
+    height: 24px;
+    width: 1px;
+    background-color: #6c757d;
+    margin: 0 15px;
+    display: inline-block;
+    align-self: center;
+  }
+  

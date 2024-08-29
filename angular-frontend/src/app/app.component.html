@@ -38,34 +38,44 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
           <ul class="navbar-nav me-auto mb-2 mb-md-0">
+            <li class="divider"></li>
+
             <li class="nav-item">
-              <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-link" aria-current="page">Speiseplan</a>
+              <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-link"
+                aria-current="page">Speiseplan</a>
             </li>
-            
+
             <li *ngIf="userAccess" class="nav-item">
-              <a routerLink="/order" routerLinkActive="active" class="nav-link" aria-current="page">Bestellung</a>
+              <a routerLink="/order" routerLinkActive="active" class="nav-link"
+                aria-current="page">Bestell-Übersicht</a>
             </li>
-            
+
             <li *ngIf="userAccess" class="nav-item">
-              <a routerLink="/view" routerLinkActive="active" class="nav-link" aria-current="page">Verlauf</a>
+              <a routerLink="/view" routerLinkActive="active" class="nav-link" aria-current="page">Bestell-Verlauf</a>
             </li>
-            
+
+            <li *ngIf="adminAccess" class="divider"></li>
+
             <li *ngIf="kanteenAccess" class="nav-item">
-              <a routerLink="/dashboard/mealplan" routerLinkActive="active" class="nav-link" aria-current="page">Menü-Verwaltung</a>
+              <a routerLink="/dashboard/mealplan" routerLinkActive="active" class="nav-link"
+                aria-current="page">Menü-Verwaltung</a>
             </li>
-            
+
             <li *ngIf="kanteenAccess" class="nav-item">
-              <a routerLink="/dashboard/orders" routerLinkActive="active" class="nav-link" aria-current="page">Bestell-Übersicht</a>
+              <a routerLink="/dashboard/orders" routerLinkActive="active" class="nav-link"
+                aria-current="page">Bestell-Verwaltung</a>
             </li>
-            
+
             <li *ngIf="adminAccess" class="nav-item">
-              <a routerLink="/dashboard/accounts" routerLinkActive="active" class="nav-link" aria-current="page">Account-Verwaltung</a>
-            </li>            
-          </ul>          
-          <a *ngIf="loggedIn" class="btn btn-outline-light" type="button" href="/checkout"
+              <a routerLink="/dashboard/accounts" routerLinkActive="active" class="nav-link"
+                aria-current="page">Account-Verwaltung</a>
+            </li>
+          </ul>
+          <a *ngIf="shouldShowNav() && loggedIn" class="btn btn-outline-light" type="button" href="/checkout"
             style="margin-right: 10px;">Warenkorb</a>
-          <a *ngIf="!loggedIn" class="btn btn-success" type="button" href="/login">Login</a>
-          <button *ngIf="loggedIn" (click)="logout()" class="btn btn-outline-success" type="button">Logout</button>
+          <a *ngIf="shouldShowNav() && !loggedIn" class="btn btn-success" type="button" href="/login">Anmelden</a>
+          <button *ngIf="shouldShowNav() && loggedIn" (click)="logout()" class="btn btn-outline-success"
+            type="button">Abmelden</button>
         </div>
       </div>
     </nav>
