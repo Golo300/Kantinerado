@@ -46,4 +46,27 @@ public class AdminService {
 
         return true;
     }
+
+    public Boolean deleteAccount(String employeeIdstr)
+    {
+        int employeeId;
+        try {
+        employeeId = Integer.parseInt(employeeIdstr);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+
+        Optional<ApplicationUser> userOptional = userRepository.findByEmployeeiD(employeeId);
+
+        if(userOptional.isEmpty())
+        {
+            return false;
+        }
+
+        ApplicationUser user = userOptional.get();
+
+        userRepository.delete(user);
+
+        return true;
+    }
 }
