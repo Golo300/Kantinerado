@@ -107,3 +107,31 @@ export interface FullOrder {
   /** Indicates if the dish is vegetarian. */
   veggie: boolean;
 }
+
+/**
+ * Data structure for an application user.
+ */
+export interface ApplicationUser {
+  /** Unique identifier of the user. */
+  userId: number;
+  /** Username of the user. */
+  username: string;
+  /** Employee ID of the user. */
+  employeeId: number;
+  /** Email of the user. */
+  email: string;
+  /** Password of the user. */
+  password: string;
+  /** Roles assigned to the user. */
+  authorities: Role[];
+}
+
+/**
+ * Data structure for a role.
+ */
+export interface Role {
+  /** Unique identifier of the role. */
+  roleId: number;
+  /** The authority granted by the role. */
+  authority: string;
+}
