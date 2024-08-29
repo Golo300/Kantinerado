@@ -5,7 +5,7 @@ import { AuthService } from './services/auth.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css',  
+  styleUrls: ['./app.component.css'],  
 })
 export class AppComponent {
   title = 'homes';
@@ -17,13 +17,13 @@ export class AppComponent {
   public adminAccess: boolean = false;
 
   constructor(private authGuardService: AuthGuardService, 
-              private authService: AuthService,) 
+              private authService: AuthService) 
   {
     this.loggedIn = this.authService.isLoggedIn();
 
     this.userAccess = this.authGuardService.hasUserAcces();
     this.kanteenAccess = this.authGuardService.hasKanteenAcces();
-    this.adminAccess = this.authGuardService.hasUserAcces();
+    this.adminAccess = this.authGuardService.hasAdminAcces();
     console.log("is logged in: " + this.authService.isLoggedIn());
   }
 
@@ -35,6 +35,6 @@ export class AppComponent {
 
   ngOnInit()
   {
-    
+    // Hier kann zusätzliche Initialisierungslogik platziert werden
   }
 }

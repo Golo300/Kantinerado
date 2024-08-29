@@ -1,0 +1,5 @@
+.nav-link.active {
+    color: green !important;
+    font-weight: bold;
+    border-bottom: 2px solid green;
+  }
