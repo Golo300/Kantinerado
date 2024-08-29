@@ -1,5 +1,11 @@
-td, th {
+td {
     text-align: center;
     width: calc(100% / 7);
     height: 5rem; /* Maintain the same style */
+}
+
+th {
+    text-align: center;
+    height: 2rem !important;
+    width: calc(100% / 7) !important;
 }

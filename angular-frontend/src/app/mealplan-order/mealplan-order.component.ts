@@ -16,10 +16,6 @@ export class MealplanOrderComponent extends MealplanComponent implements OnInit 
 
 
   private route = inject(ActivatedRoute);
-
-  isBreakfastOpen: boolean = false;
-  isLunchOpen: boolean = true;
-
   orderReady: boolean = true;
 
   // Alle im Frontend ausgewählten Dishes (enthält orderedDishes und newSelectedDishes)
@@ -102,14 +98,6 @@ export class MealplanOrderComponent extends MealplanComponent implements OnInit 
   private getWeekdayIndex(weekday: string): number {
     const weekdays = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'];
     return weekdays.findIndex(day => day === weekday);
-  }
-
-  toggleCollapse(collapseId: string): void {
-    if (collapseId === 'collapseBreakfast') {
-      this.isBreakfastOpen = !this.isBreakfastOpen; // Toggle breakfast collapse
-    } else if (collapseId === 'collapseLunch') {
-      this.isLunchOpen = !this.isLunchOpen; // Toggle lunch collapse
-    }
   }
 
   checkboxChanged(event: any, dish: Dish, dayOfWeek: string): void {

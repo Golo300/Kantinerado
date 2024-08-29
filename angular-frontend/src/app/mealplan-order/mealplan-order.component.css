@@ -1,5 +1,11 @@
-#tableMealPlanBreakfast td, #tablePrices td {
+td {
     text-align: center;
-    height: 2rem;
     width: calc(100% / 7);
+    height: 5rem; /* Maintain the same style */
+}
+
+th, #tablePrices td {
+    text-align: center;
+    height: 2rem !important;
+    width: calc(100% / 7) !important;
 }
