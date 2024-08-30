@@ -36,10 +36,14 @@ export class DetailViewComponent implements OnInit {
   }
 
   getMealplan(): void {
-    var beforeDay = new Date(this.day);
-    beforeDay.setDate(beforeDay.getDate() - 1);
 
-    this.mealService.getMealplan(beforeDay, this.day)
+    const startOfDay = new Date(this.day);
+    startOfDay.setHours(0, 0, 0, 0);
+
+    const endOfDay = new Date(this.day);
+    endOfDay.setHours(23, 59, 59, 999);
+
+    this.mealService.getMealplan(startOfDay, endOfDay)
       .subscribe((days:Day[]) => {
         this.dishes = days[0].dishes
       });
