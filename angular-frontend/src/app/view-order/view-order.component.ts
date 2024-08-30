@@ -12,7 +12,10 @@ export class ViewOrderComponent implements OnInit {
   pendingOrders: FullOrder[] = [];
   pastOrders: FullOrder[] = [];
   todayOrders: FullOrder[] = [];
-  selectedSortOption: string = 'asc'; // Default-Auswahl: Aufsteigend
+
+  selectedSortOptionToday: string = 'asc';
+  selectedSortOptionPending: string = 'asc';
+  selectedSortOptionPast: string = 'asc';
 
   constructor(private orderService: OrderService) { }
 
@@ -30,13 +33,16 @@ export class ViewOrderComponent implements OnInit {
     // Datum von morgen
     const tomorrow = new Date(today);
     tomorrow.setDate(today.getDate() + 1);
+
     this.orderService.getAllOrders()
       .pipe(
         tap((orders: FullOrder[]) => {
           this.todayOrders = orders.filter(order => this.isToday(new Date(order.date)));
           this.pendingOrders = orders.filter(order => new Date(order.date) > today);
           this.pastOrders = orders.filter(order => new Date(order.date) < yesterday);
-          this.sortOrders(); // Sortiere Bestellungen nach dem Laden
+          this.sortOrders('today');
+          this.sortOrders('pending');
+          this.sortOrders('past');
         })
       )
       .subscribe();
@@ -61,18 +67,25 @@ export class ViewOrderComponent implements OnInit {
     return new Intl.DateTimeFormat('de-DE', options).format(date);
   }
 
-  sortOrders() {
-    switch (this.selectedSortOption) {
-      case 'asc':
-        this.todayOrders.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-        this.pendingOrders.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-        this.pastOrders.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+  sortOrders(category: string) {
+    switch (category) {
+      case 'today':
+        this.sortCategory(this.todayOrders, this.selectedSortOptionToday);
         break;
-      case 'desc':
-        this.todayOrders.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-        this.pendingOrders.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-        this.pastOrders.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      case 'pending':
+        this.sortCategory(this.pendingOrders, this.selectedSortOptionPending);
         break;
+      case 'past':
+        this.sortCategory(this.pastOrders, this.selectedSortOptionPast);
+        break;
+    }
+  }
+
+  private sortCategory(orders: FullOrder[], sortOption: string) {
+    if (sortOption === 'asc') {
+      orders.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+    } else if (sortOption === 'desc') {
+      orders.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
     }
   }
 }

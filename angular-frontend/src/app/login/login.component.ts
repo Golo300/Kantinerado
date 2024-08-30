@@ -3,21 +3,14 @@ import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { catchError, of, pipe, tap } from 'rxjs';
 
-/**
- * Calls login provider with data
- * 
- */
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  /** username */
   username: string = '';
-  /** password */
   password: string = '';
-  /**error that is shown to user */
   loginError: string = '';
 
   /**
@@ -28,11 +21,6 @@ export class LoginComponent {
    */
   constructor(private router: Router, private authService: AuthService) { }
 
-  /**
-  *
-  * sends request with data from the html to the @class{AuthServices}
-  * 
-  */
   login(): void {
     console.log(this.username)
     this.authService.login({ username: this.username, password: this.password })
@@ -53,4 +41,9 @@ export class LoginComponent {
         
       });
   }
+
+  isLoginFormValid(): boolean {
+    return !!this.username && !!this.password;
+  }
+  
 }

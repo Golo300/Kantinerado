@@ -1,11 +1,11 @@
-#tableMealplan td, #tableMealplan th {
+td {
     text-align: center;
     width: calc(100% / 7);
     height: 5rem;
 }
 
-td, tr {
+th {
     text-align: center;
-    height: 2rem;
-    width: calc(100% / 4);
+    height: 2rem !important;
+    width: calc(100% / 7) !important;
 }
