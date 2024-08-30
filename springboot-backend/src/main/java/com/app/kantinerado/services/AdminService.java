@@ -18,10 +18,10 @@ import java.util.Set;
 public class AdminService {
 
     @Autowired
-    private UserRepository userRepository;
+    public UserRepository userRepository;
 
     @Autowired
-    private RoleRepository roleRepository;
+    public RoleRepository roleRepository;
 
     public Boolean promoteUser(String username)
     {
@@ -69,4 +69,26 @@ public class AdminService {
 
         return true;
     }
+
+    public Boolean demoteUser(String username) {
+        Optional<ApplicationUser> userOptional = userRepository.findByUsername(username);
+
+        if (userOptional.isEmpty()) {
+            return false;
+        }
+
+        ApplicationUser user = userOptional.get();
+
+        Role userRole = roleRepository.findByAuthority(Roles.USER).get();
+
+        Set<Role> roles = new HashSet<>();
+        roles.add(userRole);
+
+        user.setAuthorities(roles);
+
+        userRepository.save(user);
+
+        return true;
+    }
+
 }

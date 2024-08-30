@@ -47,4 +47,17 @@ public class AdminController {
             return ResponseEntity.notFound().build();
         }
     }
+    
+    @PostMapping("/demote")
+    public ResponseEntity<String> demoteUser(@RequestBody PromoteDTO demote) {
+        Boolean success = adminService.demoteUser(demote.getUsername());
+
+        if (success) {
+            return ResponseEntity.ok(demote.getUsername() + " wurde degradiert");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
 }
