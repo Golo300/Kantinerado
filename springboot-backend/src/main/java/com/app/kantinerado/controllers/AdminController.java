@@ -15,15 +15,15 @@ public class AdminController {
     AdminService adminService;
 
     @GetMapping("/")
-    public String helloAdmineController(){
+    public String helloAdminController(){
         return "Admin level access";
     }
 
     @PostMapping("/promote")
     public ResponseEntity<String> promoteUser(@RequestBody PromoteDTO promote){
-        Boolean succes = adminService.promoteUser(promote.getUsername());
+        Boolean success = adminService.promoteUser(promote.getUsername());
 
-        if(succes)
+        if(success)
         {
             return ResponseEntity.ok(promote.getUsername() + " got promoted");
         }

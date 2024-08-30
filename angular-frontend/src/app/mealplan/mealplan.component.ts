@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MealserviceService } from '../services/mealplan.service';
-import { Day, Mealplan } from '../Interfaces';
+import { Day } from '../Interfaces';
 import { addDays, format, getISOWeek, lastDayOfWeek, setWeek, subDays } from 'date-fns';
-import { AuthService } from '../services/auth.service';
 import { de } from 'date-fns/locale';
 
 @Component({
@@ -67,9 +66,9 @@ export class MealplanComponent implements OnInit {
   }
 
   getDateFromMondayOfKW(kw: number): Date {
-    const monday = setWeek(new Date(this.selectedYear, 0, 1), kw, { weekStartsOn: 1 }); // Erster Tag (Montag) der Kalenderwoche
-    return monday;
+    return setWeek(new Date(this.selectedYear, 0, 1), kw, { weekStartsOn: 1 }); // Erster Tag (Montag) der Kalenderwoche
   }
+
   calculateWeekRange(mondayOfSelectedKW: Date): void {
     const monday = mondayOfSelectedKW;
     const sunday = lastDayOfWeek(monday, { weekStartsOn: 1 });

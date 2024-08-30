@@ -1,6 +1,5 @@
 package com.app.kantinerado.controllers;
 
-import com.app.kantinerado.models.ApplicationUser;
 import com.app.kantinerado.models.DayDishDTO;
 import com.app.kantinerado.models.mealplan.Day;
 import com.app.kantinerado.services.MealplanService;

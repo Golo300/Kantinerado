@@ -1,11 +1,8 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { MealserviceService } from '../services/mealplan.service';
 import { DishService } from '../services/dish.service';
-import { Day, Dish, DayDishDTO, DishCategory, sendDish } from '../Interfaces';
-import { addDays, format, getISOWeek, lastDayOfWeek, setWeek, subDays } from 'date-fns';
-import { de } from 'date-fns/locale';
-import { Title } from '@angular/platform-browser';
-import { OrderService } from '../services/order.service';
+import { Dish, DayDishDTO, DishCategory } from '../Interfaces';
+import { addDays } from 'date-fns';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MealplanComponent } from '../mealplan/mealplan.component';
 

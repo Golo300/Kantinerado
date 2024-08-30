@@ -40,8 +40,8 @@ public class AuthenticationControllerTest {
         registrationDTO.setPassword(password);
 
         // Act
-        boolean sucess = authenticationService.registerUser(registrationDTO);
-        assertTrue(sucess);
+        boolean success = authenticationService.registerUser(registrationDTO);
+        assertTrue(success);
 
         LoginDTO loginDTO = new LoginDTO(username, password);
         LoginResponseDTO response = authenticationService.loginUser(loginDTO);

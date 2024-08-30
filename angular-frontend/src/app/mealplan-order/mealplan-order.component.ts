@@ -288,7 +288,7 @@ export class MealplanOrderComponent extends MealplanComponent implements OnInit 
     let totalPrice = 0;
 
     this.selectedDishes.forEach(order => {
-      var date = new Date(order.date)
+      let date = new Date(order.date)
         if (this.weekDays[date.getDay() - 1] == currentDay)
           {
             totalPrice += order.dish.price

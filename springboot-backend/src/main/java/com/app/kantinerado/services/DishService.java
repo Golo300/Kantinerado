@@ -9,6 +9,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.Transient;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -25,7 +26,7 @@ public class DishService {
     {
         DishCategory category = dishCategoryRepository.findByName(categoryName).orElse(null);
 
-        if(category == null) return null;
+        if(category == null) return Collections.emptyList();
 
         return dishRepository.findByDishCategory(category);
     }

@@ -1,6 +1,5 @@
 package com.app.kantinerado.services;
 
-import com.app.kantinerado.models.ApplicationUser;
 import com.app.kantinerado.models.mealplan.Day;
 import com.app.kantinerado.models.mealplan.Dish;
 import com.app.kantinerado.repository.DayRepository;

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
-import { catchError, of, pipe, tap } from 'rxjs';
+import { catchError, of, tap } from 'rxjs';
 
 @Component({
   selector: 'app-login',
