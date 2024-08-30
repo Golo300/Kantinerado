@@ -11,16 +11,34 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
+import static org.mockito.Mockito.*;
+import com.app.kantinerado.models.Role;
+import com.app.kantinerado.repository.RoleRepository;
+import com.app.kantinerado.utils.Roles;
+import org.junit.jupiter.api.BeforeEach;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import java.util.HashSet;
+import java.util.Set;
+
+
 
 @SpringBootTest
 @Transactional
 public class AdminServiceTest {
 
     @Autowired
+    private AuthenticationService authenticationService;
+
     private AdminService adminService;
 
-    @Autowired
-    private AuthenticationService authenticationService;
+    @Mock
+    private UserRepository userRepository;
+
+    @Mock
+    private RoleRepository roleRepository;
+
 
     @Autowired
     private UserRepository userRepository;
@@ -54,6 +72,87 @@ public class AdminServiceTest {
 
         userOptional = userRepository.findByEmployeeiD(employeeId);
         assertTrue(userOptional.isEmpty());
+    }
+}
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+        adminService = new AdminService();
+        adminService.userRepository = userRepository;
+        adminService.roleRepository = roleRepository;
+    }
+
+    @Test
+    public void testPromoteUser_Success() {
+        // Arrange
+        final String username = "testUser";
+        ApplicationUser user = new ApplicationUser();
+        user.setUsername(username);
+
+        Role canteenRole = new Role();
+        canteenRole.setAuthority(Roles.KANTEEN);
+
+        when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
+        when(roleRepository.findByAuthority(Roles.KANTEEN)).thenReturn(Optional.of(canteenRole));
+
+        // Act
+        boolean success = adminService.promoteUser(username);
+
+        // Assert
+        assertTrue(success);
+        assertEquals(1, user.getAuthorities().size());
+        assertTrue(user.getAuthorities().contains(canteenRole));
+    }
+
+    @Test
+    public void testPromoteUser_UserNotFound() {
+        // Arrange
+        final String username = "nonExistingUser";
+
+        when(userRepository.findByUsername(username)).thenReturn(Optional.empty());
+
+        // Act
+        boolean success = adminService.promoteUser(username);
+
+        // Assert
+        assertFalse(success);
+    }
+
+    @Test
+    public void testDemoteUser_Success() {
+        // Arrange
+        final String username = "testUser";
+        ApplicationUser user = new ApplicationUser();
+        user.setUsername(username);
+
+        Role userRole = new Role();
+        userRole.setAuthority(Roles.USER);
+
+        when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
+        when(roleRepository.findByAuthority(Roles.USER)).thenReturn(Optional.of(userRole));
+
+        // Act
+        boolean success = adminService.demoteUser(username);
+
+        // Assert
+        assertTrue(success);
+        assertEquals(1, user.getAuthorities().size());
+        assertTrue(user.getAuthorities().contains(userRole));
+    }
+
+    @Test
+    public void testDemoteUser_UserNotFound() {
+        // Arrange
+        final String username = "nonExistingUser";
+
+        when(userRepository.findByUsername(username)).thenReturn(Optional.empty());
+
+        // Act
+        boolean success = adminService.demoteUser(username);
+
+        // Assert
+        assertFalse(success);
     }
 }
 
