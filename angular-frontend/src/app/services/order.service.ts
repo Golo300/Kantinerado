@@ -2,6 +2,7 @@ import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {map, Observable} from 'rxjs';
 import {FullOrder, Order, SendOrder} from "../Interfaces";
+import {API_URL} from "../shared/constants"
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable'
 
@@ -10,7 +11,7 @@ import autoTable from 'jspdf-autotable'
 })
 export class OrderService {
 
-  private apiUrl = 'http://localhost:8080';
+  private apiUrl = API_URL
 
 
   constructor(private http: HttpClient) {
@@ -18,9 +19,9 @@ export class OrderService {
 
   createOrder(orders: Order[]): Observable<any> {
 
-    var sendOrders: SendOrder[] = []
+    let sendOrders: SendOrder[] = []
 
-    for (var order of orders) {
+    for (let order of orders) {
 
       const sendOrder: SendOrder =
         {
@@ -55,9 +56,9 @@ export class OrderService {
 
   deleteOrders(deleteOrders: FullOrder[]) {
 
-    var deleted: number[] = []
+    let deleted: number[] = []
 
-    for (var order of deleteOrders) {
+    for (let order of deleteOrders) {
       deleted.push(order.id);
     }
 
@@ -111,7 +112,6 @@ export class OrderService {
         const dishCount = dishCounts[key].count;
         const veggie = dishCounts[key].veggie ? 'Yes' : 'No';
         const price = dishCounts[key].price;
-        const totalPrice = price * dishCount;
         const date = key.substring(0, 10); // Extrahiere das Datum aus dem Schlüssel
 
         // Füge das Gericht nur einmal in die Liste ein
@@ -134,8 +134,7 @@ export class OrderService {
   generateUserPdf(newOrders: Order[], deletedOrders: Order[]) {
     const doc = new jsPDF();
     let yPos = 10;
-    let uniqueOrderNumber = this.generateUniqueOrderNumber(this.existingOrderNumbers);
-    doc.text('Ihre Bestellübersicht mit der Nummer: ' + uniqueOrderNumber, 10, yPos);
+    doc.text('Ihre Bestellübersicht', 10, yPos);
     yPos += 10;
 
     const headers = [['Date', 'Dish', 'Veggie', 'Price']];
@@ -159,7 +158,7 @@ export class OrderService {
     yPos += (data.length + 1) * 10; // Anpassung der Y-Position
     doc.text(`Total Price: ${totalPriceFormatted}`, 10, yPos);
 
-    doc.save('Ihre Bestellung_' + uniqueOrderNumber + '.pdf');
+    doc.save('Ihre Bestellungen.pdf');
   }
 
   private calculateTotalPrice(orders: Order[]): number {
@@ -177,16 +176,5 @@ export class OrderService {
       {content: order.veggie ? 'Yes' : 'No'},
       {content: color === 'red' ? '-' + order.dish.price : order.dish.price.toString(), styles: {textColor: color}}
     ]);
-  }
-
-  existingOrderNumbers = new Set<number>();
-
-  generateUniqueOrderNumber(existingOrderNumbers: Set<number>): number {
-    let orderNumber = Math.floor(Math.random() * 90000) + 10000;
-    while (existingOrderNumbers.has(orderNumber)) {
-      orderNumber = Math.floor(Math.random() * 90000) + 10000;
-    }
-    existingOrderNumbers.add(orderNumber);
-    return orderNumber;
   }
 }

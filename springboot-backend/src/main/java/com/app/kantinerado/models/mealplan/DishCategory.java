@@ -1,7 +1,6 @@
 package com.app.kantinerado.models.mealplan;
 
 import jakarta.persistence.*;
-import org.springframework.security.core.GrantedAuthority;
 
 @Entity
 public class DishCategory {

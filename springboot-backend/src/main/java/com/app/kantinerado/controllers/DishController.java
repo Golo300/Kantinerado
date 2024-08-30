@@ -1,6 +1,5 @@
 package com.app.kantinerado.controllers;
 
-import com.app.kantinerado.models.ApplicationUser;
 import com.app.kantinerado.models.mealplan.Dish;
 import com.app.kantinerado.services.DishService;
 import org.springframework.beans.factory.annotation.Autowired;

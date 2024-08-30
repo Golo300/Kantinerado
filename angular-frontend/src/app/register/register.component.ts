@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
@@ -30,6 +29,7 @@ export class RegisterComponent {
         })
       )
       .subscribe(response => {
+        console.log(response)
       });
   }
 

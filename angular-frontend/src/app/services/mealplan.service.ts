@@ -2,14 +2,15 @@ import { HttpClient, HttpParams, HttpErrorResponse } from '@angular/common/http'
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { Day, DayDishDTO, Dish } from '../Interfaces';
+import { Day, DayDishDTO } from '../Interfaces';
+import { API_URL } from '../shared/constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MealserviceService {
 
-  private apiUrl = 'http://localhost:8080/mealplan';
+  private apiUrl = API_URL + '/mealplan';
 
   constructor(private http: HttpClient) { }
 

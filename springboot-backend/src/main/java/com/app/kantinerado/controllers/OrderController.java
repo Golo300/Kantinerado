@@ -25,10 +25,14 @@ public class OrderController {
     @Autowired
     private TokenService tokenService;
 
+    private ApplicationUser getAppUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return tokenService.getUserFromAuthentication(authentication);
+    }
+
     @GetMapping("/{kw}")
     public ResponseEntity<List<Order>> getOrderByKw(@PathVariable("kw") Integer kw, @RequestParam(required = false) Integer optionalParameter) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        ApplicationUser user = tokenService.getUserFromAuthentication(authentication);
+        ApplicationUser user = getAppUser();
 
         List<Order> orders = orderService.findOrderBy(kw, user);
         return new ResponseEntity<>(orders, HttpStatus.OK);
@@ -36,7 +40,7 @@ public class OrderController {
 
     @GetMapping("/")
     public ResponseEntity<List<Order>> getAllOrders() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); ApplicationUser user = tokenService.getUserFromAuthentication(authentication);
+        ApplicationUser user = getAppUser();
 
         List<Order> orders = orderService.getAllOders(user);
         return new ResponseEntity<>(orders, HttpStatus.OK);
@@ -44,10 +48,7 @@ public class OrderController {
 
     @PostMapping("/")
     public ResponseEntity<String> createOrder(@RequestBody OrderDTO order) {
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        ApplicationUser user = tokenService.getUserFromAuthentication(authentication);
+        ApplicationUser user = getAppUser();
 
         boolean response = orderService.placeOrder(order, user);
 
@@ -59,15 +60,13 @@ public class OrderController {
 
     @PostMapping("/batch")
     public ResponseEntity<String> createOrders(@RequestBody List<OrderDTO> orders) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        ApplicationUser user = tokenService.getUserFromAuthentication(authentication);
+        ApplicationUser user = getAppUser();
 
         boolean allOrdersPlaced = true;
         for (OrderDTO order : orders) {
             boolean response = orderService.placeOrder(order, user);
             if (!response) {
                 allOrdersPlaced = false;
-                // Hier können Sie weitere Fehlerbehandlung durchführen, wenn eine Bestellung fehlschlägt
             }
         }
 
@@ -80,8 +79,7 @@ public class OrderController {
 
     @PostMapping("/batchRemove")
     public ResponseEntity<String> deleteOrders(@RequestBody List<Integer> orders) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        ApplicationUser user = tokenService.getUserFromAuthentication(authentication);
+        ApplicationUser user = getAppUser();
 
         boolean allOrdersDeleted = true;
         for (Integer order : orders) {

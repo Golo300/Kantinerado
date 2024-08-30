@@ -2,13 +2,14 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, throwError } from 'rxjs';
 import { Dish } from '../Interfaces';
+import { API_URL } from '../shared/constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DishService {
 
-  private apiUrl = 'http://localhost:8080';
+  private apiUrl = API_URL;
 
   constructor(private http: HttpClient) {
   }

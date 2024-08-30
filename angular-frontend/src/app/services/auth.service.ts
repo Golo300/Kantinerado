@@ -1,13 +1,14 @@
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, catchError, map, throwError } from 'rxjs';
+import { Observable, map } from 'rxjs';
+import { API_URL } from '../shared/constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private apiUrl = 'http://localhost:8080/auth';
+  private apiUrl = API_URL + '/auth';
 
 
   constructor(private http: HttpClient) {}
@@ -41,7 +42,7 @@ export class AuthService {
 
   test(): Observable<String> {
     
-    return this.http.get<any>(`http://localhost:8080/user/`).pipe(
+    return this.http.get<any>(`${API_URL}/user/`).pipe(
       map((response) => {
         return response;
       }));
