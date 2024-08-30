@@ -53,11 +53,9 @@ public class AdminController {
         Boolean success = adminService.demoteUser(demote.getUsername());
 
         if (success) {
-            return ResponseEntity.ok(demote.getUsername() + " wurde degradiert");
+            return ResponseEntity.ok(demote.getUsername() + " got demoted");
         } else {
             return ResponseEntity.notFound().build();
         }
     }
-
-
 }
