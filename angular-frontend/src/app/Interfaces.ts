@@ -117,13 +117,11 @@ export interface ApplicationUser {
   /** Username of the user. */
   username: string;
   /** Employee ID of the user. */
-  employeeId: number;
+  employeeiD: number;
   /** Email of the user. */
   email: string;
-  /** Password of the user. */
-  password: string;
   /** Roles assigned to the user. */
-  authorities: Role[];
+  authorities: Role;
 }
 
 /**

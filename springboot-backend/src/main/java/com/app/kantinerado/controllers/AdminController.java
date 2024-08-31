@@ -1,7 +1,11 @@
 package com.app.kantinerado.controllers;
 
 import com.app.kantinerado.models.PromoteDTO;
+import com.app.kantinerado.models.UserDTO;
 import com.app.kantinerado.services.AdminService;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +21,11 @@ public class AdminController {
     @GetMapping("/")
     public String helloAdminController(){
         return "Admin level access";
+    }
+
+    @GetMapping("/users")
+    public List<UserDTO> getAllUser(){
+        return adminService.findAllWithoutPasswords();
     }
 
     @PostMapping("/promote")
