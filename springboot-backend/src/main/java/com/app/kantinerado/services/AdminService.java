@@ -2,6 +2,7 @@ package com.app.kantinerado.services;
 
 import com.app.kantinerado.models.ApplicationUser;
 import com.app.kantinerado.models.Role;
+import com.app.kantinerado.models.UserDTO;
 import com.app.kantinerado.repository.RoleRepository;
 import com.app.kantinerado.repository.UserRepository;
 import com.app.kantinerado.utils.Roles;
@@ -10,6 +11,7 @@ import org.springframework.security.core.Transient;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -22,6 +24,11 @@ public class AdminService {
 
     @Autowired
     public RoleRepository roleRepository;
+    
+    public List<UserDTO> findAllWithoutPasswords()
+    {
+        return userRepository.findAllWithoutPasswords();
+    }
 
     public Boolean promoteUser(String username)
     {

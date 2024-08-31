@@ -1,0 +1,6 @@
+td {
+    text-align: center;
+    width: calc(100% / 5);
+    height: 3rem;
+    vertical-align: middle;
+}
