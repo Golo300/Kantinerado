@@ -68,7 +68,7 @@ public class ApplicationUser implements UserDetails{
 		return this.employeeiD;
 	}
 
-	public void getEmployeeiD(Integer employeeiD) {
+	public void setEmployeeiD(Integer employeeiD) {
 		this.employeeiD = employeeiD;
 	}
 	

@@ -19,19 +19,18 @@ import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.HashSet;
-import java.util.Set;
-
-
 
 @SpringBootTest
 @Transactional
 public class AdminServiceTest {
 
+    private AdminService adminService;
+    
     @Autowired
     private AuthenticationService authenticationService;
 
-    private AdminService adminService;
+    @Autowired
+    private UserRepository userRepositoryNoMock;
 
     @Mock
     private UserRepository userRepository;
@@ -39,15 +38,22 @@ public class AdminServiceTest {
     @Mock
     private RoleRepository roleRepository;
 
-
-    @Autowired
-    private UserRepository userRepository;
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+        adminService = new AdminService();
+        adminService.userRepository = userRepository;
+        adminService.roleRepository = roleRepository;
+    }
 
     @Test
     /**
      * Tests deletion of a user 
      */
     public void testDeleteUser() {
+
+        adminService.userRepository = userRepositoryNoMock;
+
         final String username = "testUser";
         final String password = "password";
         final int employeeId = 1234;
@@ -61,7 +67,7 @@ public class AdminServiceTest {
         boolean sucess = authenticationService.registerUser(registrationDTO);
         assertTrue(sucess);
 
-        Optional<ApplicationUser> userOptional = userRepository.findByEmployeeiD(employeeId);
+        Optional<ApplicationUser> userOptional = userRepositoryNoMock.findByEmployeeiD(employeeId);
         assertFalse(userOptional.isEmpty());
 
         ApplicationUser user = userOptional.get();
@@ -70,18 +76,10 @@ public class AdminServiceTest {
         sucess = adminService.deleteAccount(Integer.toString(employeeId));
         assertTrue(sucess);
 
-        userOptional = userRepository.findByEmployeeiD(employeeId);
+        userOptional = userRepositoryNoMock.findByEmployeeiD(employeeId);
         assertTrue(userOptional.isEmpty());
     }
-}
 
-    @BeforeEach
-    public void setUp() {
-        MockitoAnnotations.openMocks(this);
-        adminService = new AdminService();
-        adminService.userRepository = userRepository;
-        adminService.roleRepository = roleRepository;
-    }
 
     @Test
     public void testPromoteUser_Success() {
@@ -155,4 +153,3 @@ public class AdminServiceTest {
         assertFalse(success);
     }
 }
-
