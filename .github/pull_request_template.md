@@ -5,18 +5,12 @@
 [Bitte geben Sie eine kurze Beschreibung der Änderungen in diesem Pull Request.]
 
 ## Checkliste
-Bitte stellen Sie sicher, dass Sie die folgenden Punkte überprüft haben, bevor Sie diesen Pull Request einreichen:
+Bitte stell sicher, dass die folgenden Punkte überprüft sind, bevor der Pull Request gemerged wird:
 
-- [ ] Unit-Tests
-  - [ ] Für alle implementierten Backend-Services wurden Unit-Tests geschrieben
-  - [ ] Alle Tests laufen erfolgreich
+- [ ] Für alle implementierten Backend-Services wurden Unit-Tests geschrieben
+- [ ] Alle Tests laufen erfolgreich
 
-- [ ] Pipeline
-  - [ ] Die Pipeline läuft erfolgreich mit allen Tests
+- [ ] Alle wichtigen Änderungen sind durch Kommentare im Code dokumentiert
+- [ ] Die `doc.md` wurde entsprechend aktualisiert
 
-- [ ] Dokumentation
-  - [ ] Alle wichtigen Änderungen sind durch Kommentare im Code dokumentiert
-  - [ ] Die `doc.md` wurde entsprechend aktualisiert
-
-- [ ] Akzeptanzkriterien
-  - [ ] Alle in den Akzeptanzkriterien definierten Anforderungen sind erfüllt
+- [ ] Alle in den Akzeptanzkriterien definierten Anforderungen sind erfüllt
