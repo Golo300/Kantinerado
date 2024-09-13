@@ -16,10 +16,10 @@ import java.util.Optional;
 public class UserService implements UserDetailsService {
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    PasswordEncoder passwordEncoder;
 
     @Autowired
-    private UserRepository userRepository;
+    UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
