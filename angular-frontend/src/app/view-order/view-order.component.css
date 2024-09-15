@@ -1,0 +1,5 @@
+th, td {
+    text-align: center;
+    height: 2rem !important;
+    width: calc(100% / 4) !important;
+}
