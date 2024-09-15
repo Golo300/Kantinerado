@@ -100,48 +100,77 @@ export class MealplanOrderComponent extends MealplanComponent implements OnInit 
     return weekdays.findIndex(day => day === weekday);
   }
 
-  checkboxChanged(event: any, dish: Dish, dayOfWeek: string): void {
-
-      if (event.target.checked) {
-        // Anlegen einer neuen Order
-        const order: Order = {
-          date: this.getDateFromDayOfWeekAndKW(dayOfWeek),
-          dish: dish,
-          veggie: false //TODO: User muss angeben ob er veggie will oder nicht
-        };
-        // Hinzufügen zu selectedDishes
-        this.selectedDishes.push(order);
-
-        // Wenn Dish noch nicht in orderedDishes --> Zusätzlich hinzufügen zu newSelectedDishes
-        if (!this.checkIfOrdered(dish, dayOfWeek)) {
+  checkboxChanged(event: any, dish: Dish, dayOfWeek: string, isVeggie: boolean = false): void {
+    if (event.target.checked) {
+      // Anlegen einer neuen Order
+      const order: Order = {
+        date: this.getDateFromDayOfWeekAndKW(dayOfWeek),
+        dish: dish,
+        veggie: isVeggie
+      };
+      // Hinzufügen zu selectedDishes
+      this.selectedDishes.push(order);
+  
+      // Wenn Dish noch nicht in orderedDishes --> Zusätzlich hinzufügen zu newSelectedDishes
+      if (!this.checkIfOrdered(dish, dayOfWeek)) {
+        this.newSelectedDishes.push(order);
+      }
+  
+      // Wenn Dish in orderedDishes und deletedDishes ist --> Zusätzlich entfernen aus deletedDishes
+      else {
+        // Spezialfall: Menü 2 war bereits bestellt, wurde abgewählt und wird nun erneut ausgewählt --> NUR zu newSelectedDishes hinzufügen, damit die Veggie Eigenschaft neu gesetzt werden kann (2 separate Bestellungen)
+        if (dish.dishCategory.name == "Menü2") {
           this.newSelectedDishes.push(order);
         }
-
-        // Wenn Dish in orderedDishes und deletedDishes ist --> Zusätzlich entfernen aus deletedDishes
         else {
           this.deletedDishes = this.deletedDishes.filter(element => {
             const orderedDay = this.getWeekDayByDate(element.date);
             return !(dish.id === element.dish.id && orderedDay === dayOfWeek);
           });
         }
-      } else {
-        // Entfernen aus selectedDishes
-        this.selectedDishes = this.selectedDishes.filter(order => {
-          return order.dish.id !== dish.id || this.getWeekDayByDate(order.date) !== dayOfWeek;
-        });
+      }
+    } else {
+      // Entfernen aus selectedDishes
+      this.selectedDishes = this.selectedDishes.filter(order => {
+        return order.dish.id !== dish.id || this.getWeekDayByDate(order.date) !== dayOfWeek;
+      });
+  
+      // Wenn Dish noch nicht in orderedDishes also in newSelectedDishes ist --> Zusätzlich entfernen aus newSelectedDishes
+      this.newSelectedDishes = this.newSelectedDishes.filter(order => order.dish !== dish);
+  
+      // Wenn Dish bereist in orderedDishes ist --> Zusätzlich hinzufügen zu deletedDishes
+      // this.orderedDishes.forEach(element => {
+      //   const orderedDay = this.getWeekDayByDate(element.date);
+      //   if (dish.id === element.dish.id && orderedDay === dayOfWeek) {
+      //     this.deletedDishes.push(element);
+      //   }
+      // });
 
-        // Wenn Dish noch nicht in orderedDishes also in newSelectedDishes ist --> Zusätzlich entfernen aus newSelectedDishes
-        this.newSelectedDishes = this.newSelectedDishes.filter(order => order.dish !== dish);
-
-        // Wenn Dish bereist in orderedDishes ist --> Zusätzlich hinzufügen zu deletedDishes
-        this.orderedDishes.forEach(element => {
-          const orderedDay = this.getWeekDayByDate(element.date);
-          if (dish.id === element.dish.id && orderedDay === dayOfWeek) {
+      this.orderedDishes.forEach(element => {
+        const orderedDay = this.getWeekDayByDate(element.date);
+        if (dish.id === element.dish.id && orderedDay === dayOfWeek) {
+          // Füge das Gericht nur einmal zu deletedDishes hinzu
+          if (!this.deletedDishes.some(deletedOrder => deletedOrder.dish.id === dish.id && this.getWeekDayByDate(deletedOrder.date) === dayOfWeek)) {
             this.deletedDishes.push(element);
           }
-        });
+        }
+      });
     }
-  }
+  }  
+
+  toggleVegetarianOption(event: any, dish: Dish, dayOfWeek: string): void {
+    const isVeggie = event.target.checked;
+  
+    // Finde die bestehende Bestellung für das Gericht
+    const existingOrderIndex = this.selectedDishes.findIndex(order => 
+      order.dish.id === dish.id && this.getWeekDayByDate(order.date) === dayOfWeek
+    );
+  
+    if (existingOrderIndex !== -1) {
+      // Wenn die Bestellung existiert, aktualisiere nur die veggie-Option
+      this.selectedDishes[existingOrderIndex].veggie = isVeggie;
+    }
+  }  
 
   isKWValid(selected_kw: number): boolean {
     let valid = false;
@@ -205,7 +234,7 @@ export class MealplanOrderComponent extends MealplanComponent implements OnInit 
     this.orderService.getAllOrders()
       .subscribe((orders: any[]) => {
         this.orderedDishes = orders;
-
+  
         // Kopieren der bestellten Gerichte in selectedDishes
         this.selectedDishes = this.orderedDishes
           .map(order => ({
@@ -213,14 +242,13 @@ export class MealplanOrderComponent extends MealplanComponent implements OnInit 
             dish: order.dish,
             veggie: order.veggie
           }));
-
-
-        this.selectedDishes = this.selectedDishes.filter(order => { console.log(getISOWeek(order.date), getISOWeek); return getISOWeek(order.date) === this.selectedKW; });
-        this.orderedDishes = this.orderedDishes.filter(order => { console.log(getISOWeek(order.date), this.selectedKW); return getISOWeek(order.date) === this.selectedKW; });
-
+  
+        this.selectedDishes = this.selectedDishes.filter(order => getISOWeek(order.date) === this.selectedKW);
+        this.orderedDishes = this.orderedDishes.filter(order => getISOWeek(order.date) === this.selectedKW);
+  
         this.orderReady = true;
       });
-  }
+  }  
 
   checkIfOrdered(dish: Dish, day: string): boolean {
 
@@ -283,6 +311,19 @@ export class MealplanOrderComponent extends MealplanComponent implements OnInit 
     });
     return isSelected;
   }
+
+  checkIfVegetarian(dish: Dish, day: string): boolean {
+    let isVegetarian = false;
+  
+    this.selectedDishes.forEach(order => {
+      const orderedDay = this.getWeekDayByDate(order.date);
+      if (order.dish.id === dish.id && orderedDay === day) {
+        isVegetarian = order.veggie;
+      }
+    });
+  
+    return isVegetarian;
+  }  
 
   calculateTotalPricePerDay(currentDay: string): number {
     let totalPrice = 0;
