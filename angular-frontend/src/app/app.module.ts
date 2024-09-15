@@ -17,6 +17,7 @@ import { ViewOrderComponent } from './view-order/view-order.component';
 import { MealplanAdministrationComponent } from './mealplan-administration/mealplan-administration.component';
 import { ViewOrderAdministrationComponent } from './view-order-administration/view-order-administration.component';
 import { AccountManagementAdminComponent } from './account-management-admin/account-management-admin.component';
+import { AccountViewComponent } from './account-view/account-view.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { AccountManagementAdminComponent } from './account-management-admin/acco
     ViewOrderComponent,
     MealplanAdministrationComponent,
     ViewOrderAdministrationComponent,
-    AccountManagementAdminComponent
+    AccountManagementAdminComponent,
+    AccountViewComponent
   ],
   imports: [
     BrowserModule,

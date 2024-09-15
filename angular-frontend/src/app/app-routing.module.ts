@@ -11,6 +11,7 @@ import { ViewOrderComponent } from './view-order/view-order.component';
 import { MealplanAdministrationComponent } from './mealplan-administration/mealplan-administration.component';
 import { ViewOrderAdministrationComponent } from './view-order-administration/view-order-administration.component';
 import { AccountManagementAdminComponent } from './account-management-admin/account-management-admin.component';
+import { AccountViewComponent } from './account-view/account-view.component';
 
 const routes: Routes = [
   { path: '', component: MealplanComponent },
@@ -26,6 +27,7 @@ const routes: Routes = [
   { path: 'dashboard/orders', component: ViewOrderAdministrationComponent, canActivate: [AuthGuardService], data: { allowedRoles: ['ADMIN', 'KANTEEN'] } },
   { path: 'dashboard/accounts', component: AccountManagementAdminComponent, canActivate: [AuthGuardService], data: { allowedRoles: ['ADMIN'] } },
   { path: 'detailview/:day', component: DetailViewComponent },
+  { path: 'accountview', component: AccountViewComponent, canActivate: [AuthGuardService], data: { allowedRoles: ['ADMIN', 'USER', 'KANTEEN'] } },
   { path: '**', component: LoginComponent },
   // Weitere Routen können hier hinzugefügt werden
 ];

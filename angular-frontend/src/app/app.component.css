@@ -12,4 +12,9 @@
     display: inline-block;
     align-self: center;
   }
-  
+
+.user-icon {
+    color: white !important;
+    width: 24px;
+    height: 24px;
+}
