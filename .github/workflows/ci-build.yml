@@ -32,8 +32,24 @@ jobs:
       run: |
         docker-compose up -d mysql
     
+    - name: Wait for MySQL to be healthy
+      run: |
+        for i in {1..30}; do
+          if [ "$(docker-compose ps -q db | xargs docker inspect -f '{{.State.Health.Status}}')" == "healthy" ]; then
+            echo "MySQL is healthy"
+            break
+          fi
+          echo "Waiting for MySQL to be healthy..."
+          sleep 5
+        done
+
     - name: Build and Test with Gradle
       run: |
             cd springboot-backend
-            ./gradlew build
+            ./gradlew test jacocoTestReport
 
+    - name: Upload JaCoCo report
+      uses: actions/upload-artifact@v3
+      with:
+        name: jacoco-report
+        path: springboot-backend/build/reports/jacoco/test/jacocoTestReport.xml

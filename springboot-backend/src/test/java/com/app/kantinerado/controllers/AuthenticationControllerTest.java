@@ -1,36 +1,41 @@
 package com.app.kantinerado.controllers;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
-
-import com.app.kantinerado.models.ApplicationUser;
 import com.app.kantinerado.models.LoginDTO;
-import com.app.kantinerado.models.LoginResponseDTO;
 import com.app.kantinerado.models.RegistrationDTO;
-import com.app.kantinerado.services.AuthenticationService;
-
-import org.junit.jupiter.api.Assertions;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.WebApplicationContext;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @Transactional
 public class AuthenticationControllerTest {
 
-    @Autowired
-    private AuthenticationService authenticationService;
+    private MockMvc mockMvc;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    @Autowired
+    public void setMockMvc(WebApplicationContext context) {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
+    }
 
     @Test
-    /**
-     * Tests the creation of a new user and the succesfull login
-     */
-    public void testRegisterUserLogin_Success() {
+    public void testRegisterUserLogin_Success() throws Exception {
         // Arrange
-
-        final String username = "testUesr";
+        final String username = "testUser";
         final String password = "password";
 
         RegistrationDTO registrationDTO = new RegistrationDTO();
@@ -39,76 +44,79 @@ public class AuthenticationControllerTest {
         registrationDTO.setEmail("email@test.com");
         registrationDTO.setPassword(password);
 
-        // Act
-        boolean success = authenticationService.registerUser(registrationDTO);
-        assertTrue(success);
+        // Register the user
+        mockMvc.perform(post("/auth/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(registrationDTO)))
+                .andExpect(status().isCreated());
 
+        // Login with the registered user
         LoginDTO loginDTO = new LoginDTO(username, password);
-        LoginResponseDTO response = authenticationService.loginUser(loginDTO);
-        // Assert
 
-        assertEquals(username, response.getUser().getUsername());
+        ResultActions resultActions = mockMvc.perform(post("/auth/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(loginDTO)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+
+        // Assert the login response contains the correct username
+        String responseString = resultActions.andReturn().getResponse().getContentAsString();
+        assertTrue(responseString.contains(username));
     }
 
     @Test
-    /**
-     * Test that new user can't be created witch same employeeId, username or email
-     */
-    public void testRegisterDup_Success() {
-
-        final String username = "testUesr";
+    public void testRegisterDup_Failure() throws Exception {
+        final String username = "testUser";
         final String password = "password";
         final int employeeId = 1234;
         final String email = "email@test.com";
 
+        // Register the first user
         RegistrationDTO registrationDTO = new RegistrationDTO();
         registrationDTO.setEmployeeId(employeeId);
         registrationDTO.setUsername(username);
         registrationDTO.setEmail(email);
         registrationDTO.setPassword(password);
 
-        // Act
-        boolean sucess = authenticationService.registerUser(registrationDTO);
-        assertTrue(sucess);
+        mockMvc.perform(post("/auth/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(registrationDTO)))
+                .andExpect(status().isCreated());
 
-        // same id
+        // Attempt to register a second user with the same employee ID
         registrationDTO = new RegistrationDTO();
         registrationDTO.setEmployeeId(employeeId);
         registrationDTO.setUsername("testUser2");
         registrationDTO.setEmail("email2@test.com");
         registrationDTO.setPassword(password);
 
+        mockMvc.perform(post("/auth/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(registrationDTO)))
+                .andExpect(status().isBadRequest());
 
-        // Act
-        sucess = authenticationService.registerUser(registrationDTO);
-        assertFalse(sucess);
-
-
-        // same user name
+        // Attempt to register a second user with the same username
         registrationDTO = new RegistrationDTO();
-        registrationDTO.setEmployeeId(12344);
+        registrationDTO.setEmployeeId(12345);
         registrationDTO.setUsername(username);
         registrationDTO.setEmail("email3@test.com");
         registrationDTO.setPassword(password);
 
+        mockMvc.perform(post("/auth/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(registrationDTO)))
+                .andExpect(status().isBadRequest());
 
-        // Act
-         sucess = authenticationService.registerUser(registrationDTO);
-        assertFalse(sucess);
-
-
-        // same email
+        // Attempt to register a second user with the same email
         registrationDTO = new RegistrationDTO();
-        registrationDTO.setEmployeeId(12334);
+        registrationDTO.setEmployeeId(12346);
         registrationDTO.setUsername("testUser3");
         registrationDTO.setEmail(email);
         registrationDTO.setPassword(password);
 
-
-        // Act
-        sucess = authenticationService.registerUser(registrationDTO);
-        assertFalse(sucess);
-
+        mockMvc.perform(post("/auth/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(registrationDTO)))
+                .andExpect(status().isBadRequest());
     }
 }
-
