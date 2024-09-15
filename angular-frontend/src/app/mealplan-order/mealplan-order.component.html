@@ -145,6 +145,14 @@
                     </span>
                   </td>
                 </tr>
+                <tr>
+                  <th class="align-middle">Gesamtpreis</th>
+                  <td id="price-cell" *ngFor="let day of weekDays" class="setMargin align-middle">
+                    <div>
+                      {{ calculateTotalPricePerDay(day) }} €
+                    </div>
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -154,57 +162,6 @@
             </button>
           </div>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <br />
-
-  <section id="prices">
-    <div class="card text-begin divWidth">
-      <div class="card-header">Täglicher Gesamtpreis</div>
-      <div class="card-body">
-        <div class="table divWidth">
-          <table class="table table-bordered rounded" id="tablePrices">
-            <thead>
-              <tr>
-                <th class="align-middle"></th>
-                <th class="align-middle">Montag</th>
-                <th class="align-middle">Dienstag</th>
-                <th class="align-middle">Mittwoch</th>
-                <th class="align-middle">Donnerstag</th>
-                <th class="align-middle">Freitag</th>
-                <th class="align-middle">Samstag</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th class="align-middle">Gesamtpreis</th>
-                <td *ngFor="let day of weekDays" class="setMargin align-middle">
-                  <div>
-                    {{ calculateTotalPricePerDay(day) }} €
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <br />
-
-  <section id="notes">
-    <div class="card text-center divWidth">
-      <div class="card-header">Hinweise</div>
-      <div class="card-body">
-        <ul>
-          Menü 2 ist auch als vegetarische Variante zu erhalten
-        </ul>
-        <ul>
-          Samstags wird nur Menü 2 und Nachtisch angeboten
-        </ul>
       </div>
     </div>
   </section>
