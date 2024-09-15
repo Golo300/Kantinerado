@@ -1,0 +1,20 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          <h3>User Profile</h3>
+        </div>
+        <div class="card-body">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item"><strong>User ID:</strong> {{ user.userId }}</li>
+            <li class="list-group-item"><strong>Username:</strong> {{ user.username }}</li>
+            <li class="list-group-item"><strong>Employee ID:</strong> {{ user.employeeiD }}</li>
+            <li class="list-group-item"><strong>Email:</strong> {{ user.email }}</li>
+            <li class="list-group-item"><strong>Role:</strong> {{ user.authorities.authority }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
