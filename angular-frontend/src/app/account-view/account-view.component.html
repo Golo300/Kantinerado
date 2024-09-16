@@ -17,4 +17,29 @@
       </div>
     </div>
   </div>
+  <h3>Change Password</h3>
+    <form (ngSubmit)="changePassword()" class="needs-validation" novalidate>
+        <div class="mb-3">
+            <label for="currentPassword" class="form-label">Current Password:</label>
+            <input type="password" id="currentPassword" class="form-control" [(ngModel)]="currentPassword" name="currentPassword" required>
+            <div class="invalid-feedback">
+              Gib dein akutelles Passwort ein
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="newPassword" class="form-label">New Password:</label>
+            <input type="password" id="newPassword" class="form-control" [(ngModel)]="newPassword" name="newPassword" required>
+            <div class="invalid-feedback">
+              Gib dein neues Passwort ein
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Change Password</button>
+    </form>
+
+    <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+        {{ errorMessage }}
+    </div>
+    <div *ngIf="successMessage" class="alert alert-success mt-3">
+        {{ successMessage }}
+    </div>
 </div>

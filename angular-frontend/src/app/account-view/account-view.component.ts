@@ -12,6 +12,11 @@ export class AccountViewComponent {
 
   constructor(private userService: UserServiceService) { }
 
+  currentPassword: string = '';
+  newPassword: string = '';
+  errorMessage: string | null = null;
+  successMessage: string | null = null;
+
   ngOnInit(): void {
     this.getUserInfo()
   }
@@ -21,5 +26,20 @@ export class AccountViewComponent {
       .subscribe((user:ApplicationUser) => {
         this.user = user;
       });
+  }
+
+    changePassword() {
+        this.userService.changePassword(this.newPassword, this.currentPassword).subscribe({
+          next: () => {
+          this.successMessage = "Passwort erfogreich geändert";
+          this.errorMessage = '';
+          this.currentPassword = '';
+          this.newPassword = '';
+        },
+        error: err => {
+          this.errorMessage = "Passwort ändern fehlgeschlagen";
+          this.successMessage = '';
+        }
+    });
   }
 }

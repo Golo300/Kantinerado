@@ -8,10 +8,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.app.kantinerado.models.UserDTO;
 import com.app.kantinerado.repository.UserRepository;
-
-import java.util.Optional;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -27,20 +24,16 @@ public class UserService implements UserDetailsService {
         return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("user is not valid"));
     }
 
-    public boolean updatePassword(String username, String newPassword) {
-        Optional<ApplicationUser> userOpt = userRepository.findByUsername(username);
+    public boolean updatePassword(ApplicationUser user, String newPassword, String currentPassword) {
 
-        if (userOpt.isPresent()) {
-            ApplicationUser user = userOpt.get();
-
-            String encodedPassword = passwordEncoder.encode(newPassword);
-
-            user.setPassword(encodedPassword);
-
-            userRepository.save(user);
-            return true;
-        } else {
-            return false;
+        // Verify the current password
+        if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+            return false; // Current password doesn't match
         }
+
+        String encodedPassword = passwordEncoder.encode(newPassword);
+        user.setPassword(encodedPassword);
+        userRepository.save(user);
+        return true;
     }
 }
