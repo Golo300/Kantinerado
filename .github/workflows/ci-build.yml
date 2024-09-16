@@ -53,10 +53,3 @@ jobs:
       with:
         name: jacoco-report
         path: springboot-backend/build/reports/jacoco/test/*
-
-    - name: Upload JaCoCo report to Codecov
-      uses: codecov/codecov-action@v3
-      with:
-        files: springboot-backend/build/reports/jacoco/test/jacocoTestReport.xml
-        fail_ci_if_error: true
-        verbose: true
