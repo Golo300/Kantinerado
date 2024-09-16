@@ -8,12 +8,9 @@ import org.springframework.web.bind.annotation.*;
 import com.app.kantinerado.models.ApplicationUser;
 import com.app.kantinerado.models.Role;
 import com.app.kantinerado.models.UserDTO;
+import com.app.kantinerado.models.ChangePasswordDTO;
 import com.app.kantinerado.services.TokenService;
-import com.app.kantinerado.services.UserService;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -38,13 +35,16 @@ public class UserController {
         return "User access level";
     }
 
-    @PutMapping("/editPassword/{username}")
-    public ResponseEntity<String> editPassword(@PathVariable String username, @RequestBody String newPassword) {
-        boolean updated = userService.updatePassword(username, newPassword);
+    @PostMapping("/editPassword")
+    public ResponseEntity<String> editPassword(@RequestBody ChangePasswordDTO changePassword) {
+
+        ApplicationUser user = getAppUser();
+
+        boolean updated = userService.updatePassword(user, changePassword.getNewPassword(), changePassword.getCurrentPassword());
         if (updated) {
-            return ResponseEntity.ok("Password updated successfully");
+        return new ResponseEntity<>(HttpStatus.OK);
         } else {
-            return ResponseEntity.badRequest().body("User not found or error updating password");
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
     

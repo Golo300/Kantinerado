@@ -15,4 +15,11 @@ export class UserServiceService {
   getUserInfo(): Observable<ApplicationUser> {
     return this.http.get<ApplicationUser>(this.apiUrl + '/info');
   }
+
+  changePassword(newPassword: string, currentPassword: string): Observable<any> {
+    const url = `${this.apiUrl}/editPassword`;
+    const body = {newPassword, currentPassword}
+
+    return this.http.post(url, body);
+  }
 }

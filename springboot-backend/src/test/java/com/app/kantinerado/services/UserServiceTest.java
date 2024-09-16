@@ -61,31 +61,20 @@ public class UserServiceTest {
     @Test
     public void testUpdatePassword_Success() {
         String username = "testUser";
+        String currentPassword = "currentPassword";
         String newPassword = "newPassword";
         ApplicationUser user = new ApplicationUser();
         user.setUsername(username);
+        user.setPassword(currentPassword);
 
-        when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
         when(passwordEncoder.encode(newPassword)).thenReturn("encodedPassword");
+        when(passwordEncoder.matches(currentPassword, user.getPassword())).thenReturn(true);
 
-        boolean success = userService.updatePassword(username, newPassword);
+        boolean success = userService.updatePassword(user, newPassword, currentPassword);
 
         assertTrue(success);
         assertEquals("encodedPassword", user.getPassword());
         verify(userRepository, times(1)).save(user);
         verify(passwordEncoder, times(1)).encode(newPassword);
-    }
-
-    @Test
-    public void testUpdatePassword_UserNotFound() {
-        String username = "nonExistingUser";
-        String newPassword = "newPassword";
-        when(userRepository.findByUsername(username)).thenReturn(Optional.empty());
-
-        boolean success = userService.updatePassword(username, newPassword);
-
-        assertFalse(success);
-        verify(userRepository, never()).save(any());
-        verify(passwordEncoder, never()).encode(any());
     }
 }
