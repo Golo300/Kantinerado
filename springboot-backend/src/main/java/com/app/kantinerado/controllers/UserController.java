@@ -1,10 +1,9 @@
 package com.app.kantinerado.controllers;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.app.kantinerado.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import com.app.kantinerado.models.ApplicationUser;
 import com.app.kantinerado.models.Role;
@@ -24,6 +23,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 public class UserController {
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private TokenService tokenService;
 
     private ApplicationUser getAppUser() {
@@ -34,6 +36,16 @@ public class UserController {
     @GetMapping("/")
     public String helloUserController(){
         return "User access level";
+    }
+
+    @PutMapping("/editPassword/{username}")
+    public ResponseEntity<String> editPassword(@PathVariable String username, @RequestBody String newPassword) {
+        boolean updated = userService.updatePassword(username, newPassword);
+        if (updated) {
+            return ResponseEntity.ok("Password updated successfully");
+        } else {
+            return ResponseEntity.badRequest().body("User not found or error updating password");
+        }
     }
     
     @GetMapping("/info")

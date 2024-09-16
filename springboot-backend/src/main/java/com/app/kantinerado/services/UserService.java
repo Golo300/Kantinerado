@@ -1,5 +1,6 @@
 package com.app.kantinerado.services;
 
+import com.app.kantinerado.models.ApplicationUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -10,18 +11,36 @@ import org.springframework.stereotype.Service;
 import com.app.kantinerado.models.UserDTO;
 import com.app.kantinerado.repository.UserRepository;
 
+import java.util.Optional;
+
 @Service
 public class UserService implements UserDetailsService {
 
     @Autowired
-    private PasswordEncoder encoder;
+    PasswordEncoder passwordEncoder;
 
     @Autowired
-    private UserRepository userRepository;
+    UserRepository userRepository;
 
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("user is not valid"));
     }
 
+    public boolean updatePassword(String username, String newPassword) {
+        Optional<ApplicationUser> userOpt = userRepository.findByUsername(username);
+
+        if (userOpt.isPresent()) {
+            ApplicationUser user = userOpt.get();
+
+            String encodedPassword = passwordEncoder.encode(newPassword);
+
+            user.setPassword(encodedPassword);
+
+            userRepository.save(user);
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
