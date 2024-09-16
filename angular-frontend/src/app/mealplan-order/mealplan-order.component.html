@@ -98,17 +98,33 @@
                         {{ dish.price }}
                       </div>
                       <div>
-                        <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="checkBoxMenu2"
-                          [checked]="checkIfOrdered(dish, day)" [disabled]="!isKWValid(selectedKW)"
-                          (change)="checkboxChanged($event, dish, day)" />
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="flexRadioDefault"
+                          id="checkBoxMenu2"
+                          #checkBox
+                          [checked]="checkIfOrdered(dish, day)"
+                          [disabled]="!isKWValid(selectedKW)"
+                          (change)="checkboxChanged($event, dish, day)"
+                        />
                       </div>
-                      <!-- <div class="form-check form-switch d-flex justify-content-center align-items-center">
-                          <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckMenu2Veggie">
-                          <label class="form-check-label" for="flexSwitchCheckMenu2Veggie">Vegetarisch</label>
-                        </div>   -->
+                      <div class="form-check form-switch d-flex justify-content-center align-items-center mt-2">
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          id="flexSwitchCheckMenu2Veggie-{{ day }}"
+                          [checked]="checkIfVegetarian(dish, day)"
+                          [disabled]="!checkBox.checked || (!checkIfNewSelected(dish) && checkIfOrdered(dish, day))"
+                          (change)="toggleVegetarianOption($event, dish, day)"
+                        />
+                        <label class="form-check-label" for="flexSwitchCheckMenu2Veggie-{{ day }}">
+                          Vegetarisch
+                        </label>
+                      </div>
                     </span>
                   </td>
-                </tr>
+                </tr>                
                 <tr>
                   <th class="align-middle">Nachspeise</th>
                   <td *ngFor="let day of weekDays" class="align-middle">
@@ -145,6 +161,14 @@
                     </span>
                   </td>
                 </tr>
+                <tr>
+                  <th class="align-middle">Gesamtpreis</th>
+                  <td id="price-cell" *ngFor="let day of weekDays" class="setMargin align-middle">
+                    <div>
+                      {{ calculateTotalPricePerDay(day) }} €
+                    </div>
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -154,57 +178,6 @@
             </button>
           </div>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <br />
-
-  <section id="prices">
-    <div class="card text-begin divWidth">
-      <div class="card-header">Täglicher Gesamtpreis</div>
-      <div class="card-body">
-        <div class="table divWidth">
-          <table class="table table-bordered rounded" id="tablePrices">
-            <thead>
-              <tr>
-                <th class="align-middle"></th>
-                <th class="align-middle">Montag</th>
-                <th class="align-middle">Dienstag</th>
-                <th class="align-middle">Mittwoch</th>
-                <th class="align-middle">Donnerstag</th>
-                <th class="align-middle">Freitag</th>
-                <th class="align-middle">Samstag</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th class="align-middle">Gesamtpreis</th>
-                <td *ngFor="let day of weekDays" class="setMargin align-middle">
-                  <div>
-                    {{ calculateTotalPricePerDay(day) }} €
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <br />
-
-  <section id="notes">
-    <div class="card text-center divWidth">
-      <div class="card-header">Hinweise</div>
-      <div class="card-body">
-        <ul>
-          Menü 2 ist auch als vegetarische Variante zu erhalten
-        </ul>
-        <ul>
-          Samstags wird nur Menü 2 und Nachtisch angeboten
-        </ul>
       </div>
     </div>
   </section>
