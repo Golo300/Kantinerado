@@ -151,14 +151,6 @@ export class MealplanOrderComponent extends MealplanComponent implements OnInit 
       this.newSelectedDishes = this.newSelectedDishes.filter(order => {
         return dish.id !== order.dish.id || this.getWeekDayByDate(order.date) !== dayOfWeek
       });
-  
-      // Wenn Dish bereist in orderedDishes ist --> Zusätzlich hinzufügen zu deletedDishes
-      // this.orderedDishes.forEach(element => {
-      //   const orderedDay = this.getWeekDayByDate(element.date);
-      //   if (dish.id === element.dish.id && orderedDay === dayOfWeek) {
-      //     this.deletedDishes.push(element);
-      //   }
-      // });
 
       this.orderedDishes.forEach(element => {
         const orderedDay = this.getWeekDayByDate(element.date);
@@ -240,9 +232,6 @@ export class MealplanOrderComponent extends MealplanComponent implements OnInit 
   }
 
   addToCart(): void {
-    this.deletedDishes = this.deletedDishes.filter(item => 
-      !this.checkIfNewSelected(item.dish, this.getWeekDayByDate(item.date)));
-  
     const shoppingCart = {
       newSelectedDishes: this.newSelectedDishes,
       deletedDishes: this.deletedDishes
