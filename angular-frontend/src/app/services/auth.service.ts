@@ -53,8 +53,7 @@ export class AuthService {
   } 
 
   logout(): void {
-    // JWT-Token aus dem Local Storage löschen
-    localStorage.removeItem('token');
+    localStorage.clear();
   }
 
   getRoles(): string[] {
