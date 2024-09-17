@@ -8,8 +8,8 @@
 Bitte stell sicher, dass die folgenden Punkte überprüft sind, bevor der Pull Request gemerged wird:
 
 - [ ] Für alle implementierten Backend-Services wurden Unit-Tests geschrieben
-- [ ] Alle Tests sind erfolgreich durchgelaufen
+- [ ] Alle Tests laufen fehlerfrei druch
 
-- [ ] Die architecture documentation (`doc.md`) wurde entsprechend aktualisiert
+- [ ] Die Architekturdokumentation  (`doc.md`) wurde entsprechend aktualisiert
 
 - [ ] Alle in den Akzeptanzkriterien definierten Anforderungen sind erfüllt
