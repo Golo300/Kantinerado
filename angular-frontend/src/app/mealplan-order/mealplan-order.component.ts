@@ -51,6 +51,16 @@ export class MealplanOrderComponent extends MealplanComponent implements OnInit 
     this.calculateWeekRange(this.getDateFromMondayOfKW(this.selectedKW));
     this.getMealplan();
     this.getPreviousOrder();
+    this.getCheckoutItems();
+  }
+
+  getCheckoutItems() {
+    const shoppingCart = this.orderService.getCart();
+    this.newSelectedDishes = shoppingCart.newSelectedDishes;
+    this.newSelectedDishes = this.newSelectedDishes.filter(order => getISOWeek(order.date) === this.selectedKW);
+    this.selectedDishes.push(...this.newSelectedDishes)
+    this.deletedDishes = shoppingCart.deletedDishes;
+    this.deletedDishes = this.deletedDishes.filter(order => getISOWeek(order.date) === this.selectedKW);
   }
 
   override nextWeek(): void {
@@ -67,6 +77,7 @@ export class MealplanOrderComponent extends MealplanComponent implements OnInit 
     this.calculateWeekRange(resultDate);
     this.getMealplan();
     this.getPreviousOrder();
+    this.getCheckoutItems();
   }
 
   override lastWeek(): void {
@@ -83,6 +94,7 @@ export class MealplanOrderComponent extends MealplanComponent implements OnInit 
     this.calculateWeekRange(resultDate);
     this.getMealplan();
     this.getPreviousOrder();
+    this.getCheckoutItems();
   }
 
   getDateFromDayOfWeekAndKW(dayOfWeek: string): Date {
@@ -136,7 +148,9 @@ export class MealplanOrderComponent extends MealplanComponent implements OnInit 
       });
   
       // Wenn Dish noch nicht in orderedDishes also in newSelectedDishes ist --> Zusätzlich entfernen aus newSelectedDishes
-      this.newSelectedDishes = this.newSelectedDishes.filter(order => order.dish !== dish);
+      this.newSelectedDishes = this.newSelectedDishes.filter(order => {
+        return dish.id !== order.dish.id || this.getWeekDayByDate(order.date) !== dayOfWeek
+      });
   
       // Wenn Dish bereist in orderedDishes ist --> Zusätzlich hinzufügen zu deletedDishes
       // this.orderedDishes.forEach(element => {
@@ -162,13 +176,21 @@ export class MealplanOrderComponent extends MealplanComponent implements OnInit 
     const isVeggie = event.target.checked;
   
     // Finde die bestehende Bestellung für das Gericht
-    const existingOrderIndex = this.selectedDishes.findIndex(order => 
+    let existingOrderIndex = this.selectedDishes.findIndex(order => 
       order.dish.id === dish.id && this.getWeekDayByDate(order.date) === dayOfWeek
     );
   
     if (existingOrderIndex !== -1) {
       // Wenn die Bestellung existiert, aktualisiere nur die veggie-Option
       this.selectedDishes[existingOrderIndex].veggie = isVeggie;
+    }
+
+    existingOrderIndex = this.newSelectedDishes.findIndex(order => 
+      order.dish.id === dish.id && this.getWeekDayByDate(order.date) === dayOfWeek
+    );
+  
+    if (existingOrderIndex !== -1) {
+      this.newSelectedDishes[existingOrderIndex].veggie = isVeggie;
     }
   }  
 
@@ -218,6 +240,9 @@ export class MealplanOrderComponent extends MealplanComponent implements OnInit 
   }
 
   addToCart(): void {
+    this.deletedDishes = this.deletedDishes.filter(item => 
+      !this.checkIfNewSelected(item.dish, this.getWeekDayByDate(item.date)));
+  
     const shoppingCart = {
       newSelectedDishes: this.newSelectedDishes,
       deletedDishes: this.deletedDishes
@@ -266,7 +291,7 @@ export class MealplanOrderComponent extends MealplanComponent implements OnInit 
     return isOrdered;
   }
 
-  checkIfNewSelected(dish: Dish): boolean {
+  checkIfNewSelected(dish: Dish, day:string): boolean {
 
     while (!this.orderReady) {
     }
@@ -274,7 +299,8 @@ export class MealplanOrderComponent extends MealplanComponent implements OnInit 
     let isNewSelected: boolean = false;
 
     this.newSelectedDishes.forEach(element => {
-      if (dish === element.dish) {
+      const orderedDay = this.getWeekDayByDate(element.date);
+      if (dish.id === element.dish.id && orderedDay === day) {
         isNewSelected = true;
       }
     });
@@ -305,7 +331,7 @@ export class MealplanOrderComponent extends MealplanComponent implements OnInit 
     let isSelected: boolean = false;
 
     this.selectedDishes.forEach(element => {
-      if (dish === element.dish) {
+      if (JSON.stringify(dish) === JSON.stringify(element.dish)) {
         isSelected = true;
       }
     });
@@ -316,6 +342,13 @@ export class MealplanOrderComponent extends MealplanComponent implements OnInit 
     let isVegetarian = false;
   
     this.selectedDishes.forEach(order => {
+      const orderedDay = this.getWeekDayByDate(order.date);
+      if (order.dish.id === dish.id && orderedDay === day) {
+        isVegetarian = order.veggie;
+      }
+    });
+
+    this.newSelectedDishes.forEach(order => {
       const orderedDay = this.getWeekDayByDate(order.date);
       if (order.dish.id === dish.id && orderedDay === day) {
         isVegetarian = order.veggie;
@@ -340,7 +373,7 @@ export class MealplanOrderComponent extends MealplanComponent implements OnInit 
   }
 
   setSelectionType(dish: Dish, day: string): string {
-    if (this.checkIfNewSelected(dish)) {
+    if (this.checkIfNewSelected(dish, day)) {
       return 'blue-text';
     } else if (this.checkIfDeleted(dish, day)) {
       return 'red-text';

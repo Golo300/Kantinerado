@@ -81,7 +81,7 @@
                       </div>
                       <div>
                         <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="checkBoxMenu1"
-                          [checked]="checkIfOrdered(dish, day)" [disabled]="!isKWValid(selectedKW)"
+                          [checked]="!checkIfDeleted(dish, day) && (checkIfOrdered(dish, day) || checkIfNewSelected(dish, day))" [disabled]="!isKWValid(selectedKW)"
                           (change)="checkboxChanged($event, dish, day)" />
                       </div>
                     </span>
@@ -104,7 +104,7 @@
                           name="flexRadioDefault"
                           id="checkBoxMenu2"
                           #checkBox
-                          [checked]="checkIfOrdered(dish, day)"
+                          [checked]="!checkIfDeleted(dish, day) && (checkIfOrdered(dish, day) || checkIfNewSelected(dish, day))"
                           [disabled]="!isKWValid(selectedKW)"
                           (change)="checkboxChanged($event, dish, day)"
                         />
@@ -115,7 +115,7 @@
                           type="checkbox"
                           id="flexSwitchCheckMenu2Veggie-{{ day }}"
                           [checked]="checkIfVegetarian(dish, day)"
-                          [disabled]="!checkBox.checked || (!checkIfNewSelected(dish) && checkIfOrdered(dish, day))"
+                          [disabled]="!checkBox.checked || (!checkIfSelected(dish) && checkIfOrdered(dish, day))"
                           (change)="toggleVegetarianOption($event, dish, day)"
                         />
                         <label class="form-check-label" for="flexSwitchCheckMenu2Veggie-{{ day }}">
@@ -137,7 +137,7 @@
                       </div>
                       <div>
                         <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="checkBoxDessert"
-                          [checked]="checkIfOrdered(dish, day)" [disabled]="!isKWValid(selectedKW)"
+                          [checked]="!checkIfDeleted(dish, day) && (checkIfOrdered(dish, day) || checkIfNewSelected(dish, day))" [disabled]="!isKWValid(selectedKW)"
                           (change)="checkboxChanged($event, dish, day)" />
                       </div>
                     </span>
@@ -155,7 +155,7 @@
                       </div>
                       <div>
                         <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="checkBoxSoup"
-                          [checked]="checkIfOrdered(dish, day)" [disabled]="!isKWValid(selectedKW)"
+                          [checked]="!checkIfDeleted(dish, day) && (checkIfOrdered(dish, day) || checkIfNewSelected(dish, day))" [disabled]="!isKWValid(selectedKW)"
                           (change)="checkboxChanged($event, dish, day)" />
                       </div>
                     </span>
