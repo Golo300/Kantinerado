@@ -14,6 +14,7 @@ export class AccountViewComponent {
 
   currentPassword: string = '';
   newPassword: string = '';
+  confirmNewPassword: string = '';
   errorMessage: string | null = null;
   successMessage: string | null = null;
 
@@ -23,23 +24,29 @@ export class AccountViewComponent {
 
   getUserInfo(): void {
     this.userService.getUserInfo()
-      .subscribe((user:ApplicationUser) => {
+      .subscribe((user: ApplicationUser) => {
         this.user = user;
       });
   }
 
-    changePassword() {
-        this.userService.changePassword(this.newPassword, this.currentPassword).subscribe({
-          next: () => {
-          this.successMessage = "Passwort erfogreich geändert";
-          this.errorMessage = '';
-          this.currentPassword = '';
-          this.newPassword = '';
-        },
-        error: err => {
-          this.errorMessage = "Passwort ändern fehlgeschlagen";
-          this.successMessage = '';
-        }
+  changePassword() {
+    if (this.newPassword !== this.confirmNewPassword) {
+      this.errorMessage = 'Die neuen Passwörter stimmen nicht überein.';
+      this.successMessage = '';
+      return;
+    }
+
+    this.userService.changePassword(this.newPassword, this.currentPassword).subscribe({
+      next: () => {
+        this.successMessage = "Passwort erfogreich geändert";
+        this.errorMessage = '';
+        this.currentPassword = '';
+        this.newPassword = '';
+      },
+      error: err => {
+        this.errorMessage = "Passwort ändern fehlgeschlagen";
+        this.successMessage = '';
+      }
     });
   }
 }
