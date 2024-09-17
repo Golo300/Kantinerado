@@ -42,6 +42,7 @@ export class AccountViewComponent {
         this.errorMessage = '';
         this.currentPassword = '';
         this.newPassword = '';
+        this.confirmNewPassword = '';
       },
       error: err => {
         this.errorMessage = "Passwort ändern fehlgeschlagen";
