@@ -104,7 +104,7 @@
                           name="flexRadioDefault"
                           id="checkBoxMenu2"
                           #checkBox
-                          [checked]="!checkIfDeleted(dish, day) && (checkIfOrdered(dish, day) || checkIfNewSelected(dish, day))"
+                          [checked]="(checkIfOrdered(dish, day) || checkIfNewSelected(dish, day))"
                           [disabled]="!isKWValid(selectedKW)"
                           (change)="checkboxChanged($event, dish, day)"
                         />
@@ -115,7 +115,7 @@
                           type="checkbox"
                           id="flexSwitchCheckMenu2Veggie-{{ day }}"
                           [checked]="checkIfVegetarian(dish, day)"
-                          [disabled]="!checkBox.checked || (!checkIfSelected(dish) && checkIfOrdered(dish, day))"
+                          [disabled]="!checkBox.checked || (!checkIfNewSelected(dish, day))"
                           (change)="toggleVegetarianOption($event, dish, day)"
                         />
                         <label class="form-check-label" for="flexSwitchCheckMenu2Veggie-{{ day }}">
