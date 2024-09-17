@@ -49,24 +49,20 @@
             Passwort ändern
           </div>
           <div class="card-body">
-            <form (ngSubmit)="changePassword()" [formGroup]="passwordForm" class="needs-validation" novalidate>
+            <form (ngSubmit)="changePassword()" class="needs-validation" novalidate>
               <div class="mb-3">
                 <label for="currentPassword" class="form-label">Aktuelles Passwort</label>
-                <input type="password" id="currentPassword" class="form-control" placeholder="Geben Sie Ihr aktuelles Passwort ein" formControlName="currentPassword" required>
+                <input type="password" id="currentPassword" class="form-control" placeholder="Geben Sie Ihr aktuelles Passwort ein" [(ngModel)]="currentPassword" name="currentPassword" required>
               </div>
               <div class="mb-3">
                 <label for="newPassword" class="form-label">Neues Passwort</label>
-                <input type="password" id="newPassword" class="form-control" placeholder="Geben Sie ein neues Passwort ein" formControlName="newPassword" required>
+                <input type="password" id="newPassword" class="form-control" placeholder="Geben Sie ein neues Passwort ein" [(ngModel)]="newPassword" name="newPassword" required>
               </div>
               <div class="mb-3">
-                <input type="password" id="confirmNewPassword" class="form-control" placeholder="Geben Sie das neue Passwort erneut ein" formControlName="confirmNewPassword" required>
-              </div>
-              <!-- Passwort-Mismatch-Meldung -->
-              <div *ngIf="passwordForm.errors?.passwordMismatch && passwordForm.get('confirmNewPassword')?.touched" class="text-danger">
-                Die Passwörter stimmen nicht überein.
+                <input type="password" id="confirmNewPassword" class="form-control" placeholder="Geben Sie das neue Passwort erneut ein" [(ngModel)]="confirmNewPassword" name="confirmNewPassword" required>
               </div>
               <div class="d-flex justify-content-end">
-                <button type="submit" class="btn btn-success" [disabled]="passwordForm.invalid">Passwort ändern</button>
+                <button type="submit" class="btn btn-success">Passwort ändern</button>
               </div>
             </form>
 
