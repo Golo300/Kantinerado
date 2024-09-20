@@ -25,6 +25,8 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation 'com.itextpdf:itextpdf:5.5.13.3'
 	implementation 'org.apache.pdfbox:pdfbox:3.0.0'
+
+    testImplementation 'org.springframework.security:spring-security-test'
 }
 
 jacoco {

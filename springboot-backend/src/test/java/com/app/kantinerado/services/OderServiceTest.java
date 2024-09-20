@@ -9,11 +9,14 @@ import com.app.kantinerado.repository.DishRepository;
 import com.app.kantinerado.repository.OrderRepository;
 import com.app.kantinerado.repository.UserRepository;
 
+import jakarta.transaction.Transactional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Calendar;
 import java.util.Optional;
@@ -22,6 +25,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@SpringBootTest
+@Transactional
 class OrderServiceTest {
 
     @InjectMocks
@@ -68,6 +73,7 @@ class OrderServiceTest {
     void placeOrder_ValidOrder_ReturnsTrue() {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.WEEK_OF_YEAR, 2);
+        cal.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
         testOrderDTO.setDate(cal.getTime());
 
         when(orderRepository.save(any(Order.class))).thenReturn(new Order());
@@ -90,6 +96,7 @@ class OrderServiceTest {
     void placeOrder_VeggieNotAllowed_ReturnsFalse() {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.WEEK_OF_YEAR, 2);
+        cal.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
         testOrderDTO.setDate(cal.getTime());
         testOrderDTO.setVeggie(true);
 

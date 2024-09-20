@@ -27,8 +27,6 @@ public class OrderService {
     private DishRepository dishRepository;
 
     public String message = "Unbekannter Fehler";
-    @Autowired
-    private DayRepository dayRepository;
 
     public List<Order> findOrderBy(int kw, ApplicationUser user)
     {
