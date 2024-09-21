@@ -17,6 +17,10 @@
             pkgs.jdk17
             pkgs.gradle
             pkgs.nodejs
+            pkgs.cypress
+            pkgs.chromedriver
+            pkgs.geckodriver
+            pkgs.selenium-server-standalone
           ];
           shellHook = ''
             export NPM_CONFIG_PREFIX="$out"
@@ -33,6 +37,9 @@
             npm install
             export NODE_OPTIONS=--openssl-legacy-provider
             echo ../outputs/out/bin/ng serve
+
+            export CYPRESS_INSTALL_BINARY=0
+            export CYPRESS_RUN_BINARY=${pkgs.cypress}/bin/Cypress
 
             '';
         };
