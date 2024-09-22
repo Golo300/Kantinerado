@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   angular-app:
     container_name: angular-app
@@ -16,6 +14,14 @@ services:
     build:
       context: ./springboot-backend
       dockerfile: Dockerfile
+    environment:
+      KANTINERADO_DB_USER: ${KANTINERADO_DB_USER}
+      KANTINERADO_DB_PASSWORD: ${KANTINERADO_DB_PASSWORD}
+      KANTINERADO_DB: ${KANTINERADO_DB}
+      ADMIN_USER_ID: ${ADMIN_USER_ID}
+      ADMIN_USERNAME: ${ADMIN_USERNAME}
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
     ports:
       - "8080:8080"  
     depends_on:
@@ -23,13 +29,14 @@ services:
               condition: service_healthy
 
   mysql:
-    image: mysql:latest
+    container_name: mysql
     platform: linux/amd64
+    image: mysql:latest
     environment:
-      MYSQL_ROOT_PASSWORD: root_password
-      MYSQL_DATABASE: kantine
-      MYSQL_USER: springuser
-      MYSQL_PASSWORD: ThePassword
+      MYSQL_DATABASE: ${KANTINERADO_DB}
+      MYSQL_USER: ${KANTINERADO_DB_USER}
+      MYSQL_PASSWORD: ${KANTINERADO_DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${KANTINERADO_DB_ROOT_PASSWORD}
     healthcheck:
             test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
             timeout: 20s

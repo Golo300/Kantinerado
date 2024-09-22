@@ -10,6 +10,7 @@ version = '0.0.1-SNAPSHOT'
 
 java {
 	sourceCompatibility = '17'
+    targetCompatibility = '17'
 }
 
 repositories {
@@ -35,7 +36,7 @@ jacoco {
 
 jacocoTestReport {
     reports {
-        xml.required = true  // Wichtiger Schritt, um den Bericht im XML-Format zu erstellen
+        xml.required = true
         html.required = true
         csv.required = false
     }
@@ -55,19 +56,77 @@ jacocoTestCoverageVerification {
     }
 }
 
+task showCoverage(type: Exec, dependsOn: jacocoTestReport) {
+    commandLine 'open', "${buildDir}/reports/jacoco/test/html/index.html"
+}
+
+task waitForTestDatabase {
+    doLast {
+        def maxRetries = 10
+        def retryCount = 0
+        def healthStatus = ''
+        
+        while (retryCount < maxRetries && healthStatus != 'healthy') {
+            def output = new ByteArrayOutputStream()
+            exec {
+                commandLine 'docker', 'inspect', '--format', '{{.State.Health.Status}}', 'mysql-test'
+                standardOutput = output
+            }
+            healthStatus = output.toString().trim()
+
+            if (healthStatus != 'healthy') {
+                println "Current health status: ${healthStatus}. Waiting for the test database to become healthy..."
+                sleep(5000) // wait for 5 seconds before retrying
+                retryCount++
+            }
+        }
+
+        if (healthStatus == 'healthy') {
+            println "Test database is healthy!"
+        } else {
+            throw new GradleException("Test database did not become healthy within the timeout period.")
+        }
+    }
+}
+
+task startTestDatabase {
+    doLast {
+        try {
+            exec {
+                commandLine 'docker-compose', '-f', 'docker-compose-test.yaml', 'up', '-d'
+                ignoreExitValue true
+            }
+        } catch (Exception e) {
+            exec {
+                commandLine 'docker', 'compose', '-f', 'docker-compose-test.yaml', 'up', '-d'
+                ignoreExitValue true
+            }
+        }
+    }
+    finalizedBy waitForTestDatabase 
+}
+
+task stopTestDatabase {
+    doLast {
+        try {
+            exec {
+                commandLine 'docker-compose', '-f', 'docker-compose-test.yaml', 'down'
+                ignoreExitValue true
+            }
+        } catch (Exception e) {
+            exec {
+                commandLine 'docker', 'compose', '-f', 'docker-compose-test.yaml', 'down'
+                ignoreExitValue true
+            }
+        }
+    }
+}
+
 test {
-    finalizedBy jacocoTestReport
+    useJUnitPlatform()
+    dependsOn startTestDatabase
+    finalizedBy stopTestDatabase, jacocoTestReport
     maxParallelForks = 4
 }
 
 check.dependsOn jacocoTestCoverageVerification
-
-task showCoverage(type: Exec, dependsOn: jacocoTestReport) {
-    // commandLine 'cmd', '/c', "start ${buildDir}/reports/jacoco/test/html/index.html"
-    // Für macOS und Linux:
-    commandLine 'open', "${buildDir}/reports/jacoco/test/html/index.html"
-}
-
-tasks.named('test') {
-	useJUnitPlatform()
-}

@@ -9,6 +9,7 @@ import com.app.kantinerado.repository.*;
 import com.app.kantinerado.services.MealplanService;
 import com.app.kantinerado.utils.Roles;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -28,14 +29,29 @@ public class AuthenticatedBackendApplication {
     @Autowired
     MealplanService mealplanService;
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
+    @Value("${ADMIN_USER_ID}")
+    private String adminUserId;
+
+    @Value("${ADMIN_USERNAME}")
+    private String adminUsername;
+
+    @Value("${ADMIN_EMAIL}")
+    private String adminEmail;
+
+    @Value("${ADMIN_PASSWORD}")
+    private String adminPassword;
 
     @Bean
     CommandLineRunner run(RoleRepository roleRepository, UserRepository userRepository,
-                          DayRepository dayRepository, DishRepository dishRepository, DishCategoryRepository dishCategoryRepository,
-                          OrderRepository orderRepository, PasswordEncoder passwordEncoder) {
+            DayRepository dayRepository, DishRepository dishRepository, DishCategoryRepository dishCategoryRepository,
+            OrderRepository orderRepository, PasswordEncoder passwordEncoder) {
         return args -> {
 
-            if (roleRepository.findByAuthority("ADMIN").isPresent()) return;
+            if (roleRepository.findByAuthority("ADMIN").isPresent())
+                return;
 
             Role adminRole = roleRepository.save(new Role(Roles.ADMIN));
             Role userRole = roleRepository.save(new Role(Roles.USER));
@@ -45,8 +61,13 @@ public class AuthenticatedBackendApplication {
             Set<Role> roles = new HashSet<>();
             roles.add(adminRole);
 
-            ApplicationUser admin = new ApplicationUser(123, "admin", "test@test.de",
-                    passwordEncoder.encode("password"), roles);
+            ApplicationUser admin = new ApplicationUser(
+                Integer.parseInt(adminUserId),
+                adminUsername,
+                adminEmail,
+                passwordEncoder.encode(adminPassword),
+                roles
+            );
 
             userRepository.save(admin);
 
@@ -63,26 +84,26 @@ public class AuthenticatedBackendApplication {
             dish1.setPrice(9.99);
             dishRepository.save(dish1);
 
+            Dish dish2 = new Dish();
+            dish2.setDishCategory(menu_2);
+            dish2.setTitle("Maultaschen");
+            dish2.setDescription("Maultaschen Schwäbischer Art");
+            dish2.setPrice(6.99);
+            dishRepository.save(dish2);
+
             Dish dish3 = new Dish();
-            dish3.setDishCategory(menu_2);
-            dish3.setTitle("Maultaschen");
-            dish3.setDescription("Maultaschen Schwäbischer Art");
-            dish3.setPrice(6.99);
+            dish3.setDishCategory(suppe);
+            dish3.setTitle("Peking Suppe");
+            dish3.setDescription("Peking Suppe");
+            dish3.setPrice(3.99);
             dishRepository.save(dish3);
 
             Dish dish4 = new Dish();
-            dish4.setDishCategory(suppe);
-            dish4.setTitle("Peking Suppe");
-            dish4.setDescription("Peking Suppe");
-            dish4.setPrice(3.99);
+            dish4.setDishCategory(dessert);
+            dish4.setTitle("Kuchen");
+            dish4.setDescription("Bannanenkuchen");
+            dish4.setPrice(4.99);
             dishRepository.save(dish4);
-
-            Dish dish2 = new Dish();
-            dish2.setDishCategory(dessert);
-            dish2.setTitle("Kuchen");
-            dish2.setDescription("Bannanenkuchen");
-            dish2.setPrice(4.99);
-            dishRepository.save(dish2);
         };
     }
 }

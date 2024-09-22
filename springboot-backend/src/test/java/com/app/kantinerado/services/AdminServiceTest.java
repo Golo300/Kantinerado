@@ -10,6 +10,7 @@ import com.app.kantinerado.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import static org.mockito.Mockito.*;
 import com.app.kantinerado.models.Role;
@@ -21,6 +22,7 @@ import org.mockito.MockitoAnnotations;
 
 
 @SpringBootTest
+@ActiveProfiles("test")
 @Transactional
 public class AdminServiceTest {
 

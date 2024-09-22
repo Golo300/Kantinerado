@@ -53,7 +53,6 @@ angular-frontend/bazel-out
 # Dependencies
 angular-frontend/node_modules
 
-
 # IDE - VSCode
 .vscode/*
 !.vscode/settings.json
@@ -65,3 +64,6 @@ angular-frontend/node_modules
 .DS_Store
 Thumbs.db
 springboot-backend/src/main/resources/application.properties
+
+# .env File
+.env

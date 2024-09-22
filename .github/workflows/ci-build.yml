@@ -28,28 +28,47 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y docker-compose
 
-    - name: Start MySQL with Docker Compose
+    - name: Start Container with Docker Compose
+      env:
+        KANTINERADO_DB_ROOT_PASSWORD: ${{ secrets.KANTINERADO_DB_ROOT_PASSWORD }}
+        KANTINERADO_DB: ${{ secrets.KANTINERADO_DB }}
+        KANTINERADO_DB_USER: ${{ secrets.KANTINERADO_DB_USER }}
+        KANTINERADO_DB_PASSWORD: ${{ secrets.KANTINERADO_DB_PASSWORD }}
+        ADMIN_USER_ID: ${{ secrets.ADMIN_USER_ID }}
+        ADMIN_USERNAME: ${{ secrets.ADMIN_USERNAME }}
+        ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+        ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
       run: |
-        docker-compose up -d mysql
-    
-    - name: Wait for MySQL to be healthy
+        docker-compose up --build -d
+
+    - name: Wait for MySQL to be ready
       run: |
-        for i in {1..30}; do
-          if [ "$(docker-compose ps -q db | xargs docker inspect -f '{{.State.Health.Status}}')" == "healthy" ]; then
-            echo "MySQL is healthy"
-            break
-          fi
-          echo "Waiting for MySQL to be healthy..."
-          sleep 5
+        echo "Waiting for MySQL to be healthy..."
+        until [ "`docker inspect -f {{.State.Health.Status}} mysql`" == "healthy" ]; do
+          sleep 5;
         done
+        echo "MySQL is healthy!"
 
-    - name: Build and Test with Gradle
+    - name: Run tests with Gradle
       run: |
-            cd springboot-backend
-            ./gradlew test jacocoTestReport
+        cd springboot-backend
+        ./gradlew test --info
+      env:
+        KANTINERADO_DB: ${{ secrets.KANTINERADO_DB }}
+        KANTINERADO_DB_USER: ${{ secrets.KANTINERADO_DB_USER }}
+        KANTINERADO_DB_PASSWORD: ${{ secrets.KANTINERADO_DB_PASSWORD }}
+        ADMIN_USER_ID: ${{ secrets.ADMIN_USER_ID }}
+        ADMIN_USERNAME: ${{ secrets.ADMIN_USERNAME }}
+        ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+        ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
 
-    - name: Upload JaCoCo report
+    - name: Generate test coverage report
+      run: |
+        cd springboot-backend
+        ./gradlew jacocoTestReport
+
+    - name: Upload test report
       uses: actions/upload-artifact@v3
       with:
-        name: jacoco-report
-        path: springboot-backend/build/reports/jacoco/test/*
+        name: test-report
+        path: springboot-backend/build/reports/tests/test/
