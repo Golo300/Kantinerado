@@ -1,4 +1,4 @@
-<mxfile host="Electron" modified="2024-09-02T13:09:04.128Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.4.0 Chrome/122.0.6261.156 Electron/29.4.5 Safari/537.36" etag="40t9EdRNh7VHAzovJwIJ" version="24.3.1" type="device">
+<mxfile host="Electron" modified="2024-09-23T13:12:40.378Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.4.0 Chrome/122.0.6261.156 Electron/29.4.5 Safari/537.36" etag="Lf8cwwcyCFHAy2xEMBsp" version="24.3.1" type="device">
   <diagram name="Seite-1" id="-oiyD1ErW6IM80D44xzI">
     <mxGraphModel dx="1666" dy="989" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -186,6 +186,12 @@
         </mxCell>
         <mxCell id="3O_0u6_tolEpB3LdawZj-8" value="Kantinenmitarbeiter" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" parent="1" vertex="1">
           <mxGeometry x="740" y="50" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="NORuL4h3SYZ8U73wGxhU-1" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.905;entryY=0.412;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0;exitY=0.25;exitDx=0;exitDy=0;" edge="1" parent="1" source="B-cs-kjj54bmsKe5fscL-15" target="B-cs-kjj54bmsKe5fscL-51">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="501" y="281" as="sourcePoint" />
+            <mxPoint x="335" y="120" as="targetPoint" />
+          </mxGeometry>
         </mxCell>
       </root>
     </mxGraphModel>
