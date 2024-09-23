@@ -4,7 +4,7 @@
 
 Dieses Projekt ist ein Semesterprojekt, welches das Hauptziel hat, die in der Vorlesung gelernten Konzepte zur Software-Planung und Dokumentation umsetzen.
 
-Hierzu soll eine Applikation erstellt und dokumentiert werden, mit der Mitarbeiter einer fiktiven Firma Essen in der Kantine Einsehen und bestellen können mit einfacher Benutzerverwaltung. Dieses Dokument ist eine Architecture Dokumentation der gesamten Anwendung.
+Hierzu soll eine Applikation erstellt und dokumentiert werden, mit der Mitarbeiter einer fiktiven Firma Essen in der Kantine einsehen und bestellen können mit einfacher Benutzerverwaltung. Dieses Dokument ist eine Architecture Dokumentation der gesamten Anwendung.
 
 Diese Dokumentation umfasst die gesamte bisherige Entwicklung bis einschließlich Sprint 4 und hält sich stark an die arc42 Vorgaben.
 
@@ -35,7 +35,7 @@ Um Requirements für ein Projekt zu definiern sollte als erstes eine Stakeholder
 ## Funktional requirements:
 
 1. **Benutzerregistrierung und Authentifizierung:**
-   - Benutzer sollten sich registrieren können, um ein Konto zu erstellen, und sich dann mit ihren Anmeldeinformationen anmelden können, um auf die App zuzugreifen.
+   - Benutzer sollten sich registrieren können, um ein Konto zu erstellen und sich dann mit ihren Anmeldeinformationen anmelden können, um auf die App zuzugreifen.
 
 2. **Produktkatalog anzeigen:**
    - Die App sollte eine übersichtliche Darstellung des verfügbaren Speiseangebots mit Preisen, Beschreibungen und ggf. Bildern anzeigen.
@@ -285,6 +285,6 @@ In Angular ist durch die Services und Komponenten eine grobe Struktur für den A
 
 Zum Schluss noch die unschöne Seite. Zuerst ist hier auf die hohe Anzahl an offenen Bugs hinzudeuten. Diese sind vor allem durch Nichteinhalten der DoD entstanden. Durch zu spätes Anfangen und demnach das zu späte Abschließen von Userstories konnte die Qualität nicht immer auf dem erwünschten Stand gehalten werden.
 
-Zudem sind auch nicht alle erwünschten Features implementiert worden, welche für die 4 Sprints geplant wurden. Es fehlen entscheiden Funktionen wie das Anpassen seines Profils und die gesamte Benutzerverwaltung. Die App bietet zwar gewisse Grundfunktionen ist aber lange nicht fertig. Vor allem muss aber hervorgehoben werden, dass durch die Domain Modellierung und die Implementierungen der Grundfunktionen eine sehr gute Grundlage geschaffen wurde auf welcher weitere Entwickeltung gut aufbauen kann.
+Zudem sind auch nicht alle erwünschten Features implementiert worden, welche für die 7 Sprints geplant wurden. Es fehlen Funktionen wie das Anpassen seines Profils. Die App bietet zwar gewisse Grundfunktionen ist aber nicht fertig. Vor allem muss aber hervorgehoben werden, dass durch die Domain Modellierung und die Implementierungen der Grundfunktionen eine sehr gute Grundlage geschaffen wurde auf welcher weitere Entwickeltung gut aufbauen kann.
 
 Nach dieser Analyse ist zu sagen, dass das Projekt bei Weiterführung eine gute und realistische Chance hat, vollständig und fertig zu werden.
