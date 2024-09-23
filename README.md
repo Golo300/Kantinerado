@@ -86,4 +86,4 @@ Das Backend kann auch aus komfort Gründen über Docker als Kontainer gestartet 
 
 Damit die Datenbank Verindung inherlab der Docker Anwendung richtig läuft muss in der `application.properties` folgende Anpassung gemacht werden.
 
-    spring.datasource.url=jdbc:mysql://${MYSQL_HOST:mysql}:3306kantine
+    spring.datasource.url=jdbc:mysql://${MYSQL_HOST:mysql}:3306/kantine
